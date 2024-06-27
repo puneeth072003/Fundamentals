@@ -1,10 +1,18 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App/App.jsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import Content from "./Router/Content.jsx";
+import { Navbar } from "./Navbar/Navbar.jsx";
+import "./index.css";
+import "./Navbar/navbar.css";
+import { Support } from "./Support/Support.jsx";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <div>
+    <Navbar />
+    <BrowserRouter>
+      <Content />
+    </BrowserRouter>
+    <Support />
+  </div>
+);
