@@ -1,0 +1,36 @@
+/* .sidenav{
+    padding: 30px 80px;
+}
+ .sidenav .side-link{
+    padding-bottom: 25px;
+ }
+
+.sidenav .side-link .unit1{
+    font-size: smaller;
+    color: gray;
+}
+
+.sidenav .side-link .sets{
+    font-size: 18px;    
+} */
+
+.sidebar{
+    width: 25%;
+    padding-bottom: 25px;
+}
+.sidebar-List{
+    height: auto;
+    width: 100%;
+    padding: 20px;
+}
+
+.sidebar-List .row{
+    width: 20;
+    height: 100%;
+    padding-top: 20px;
+}
+
+.sidebar-List .row:hover{
+    cursor: pointer;
+    background-color: grey;
+}
