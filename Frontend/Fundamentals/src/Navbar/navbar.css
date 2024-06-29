@@ -146,11 +146,13 @@ a {
     display: none;
   }
   .links {
+    padding: 3vh;
+    justify-content: space-between;
     height: auto;
     display: flex;
   }
   .links a {
-    padding: 1rem;
+    padding: 2rem;
     background: #ffffff;
   }
   .links a:hover {
@@ -161,5 +163,29 @@ a {
   }
   .login-btn:hover {
     color: #1ee664;
+  }
+  ul li{
+    display: inline-block;
+    margin: 5px 20px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  ul button{
+    background-color: blue; /* Green */
+    border: none;
+    color: black;
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+  }
+  ul select{
+    background-color: none;
+    border: none;
+    color: black;
+    display: block;
+    font-size: 20px;
+
   }
 }
