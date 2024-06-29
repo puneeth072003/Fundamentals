@@ -1,0 +1,84 @@
+.teach-main{
+  height: 52vh;
+}
+.teach-head{
+  padding-top: 50px;
+  padding-left: 100px;
+}
+.teach-container {
+  padding-top: 25px;
+  display: flex;
+  justify-content:center;
+  margin: 20px;
+}
+
+.teach-students {
+  width: 30%;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.teach-students h2 {
+  margin-bottom: 10px;
+}
+
+.teach-students ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.teach-students .teach-student {
+  cursor: pointer;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  background-color: #f0f0f0;
+  border: 1px solid transparent;
+}
+
+.teach-students .teach-student.selected {
+  background-color: #cce6ff;
+  border-color: #99c2ff;
+}
+
+.teach-units {
+  width: 60%;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.teach-units h2 {
+  margin-bottom: 10px;
+}
+
+.teach-unit-dropdown {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.teach-score {
+  display: flex;
+  align-items: center;
+}
+
+.teach-score label {
+  margin-right: 10px;
+}
+
+.teach-score-input {
+  width: 60px;
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.teach-submit-btn {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.teach-submit-btn:hover {
+  background-color: #0056b3;
+}

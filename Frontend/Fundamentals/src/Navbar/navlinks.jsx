@@ -6,18 +6,10 @@ import { Link } from "react-router-dom";
 const Navlinks=()=>{
     return(
     <nav>
-      <ul className="links">
-        <select>
-          <option value="">Class 11</option>
-          <option value="">Class 12</option>
-        </select>
-        <li>
-          Teachers
-        </li>
-        <li>
-          Studnets
-        </li>
-        <button>Login</button>
+      <ul className="linksinnav">
+        <a href="/class11" className="nav-link">Student</a>
+        <a href="/class11" className="nav-link">Teacher</a>
+        {/* <button class="login-button">Login</button> */}
       </ul>
     </nav>
     )

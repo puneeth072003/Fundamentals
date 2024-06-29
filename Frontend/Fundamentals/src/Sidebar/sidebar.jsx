@@ -1,95 +1,56 @@
 import React from 'react'
 import "./sidebar.css"
 import { sidebarData } from './sidebarData';
+import { useState } from 'react';
 
-function Sidebar() {
+const StudentApp = () => {
+  const [selectedUnit, setSelectedUnit] = useState(null);
+
+  const handleUnitClick = (unit) => {
+    setSelectedUnit(unit);
+  };
+
   return (
-    // <div className='sidenav'>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 1</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Sets</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 2</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Relations & Functions</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 3</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Tringnomentric Functions</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 4</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Complex Numbers and Quacratic Equations</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 5</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Linear Inequalities</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 6</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Permutations & Combinations</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 7</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Binomial Theorem</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 8</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Sequence & Series</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 9</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Straight Lines</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 10</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Conic Sections</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 11</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Introduction to Three Dimentional Geometry</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 12</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Limits & Derivatives</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 13</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Statistics</span>
-    //     </div>
-    //     <div className='side-link'>
-    //       <span className='unit1'>Unit 14</span>
-    //       <div aria-hidden="true" className='unit-1'></div>
-    //       <span className='sets'>Probablity</span>
-    //     </div>
-    // </div>
-    <div className='sidebar'>
-      <ul className="sidebar-List">
-      {sidebarData.map((val, key) => {
-        return(
-          <li key = {key} className="row" onClick={() => {
-            window.location.pathname = val.link;
-          }}>
-          <div>{val.title1}: {val.title2}</div>
-          </li>
-        )
-      })}
-      </ul>
+    <div className="student_app">
+      <div className="sidebar">
+        <ul className="sidebar-list">
+          {sidebarData.map((val, key) => (
+            <li key={key} className="sidebar-item" onClick={() => handleUnitClick(val)}>
+              <div className="sidebar-item-title">{val.title1}: {val.title2}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="main-content">
+        {!selectedUnit && (
+          <div className="video-placeholder">
+            Click on a unit to continue
+          </div>
+        )}
+        {selectedUnit && (
+          <>
+            <div className="video-container">
+              <iframe
+                width="1000"
+                height="550"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+            <div className="quiz-container">
+              <h2>Quiz for {selectedUnit.title1}: {selectedUnit.title2  }</h2>
+              <div className="quiz-question">Question 1: What is ...?</div>
+              <div className="quiz-question">Question 2: How does ...?</div>
+              {/* Add more questions as needed */}
+            </div>
+          </>
+        )}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar;
+export default StudentApp;

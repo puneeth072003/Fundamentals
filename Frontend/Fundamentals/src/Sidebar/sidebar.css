@@ -1,36 +1,69 @@
-/* .sidenav{
-    padding: 30px 80px;
-}
- .sidenav .side-link{
-    padding-bottom: 25px;
- }
-
-.sidenav .side-link .unit1{
-    font-size: smaller;
-    color: gray;
-}
-
-.sidenav .side-link .sets{
-    font-size: 18px;    
-} */
-
-.sidebar{
-    width: 25%;
-    padding-bottom: 25px;
-}
-.sidebar-List{
-    height: auto;
-    width: 100%;
-    padding: 20px;
-}
-
-.sidebar-List .row{
-    width: 20;
-    height: 100%;
-    padding-top: 20px;
-}
-
-.sidebar-List .row:hover{
+.student_app {
+    display: flex;
+    height: 100vh; /* Ensure the app takes full viewport height */
+  }
+  
+  .sidebar {
+    background-color: #ffffff; /* white background */
+    border-right: 1px solid #cccccc; /* light gray border */
+    width: 400px; /* Increase the width of the sidebar */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex: 1; /* Allow the list to grow and fill the available space */
+    overflow-y: auto; /* Make the list scrollable */
+  }
+  
+  .sidebar-item {
+    padding: 10px;
+    border-bottom: 1px solid #cccccc; /* light gray line between items */
     cursor: pointer;
-    background-color: grey;
-}
+  }
+  
+  .sidebar-item:hover {
+    background-color: #f0f0f0; /* light gray on hover */
+  }
+  
+  .sidebar-item-title {
+    color: #007bff; /* blue text */
+  }
+  
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    padding: 20px;
+  }
+  
+  .video-container {
+    display: flex;
+    justify-content: center; /* Center video horizontally */
+    width: 100%; /* Ensure the container takes full width */
+    margin-bottom: 20px;
+  }
+  
+  .quiz-container {
+    border-top: 1px solid #cccccc; /* light gray line on top */
+    padding-top: 20px;
+    width: 100%; /* Ensure the container takes full width */
+  }
+  
+  .quiz-question {
+    margin-bottom: 20px;
+  }
+  
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .quiz-options label {
+    margin-bottom: 5px;
+  }
+  

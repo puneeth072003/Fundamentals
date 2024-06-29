@@ -124,6 +124,21 @@ a {
   border: #191414;
   border-radius: 10px;
 }
+.login-button {
+  background-color: #007bff; /* blue background */
+  font-family: "spotify-circular";
+  color: #ffffff; /* white text */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #0056b3; /* darker blue on hover */
+}
 @media screen and (min-width: 992px) {
   .section-center {
     width: 95vw;
@@ -188,4 +203,25 @@ a {
     font-size: 20px;
 
   }
+}
+.linksinnav {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0;
+  margin: 0;
+  display: flex; /* Align items horizontally */
+  gap: 15px; /* Space between links */
+}
+
+.nav-link {
+  text-decoration: none; /* Remove underline */
+  color: #0044cc; /* Blue color for links */
+  background-color: #f8f8f8; /* Light background */
+  padding: 10px 20px;
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transitions */
+}
+
+.nav-link:hover {
+  background-color: #0044cc; /* Change background on hover */
+  color: #ffffff; /* Change text color on hover */
 }
