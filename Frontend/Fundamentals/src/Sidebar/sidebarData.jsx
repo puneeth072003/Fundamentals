@@ -2,73 +2,91 @@ import "./Units/sets"
 
 export const sidebarData = [
     {
-        title1: "Unit 1",
-        title2: "Sets",
-        link: ""
+      title1: 'Unit 1',
+      title2: 'Introduction to React',
+      subunits: [
+        {
+          name: 'React Overview sasdfasda',
+          type: 'video',
+          videoUrl: 'https://www.youtube.com/embed/N3AkSS5hXMA'
+        },
+        {
+          name: 'React Quiz',
+          type: 'quiz',
+          quizTitle: 'React Basics Quiz',
+          questions: [
+            {
+              question: 'What is the capital of France?',
+              options: ['Paris', 'London', 'Rome', 'Berlin'],
+              correctAnswer: 'Paris'
+            },
+            {
+              question: 'What is 2 + 2?',
+              options: ['3', '4', '5', '6'],
+              correctAnswer: '4'
+            },
+            // Add more questions here...
+          ],
+        }
+      ]
     },
     {
-        title1: "Unit 2",
-        title2: "Relations & Functions",
-        link: "/Relations & Functions"
+      title1: 'Unit 2',
+      title2: 'State and Props',
+      subunits: [
+        {
+          name: 'State and Props Overview',
+          type: 'video',
+          videoUrl: 'https://www.youtube.com/embed/dpw9EHDh2bM'
+        },
+        {
+          name: 'State and Props Quiz',
+          type: 'quiz',
+          quizTitle: 'State and Props Quiz',
+          questions: [
+            {
+              question: 'What is the capital of France?',
+              options: ['Paris', 'London', 'Rome', 'Berlin'],
+              correctAnswer: 'Paris'
+            },
+            {
+              question: 'What is 2 + 2?',
+              options: ['3', '4', '5', '6'],
+              correctAnswer: '4'
+            },
+            // Add more questions here...
+          ],
+        }
+      ]
     },
     {
-        title1: "Unit 3",
-        title2: "Tringnomentric Functions",
-        link: "/Tringnomentric Functions"
-    },
-    {
-        title1: "Unit 4",
-        title2: "Complex Numbers and Quacratic Equations",
-        title: "/Complex Numbers and Quacratic Equations"
-    },
-    {
-        title1: "Unit 5",
-        title2: "Linear Inequalities",
-        link: "/Linear Inequalities"
-    },
-    {
-        title1: "Unit 6",
-        title2: "Permutations & Combinations",
-        link: "/Permutations & Combinations"
-    },
-    {
-        title1: "Unit 7",
-        title2: "Binomial Theorem",
-        link: "/Binomial Theorem"
-    },
-    {
-        title1: "Unit 8",
-        title2: "Sequence & Series",
-        link: "/Sequence & Series"
-    },
-    {
-        title1: "Unit 9",
-        title2: "Straight Lines",
-        link: "/Straight Lines"
-    },
-    {
-        title1: "Unit 10",
-        title2: "Conic Sections",
-        link: "/Conic Sections"
-    },
-    {
-        title1: "Unit 11",
-        title2: "Introduction to Three Dimentional Geometry",
-        link: "/Introduction to Three Dimentional Geometry"
-    },
-    {
-        title1: "Unit 12",
-        title2: "Limits & Derivatives",
-        link: "/Limits & Derivatives"
-    },
-    {
-        title1: "Unit 13",
-        title2: "Statistics",
-        link: "/Statistics"
-    },
-    {
-        title1: "Unit 14",
-        title2: "Probablity",
-        link: "/Probablity"
+      title1: 'Unit 3',
+      title2: 'Component Lifecycle',
+      subunits: [
+        {
+          name: 'Lifecycle Methods',
+          type: 'video',
+          videoUrl: 'https://www.youtube.com/embed/5p9u1Uio_qE'
+        },
+        {
+          name: 'Lifecycle Quiz',
+          type: 'quiz',
+          quizTitle: 'Component Lifecycle Quiz',
+          questions: [
+            {
+              question: 'What is the capital of France?',
+              options: ['Paris', 'London', 'Rome', 'Berlin'],
+              correctAnswer: 'Paris'
+            },
+            {
+              question: 'What is 2 + 2?',
+              options: ['3', '4', '5', '6'],
+              correctAnswer: '4'
+            },
+            // Add more questions here...
+          ],
+        }
+      ]
     }
-] 
+  ];
+  

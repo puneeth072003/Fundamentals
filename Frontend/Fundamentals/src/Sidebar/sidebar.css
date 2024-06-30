@@ -1,6 +1,6 @@
 .student_app {
     display: flex;
-    height: 100vh; /* Ensure the app takes full viewport height */
+    height: 80vh; /* Ensure the app takes full viewport height */
   }
   
   .sidebar {
@@ -54,16 +54,117 @@
     width: 100%; /* Ensure the container takes full width */
   }
   
+  .quiz-box {
+    margin-bottom: 20px;
+  }
+
+
+  /* quiz component styles */
+  .quiz-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f8ff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
   .quiz-question {
     margin-bottom: 20px;
   }
   
+  .quiz-question h2 {
+    font-size: 1.5em;
+    color: #1e90ff;
+  }
+  
   .quiz-options {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
   }
   
-  .quiz-options label {
-    margin-bottom: 5px;
+  .quiz-option {
+    background-color: #1e90ff;
+    width: 45%;
+    color: white;
+    border: none;
+    font-family: "spotify-circular";
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
   }
   
+  .quiz-option:hover {
+    background-color: #1c86ee;
+  }
+  
+  .quiz-selected {
+    background-color: #104e8b;
+  }
+  
+  .quiz-correct {
+    background-color: #32cd32;
+  }
+  
+  .quiz-incorrect {
+    background-color: #ff6347;
+  }
+  
+  .quiz-answer {
+    margin-top: 20px;
+  }
+  
+  .quiz-next {
+    background-color: #1e90ff;
+    font-family: "spotify-circular";
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .quiz-next:hover {
+    background-color: #1c86ee;
+  }
+  
+  .quiz-reset {
+    margin-top: 30px;
+  }
+  
+  .quiz-reset button {
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-family: "spotify-circular";
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .quiz-reset button:hover {
+    background-color: #e03e00;
+  }
+  
+  .well-done-message {
+    font-size: 2em;
+    color: #32cd32;
+  }
+  .well-done-reset{
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-family: "spotify-circular";
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
