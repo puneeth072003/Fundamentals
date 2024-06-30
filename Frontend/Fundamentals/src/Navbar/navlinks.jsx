@@ -8,7 +8,7 @@ const Navlinks=()=>{
     <nav>
       <ul className="linksinnav">
         <a href="/class11" className="nav-link">Student</a>
-        <a href="/class11" className="nav-link">Teacher</a>
+        <a href="/teacher" className="nav-link">Teacher</a>
         {/* <button class="login-button">Login</button> */}
       </ul>
     </nav>

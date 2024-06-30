@@ -7,9 +7,9 @@ const TeacherComp = () => {
   const [score, setScore] = useState(0);
 
   const students = [
-    { id: 1, name: 'Student A' },
-    { id: 2, name: 'Student B' },
-    { id: 3, name: 'Student C' },
+    { id: 1, name: 'Student A' , score: 3},
+    { id: 2, name: 'Student B' , score: 7 },
+    { id: 3, name: 'Student C', score: 9 },
   ];
 
   const units = [
