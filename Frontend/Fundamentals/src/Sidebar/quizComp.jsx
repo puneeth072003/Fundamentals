@@ -8,6 +8,8 @@ const QuizComponent = ({ questions }) => {
   const [resetCount, setResetCount] = useState(0);
   const [showWellDone, setShowWellDone] = useState(false);
   const [score, setScore] = useState(0);
+  const [attendedQuestions, setAttendedQuestions] = useState([]);
+  const [message, setMessage] = useState("");
 
   const maxResets = 3;
   const maxQuestions = 10;
@@ -26,20 +28,34 @@ const QuizComponent = ({ questions }) => {
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
     setScore(0); // Reset score when questions are shuffled
+    setAttendedQuestions([]); // Reset attended questions when shuffled
+    setMessage("");
   };
 
   const handleAnswerClick = (answer) => {
     setSelectedAnswer(answer);
     const currentQuestion = shuffledQuestions[currentQuestionIndex];
-    if (answer === currentQuestion.correctAnswer) {
+    const isCorrect = answer === currentQuestion.correctAnswer;
+    if (isCorrect) {
       setScore(score + 1); // Increment score on correct answer
+      setMessage("Right Answer!");
+    } else {
+      setMessage("Wrong Answer!");
     }
+    setAttendedQuestions([
+      ...attendedQuestions,
+      {
+        questionNumber: currentQuestionIndex + 1,
+        isCorrect: isCorrect,
+      },
+    ]);
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
+      setMessage("");
     } else {
       setShowWellDone(true);
     }
@@ -73,6 +89,7 @@ const QuizComponent = ({ questions }) => {
         <>
           <div className="quiz-question">
             <h2>{currentQuestion.question}</h2>
+            <p>Question {currentQuestionIndex + 1} of {maxQuestions}</p>
           </div>
           <div className="quiz-options">
             {currentQuestion.options.map((option, index) => (
@@ -90,6 +107,7 @@ const QuizComponent = ({ questions }) => {
           </div>
           {selectedAnswer && (
             <div className="quiz-answer">
+              <p>{message}</p>
               <button className="quiz-next" onClick={handleNextQuestion}>
                 Next Question
               </button>
@@ -99,6 +117,21 @@ const QuizComponent = ({ questions }) => {
             <button onClick={handleResetQuiz}>
               Reset Quiz
             </button>
+          </div>
+          <div className="attended-questions">
+            <h3>Attended Questions:</h3>
+            <ul>
+              {attendedQuestions.map((item, index) => (
+                <li key={index} className={item.isCorrect ? 'correct-answer' : 'incorrect-answer'}>
+                  <input
+                    type="radio"
+                    checked
+                    readOnly
+                  />
+                  Question {item.questionNumber}
+                </li>
+              ))}
+            </ul>
           </div>
         </>
       )}
