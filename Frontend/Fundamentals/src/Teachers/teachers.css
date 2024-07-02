@@ -1,84 +1,80 @@
-.teach-main{
-  height: 52vh;
+.teach-main {
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
-.teach-head{
-  padding-top: 50px;
-  padding-left: 100px;
+
+.teach-head {
+  text-align: center;
 }
+
 .teach-container {
-  padding-top: 25px;
   display: flex;
-  justify-content:center;
-  margin: 20px;
+  justify-content: space-around;
+  margin-top: 20px;
 }
 
-.teach-students {
+.teach-students, .teach-units{
   width: 30%;
-  border: 1px solid #ccc;
-  padding: 10px;
+}
+.teach-grading {
+  width: 17%;
 }
 
-.teach-students h2 {
-  margin-bottom: 10px;
-}
-
-.teach-students ul {
+.teach-students ul, .teach-grading ul {
   list-style-type: none;
   padding: 0;
+  display: grid;
 }
 
-.teach-students .teach-student {
-  cursor: pointer;
-  padding: 5px 10px;
-  margin-bottom: 5px;
-  background-color: #f0f0f0;
-  border: 1px solid transparent;
-}
 
-.teach-students .teach-student.selected {
-  background-color: #cce6ff;
-  border-color: #99c2ff;
-}
-
-.teach-units {
-  width: 60%;
-  border: 1px solid #ccc;
+.teach-student, .teach-grade-item {
   padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
 }
 
-.teach-units h2 {
-  margin-bottom: 10px;
+.teach-student.selected {
+  background-color: #f0f0f0;
+  font-weight: bold;
 }
 
 .teach-unit-dropdown {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
+  padding: 5px;
+  margin-top: 10px;
 }
 
 .teach-score {
-  display: flex;
-  align-items: center;
-}
-
-.teach-score label {
-  margin-right: 10px;
+  margin-top: 10px;
 }
 
 .teach-score-input {
-  width: 60px;
-  padding: 8px;
-  margin-right: 10px;
+  width: 50px;
+  margin-left: 10px;
 }
 
 .teach-submit-btn {
-  padding: 8px 16px;
-  background-color: #007bff;
+  margin-left: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #28a745;
   color: white;
   border: none;
-  cursor: pointer;
+  border-radius: 5px;
 }
 
 .teach-submit-btn:hover {
-  background-color: #0056b3;
+  background-color: #218838;
+}
+
+.teach-grade-btn {
+  width: 50%;
+  padding: 0px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
