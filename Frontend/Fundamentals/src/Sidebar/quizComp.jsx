@@ -57,7 +57,7 @@ const QuizComponent = ({ questions }) => {
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+    if (currentQuestionIndex < shuffledQuestions.length - 1 && resetCount < maxResets) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
       setMessage('');
@@ -68,7 +68,7 @@ const QuizComponent = ({ questions }) => {
   };
 
   const handlePreviousQuestion = () => {
-    if (currentQuestionIndex > 0) {
+    if (currentQuestionIndex > 0 && resetCount < maxResets) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
       setSelectedAnswer(null);
       setMessage('');
@@ -165,7 +165,7 @@ const QuizComponent = ({ questions }) => {
         </div>
       )}
       {showTeacherMessage && (
-        <div className="teacher-message">
+        <div className="quiz-solution">
           <p>For mastering the topic you need to contact the respective teacher.</p>
         </div>
       )}

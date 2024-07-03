@@ -51,7 +51,7 @@
 .quiz-container {
   border-top: 1px solid #cccccc; /* light gray line on top */
   padding-top: 20px;
-  width: 100vh; /* Ensure the container takes full width */
+  width: 759px; /* Ensure the container takes full width */
   overflow-y: auto; /* Make the quiz container scrollable */
   height: 400px; /* Set a fixed height for the quiz container */
   margin-bottom: 20px; /* Add margin at the bottom */
@@ -225,10 +225,6 @@
   font-weight: bold;
 }
 
-.show-solution-button {
-  margin-right: 10px;
-}
-
 .quiz-navigation {
   margin-top: 20px;
   display: flex;
@@ -256,4 +252,16 @@
 .quiz-next:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+.show-solution-button{
+  background-color: #1e90ff;
+  font-family: "spotify-circular";
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
