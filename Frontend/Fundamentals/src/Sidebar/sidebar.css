@@ -265,3 +265,34 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
+.qt-attended-questions {
+  text-align: center;
+}
+
+.qt-heading {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.qt-questions-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.qt-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: grey;
+  margin: 0 5px;
+}
+
+.qt-correct-answer {
+  background-color: rgb(26, 225, 26);
+}
+
+.qt-incorrect-answer {
+  background-color: rgb(246, 7, 7);
+}

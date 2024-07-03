@@ -15,6 +15,7 @@ const QuizComponent = ({ questions }) => {
 
   const maxResets = 3;
   const maxQuestions = 10;
+  const totalQuestions = 10;
 
   useEffect(() => {
     shuffleQuestions();
@@ -146,16 +147,23 @@ const QuizComponent = ({ questions }) => {
                 Reset Quiz
               </button>
             </div>
-            <div className="attended-questions">
-              <h3>Attended Questions:</h3>
-              <ul>
-                {attendedQuestions.map((item, index) => (
-                  <li key={index} className={item.isCorrect ? 'correct-answer' : 'incorrect-answer'}>
-                    Question {item.questionNumber}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <div className="qt-attended-questions">
+            <h3 className="qt-heading">Attended Questions:</h3>
+            <ul className="qt-questions-list">
+              {[...Array(totalQuestions)].map((_, index) => {
+                const attendedQuestion = attendedQuestions.find(item => item.questionNumber === index + 1);
+                let circleClass = 'qt-circle';
+                
+                if (attendedQuestion) {
+                  circleClass += attendedQuestion.isCorrect ? ' qt-correct-answer' : ' qt-incorrect-answer';
+                }
+
+                return (
+                  <li key={index} className={circleClass}></li>
+                );
+              })}
+            </ul>
+          </div>
           </>
         )}
       </div>
