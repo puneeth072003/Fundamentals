@@ -1,6 +1,6 @@
 .student_app {
   display: flex;
-  height: 80vh; /* Ensure the app takes full viewport height */
+  height: 100vh; /* Ensure the app takes full viewport height */
 }
 
 .sidebar {
@@ -51,9 +51,11 @@
 .quiz-container {
   border-top: 1px solid #cccccc; /* light gray line on top */
   padding-top: 20px;
-  width: 100%; /* Ensure the container takes full width */
+  width: 100vh; /* Ensure the container takes full width */
   overflow-y: auto; /* Make the quiz container scrollable */
-  height: 100%; /* Ensure the container takes full height */
+  height: 400px; /* Set a fixed height for the quiz container */
+  margin-bottom: 20px; /* Add margin at the bottom */
+  overflow-y: scroll;
 }
 
 .quiz-box {
@@ -61,8 +63,7 @@
 }
 
 /* quiz component styles */
-.quiz-container {
-  width: 100%;
+.quiz-container.scrollable {
   margin: 0 auto;
   padding: 20px;
   background-color: #f0f8ff;
@@ -171,6 +172,10 @@
   transition: background-color 0.3s;
 }
 
+.well-done-reset:hover {
+  background-color: #e03e00;
+}
+
 /* Attended questions styles */
 .attended-questions {
   margin-top: 20px;
@@ -199,4 +204,56 @@
 
 .incorrect-answer input[type="radio"] {
   accent-color: #ff6347;
+}
+
+/* Solution section */
+.quiz-wrapper {
+  display: flex;
+}
+
+.quiz-solution {
+  flex: 0 0 300px; /* Adjust the width as needed */
+  margin-left: 20px;
+  padding: 10px;
+  border: 1px solid #ffeeba;
+  background-color: #fff3cd;
+  border-radius: 5px;
+}
+
+.quiz-solution p {
+  color: #856404;
+  font-weight: bold;
+}
+
+.show-solution-button {
+  margin-right: 10px;
+}
+
+.quiz-navigation {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.quiz-prev,
+.quiz-next {
+  background-color: #1e90ff;
+  font-family: "spotify-circular";
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.quiz-prev:hover,
+.quiz-next:hover {
+  background-color: #1c86ee;
+}
+
+.quiz-prev:disabled,
+.quiz-next:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
