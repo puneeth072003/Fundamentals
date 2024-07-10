@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "./Login.css";
+import Logo from '../../assets/plainlogo.png';
 
 function Signup() {
   const [email, setEmail] = useState('');
@@ -35,7 +36,8 @@ function Signup() {
   return (
     <div className="log-body">
       <div className="auth-container">
-        <h2>Sign Up</h2>
+        {/* <h2>Sign Up</h2> */}
+        <img className="logo" src={Logo} alt="Logo" />
         <form onSubmit={handleSubmit}>
           <div>
             <label>Email:</label>
