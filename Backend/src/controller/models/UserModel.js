@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Password must contain at least one uppercase letter, one lowercase letter, one special character and one number'
     }
+  },
+  asTeacher: {
+    type:Boolean,
+    required: true
   }
 });
 

@@ -1,13 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import "./sidebar.css";
-import handleFetch from './sidebarData';
 import QuizComponent from './quizComp';
+import axios from 'axios';
 
 const StudentApp = () => {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedSubunit, setSelectedSubunit] = useState(null);
   const [questions, setQuestions] = useState([]);
-  const sidebarData= useState(handleFetch());
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [status,setStatus]=useState("Click on a subunit to continue");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setStatus("Loading....")
+      try {
+        const response = await axios.get('http://localhost:3000/api/v1/class11');
+        if (Array.isArray(response.data.content)) {
+          setData(response.data.content);
+          setStatus("Click on a subunit to continue");
+        } else {
+          console.error('Response data is not an array:', response.data);
+          setStatus(error.message);
+        }
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
 
   const handleUnitClick = (unit) => {
     setSelectedUnit(unit);
@@ -27,7 +50,7 @@ const StudentApp = () => {
     <div className="student_app">
       <div className="sidebar">
         <ul className="sidebar-list">
-          {sidebarData.map((unit, unitIndex) => (
+          {data.map((unit, unitIndex) => (
             <li key={unitIndex} className="sidebar-item">
               <div className="sidebar-item-title" onClick={() => handleUnitClick(unit)}>
                 {unit.title1}: {unit.title2}
@@ -48,7 +71,7 @@ const StudentApp = () => {
       <div className="main-content">
         {!selectedSubunit && (
           <div className="content-placeholder">
-            Click on a subunit to continue
+            {status}
           </div>
         )}
         {selectedSubunit && selectedSubunit.type === 'video' && (
