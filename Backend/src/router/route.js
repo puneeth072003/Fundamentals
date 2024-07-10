@@ -4,11 +4,10 @@ const { login, signin, getCurrentUser } = require("../controller/db.js");
 const bcrypt = require('bcrypt');
 const User = require('../controller/models/UserModel.js')
 const router = express.Router();
-const {fetchClass11Element} = require("../controller/tasks.js")
-const SidebarData = require('../controller/models/ClassModel.js'); 
 const MongoClient = require('mongodb').MongoClient;
 
 router.get("/", getHome);
+
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,9 +24,9 @@ router.post('/login', async (req, res) => {
 
 
 router.post('/signin', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password , asTeacher} = req.body;
     const hashedPassword = await bcrypt.hash(password, 10); // Hash the password with a salt of 10
-    const user = new User({ email, password: hashedPassword });
+    const user = new User({ email, password: hashedPassword , asTeacher});
     try {
       await user.save();
       res.send({ message: 'User registered successfully' });
@@ -48,7 +47,7 @@ router.get('/class11', async (req, res) => {
     const sidebarData = await collection.findOne();
     const class11 = sidebarData.class11;
 
-    res.json(class11);
+    res.json({"content":class11});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error fetching class11 data' });
