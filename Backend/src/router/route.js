@@ -5,7 +5,22 @@ const { login, signin, getCurrentUser } = require("../controller/db.js");
 const router = express.Router();
 
 router.get("/", getHome);
-router.get("/login",login);
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).send({ message: 'Email not found' });
+    }
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    if (!isMatch) {
+      return res.status(401).send({ message: 'Incorrect password' });
+    }
+    const token = user.generateAuthToken();
+    res.send({ token });
+    // const token = user.generateAuthToken();
+    res.send({ message: 'User logged successfully' });
+  });
 router.get("/signin",signin);
 router.get('/getuser',getCurrentUser);
 
