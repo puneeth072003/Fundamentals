@@ -243,3 +243,7 @@ a {
   background-color: #0044cc; /* Change background on hover */
   color: #ffffff; /* Change text color on hover */
 }
+
+.logo-text {
+  font-size: 1.2rem; /* Adjust font size as needed */
+}
