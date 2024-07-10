@@ -15,7 +15,7 @@ function Login() {
       const response = await axios.post('http://localhost:3000/api/v1/login', {
         email,
         password,
-      });
+      }) ;
 
       // Assuming the response contains a status or message field to indicate success
       console.log('Login successful', response.data);
