@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./sidebar.css";
-import { sidebarData } from './sidebarData';
+import handleFetch from './sidebarData';
 import QuizComponent from './quizComp';
 
 const StudentApp = () => {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedSubunit, setSelectedSubunit] = useState(null);
   const [questions, setQuestions] = useState([]);
+  const sidebarData= useState(handleFetch());
 
   const handleUnitClick = (unit) => {
     setSelectedUnit(unit);
