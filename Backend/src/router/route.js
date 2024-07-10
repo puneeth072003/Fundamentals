@@ -4,9 +4,9 @@ const { login, signin, getCurrentUser } = require("../controller/db.js");
 const bcrypt = require('bcrypt');
 const User = require('../controller/models/UserModel.js')
 const router = express.Router();
-const { MongoClient, ObjectId } = require('mongodb');
 const {fetchClass11Element} = require("../controller/tasks.js")
-const Class11 = require('../controller/models/ClassModel.js'); 
+const SidebarData = require('../controller/models/ClassModel.js'); 
+const MongoClient = require('mongodb').MongoClient;
 
 router.get("/", getHome);
 router.post('/login', async (req, res) => {
@@ -36,20 +36,25 @@ router.post('/signin', async (req, res) => {
     }
   });
 
-  router.get('/class/:className', async (req, res) => {
-    try {
-      const className = req.params.className;
-      const class11Element = await Class11.findOne({ title1: className }, 'class11');
-  
-      if (class11Element) {
-        res.json(class11Element);
-      } else {
-        res.status(404).send('Class not found');
-      }
-    } catch (error) {
-      res.status(500).send('Error fetching class11 element');
-    }
-  });
+router.get('/class11', async (req, res) => {
+  try {
+    const url = 'mongodb+srv://pyd773:pyd773@cluster0.i0exuyl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+    const dbName = 'test';
+    const collectionName = 'SidebarData';
+    const client = new MongoClient(url);
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+
+    const sidebarData = await collection.findOne();
+    const class11 = sidebarData.class11;
+
+    res.json(class11);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error fetching class11 data' });
+  }
+});
+
 router.get('/getuser',getCurrentUser);
 
 module.exports = router;
