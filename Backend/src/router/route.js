@@ -16,12 +16,22 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(401).send({ message: 'Incorrect password' });
     }
-    const token = user.generateAuthToken();
-    res.send({ token });
-    // const token = user.generateAuthToken();
     res.send({ message: 'User logged successfully' });
   });
-router.get("/signin",signin);
+
+
+router.post('/signin', async (req, res) => {
+    const { email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password with a salt of 10
+    const user = new User({ email, password: hashedPassword });
+    try {
+      await user.save();
+      res.send({ message: 'User registered successfully' });
+    } catch (err) {
+      res.status(400).send({ message: 'Error registering user' });
+    }
+  });
+  
 router.get('/getuser',getCurrentUser);
 
 module.exports = router;
