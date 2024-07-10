@@ -1,6 +1,8 @@
 const express = require("express");
 const getHome =require("../controller/tasks.js");
 const { login, signin, getCurrentUser } = require("../controller/db.js");
+const bcrypt = require('bcrypt');
+const User = require('../controller/UserModel.js')
 
 const router = express.Router();
 
