@@ -6,22 +6,20 @@ import Logo from '../../assets/plainlogo.png';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [asTeacher,setasTeacher]=useState(true);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    setasTeacher(false)
     e.preventDefault();
-
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/login', {
-        email,
-        password,
-      }) ;
-
-      // Assuming the response contains a status or message field to indicate success
+      const response = await axios.post('http://localhost:3000/api/v1/signin', {email,password,asTeacher});
       console.log('Login successful', response.data);
-
       if (response.data.message === "User logged successfully") {
-        navigate('/teacher');
+        localStorage.setItem("state",response.data.state);
+        localStorage.setItem("username",response.data.username);
+        navigate('/class11');
       } else {
         alert("Invalid credentials");
       }
@@ -31,21 +29,40 @@ function Login() {
     }
   };
 
+  const handleClick = async (e) => {
+    e.preventDefault();
+    setasTeacher(true);
+    try {
+      const response = await axios.post('http://localhost:3000/api/v1/signin', {email,password,asTeacher});
+      console.log('Login successful', response.data);
+      if (response.data.message === "User logged successfully") {
+        localStorage.setItem("state",response.data.state);
+        localStorage.setItem("username",response.data.username);
+        navigate('/teacher');
+      } else {
+        alert("Access denied");
+      }
+    } catch (error) {
+      console.error('There was an error logging in!', error);
+      alert('There was an error logging in. Please try again.');
+    }
+  }
+
   return (
     <div className="log-body">
       <div className="auth-container">
-        {/* <h2>Login</h2> */}
         <img className="logo" src={Logo} alt="Logo" />
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Email:</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
-            <label>Password:</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
-          <button type="submit">Login</button>
+          <div className='btn-ctn'>
+            <button type="submit">Login as student</button>
+            <button onClick={handleClick}>Login as a Teacher</button>
+          </div>
         </form>
         <p>
           Don't have an account? <a href="/signup">Sign Up</a>

@@ -1,5 +1,5 @@
 .log-body {
-  font-family: Arial, sans-serif;
+  font-family: "spotify-circular";
   margin: 0;
   padding: 0;
   display: flex;
@@ -12,19 +12,23 @@
 .auth-container {
   background-color: white;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(26, 152, 255, 0.819);
   text-align: center;
-  width: 35%;
-  height: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  min-height: 70vh; /* Ensures it takes at least 70% of viewport height */
+  box-sizing: border-box; /* Ensures padding is included in width/height */
 }
-
-
-
-/* .auth-container h2 {
-  margin-bottom: 1rem;
-} */
-
+input::placeholder {
+  font-family: "spotify-circular";
+  color: #999;
+  font-size: 14px;
+}
 .auth-container .logo {
   width: 80px;
   height: auto;
@@ -74,4 +78,25 @@
 
 .auth-container p a:hover {
   text-decoration: underline;
+}
+.btn-ctn {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Optional: adds space between the buttons */
+}
+
+.btn-ctn button {
+  font-family: "spotify-circular";
+  flex: 1;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn-ctn button:hover {
+  background-color: #0056b3; /* Optional: change to your desired hover color */
 }

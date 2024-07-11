@@ -1,6 +1,6 @@
 const express = require("express");
 const getHome =require("../controller/tasks.js");
-const { login, signin, getCurrentUser } = require("../controller/db.js");
+const { getCurrentUser } = require("../controller/db.js");
 const bcrypt = require('bcrypt');
 const User = require('../controller/models/UserModel.js')
 const router = express.Router();
@@ -9,7 +9,7 @@ const MongoClient = require('mongodb').MongoClient;
 router.get("/", getHome);
 
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const {email, password, asTeacher } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.findOne({ email });
     if (!user) {
@@ -19,17 +19,21 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(401).send({ message: 'Incorrect password' });
     }
-    res.send({ message: 'User logged successfully' });
+    if (asTeacher != user.asTeacher){
+      return res.status(401).send({ message: 'Permission denied' });
+    }
+    res.send({ message: 'User logged successfully', username: user.username ,state: true});
   });
 
 
 router.post('/signin', async (req, res) => {
-    const { email, password , asTeacher} = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password with a salt of 10
-    const user = new User({ email, password: hashedPassword , asTeacher});
+    const { username, email, password , asTeacher} = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({ username, email, password: hashedPassword , asTeacher});
     try {
       await user.save();
-      res.send({ message: 'User registered successfully' });
+      res.send({ message: 'User registered successfully' , username: username ,state: true});
     } catch (err) {
       res.status(400).send({ message: 'Error registering user' });
     }
