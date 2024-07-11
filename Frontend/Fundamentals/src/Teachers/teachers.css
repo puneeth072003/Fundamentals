@@ -1,6 +1,8 @@
 .teach-main {
-  padding: 20px;
   font-family: Arial, sans-serif;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 20px;
 }
 
 .teach-head {
@@ -9,72 +11,92 @@
 
 .teach-container {
   display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+  justify-content: space-between;
 }
 
-.teach-students, .teach-units{
-  width: 30%;
-}
-.teach-grading {
-  width: 17%;
+.teach-students {
+  flex: 1;
 }
 
-.teach-students ul, .teach-grading ul {
-  list-style-type: none;
-  padding: 0;
-  display: grid;
+.teach-students h2,
+.teach-units h2,
+.teach-grading h2 {
+  margin-bottom: 10px;
 }
 
-
-.teach-student, .teach-grade-item {
-  padding: 10px;
-  margin: 5px 0;
+.teach-student {
   cursor: pointer;
+  padding: 10px;
+  margin-bottom: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  text-align: center;
 }
 
 .teach-student.selected {
-  background-color: #f0f0f0;
-  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+}
+
+.teach-units {
+  flex: 1;
+  margin-left: 20px;
 }
 
 .teach-unit-dropdown {
   width: 100%;
-  padding: 5px;
-  margin-top: 10px;
+  padding: 8px;
+  margin-bottom: 10px;
 }
 
 .teach-score {
-  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.teach-score label {
+  display: block;
+  margin-bottom: 5px;
 }
 
 .teach-score-input {
-  width: 50px;
-  margin-left: 10px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .teach-submit-btn {
-  margin-left: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-  background-color: #28a745;
+  width: 100%;
+  padding: 8px;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .teach-submit-btn:hover {
-  background-color: #218838;
+  background-color: #0056b3;
+}
+
+.teach-grading {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.teach-grade-item {
+  margin-bottom: 5px;
 }
 
 .teach-grade-btn {
-  width: 50%;
-  padding: 0px;
-  color: white;
-  border: none;
+  padding: 5px 10px; /* Adjust padding to make the buttons smaller */
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.teach-grade-btn:hover {
+  background-color: #007bff;
+  color: white;
 }
