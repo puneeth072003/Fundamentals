@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const User = require('../controller/models/UserModel.js')
 const Student = require('../controller/models/TeacherModel.js')
 const router = express.Router();
+
 const MongoClient = require('mongodb').MongoClient;
 
 router.get("/", getHome);
@@ -75,6 +76,31 @@ router.get('/getall',async (req, res) => {
     res.status(200).send(students);
   } catch (error) {
     res.status(500).send({ error: 'Error fetching students', details: error.message });
+  }
+});
+
+router.put('/modifygrade/:id', async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { unitNo, newGrade } = req.body;
+
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).send({ error: 'Student not found' });
+    }
+
+    const unit = student.units.find((unit) => unit.no === unitNo);
+    if (!unit) {
+      return res.status(404).send({ error: 'Unit not found' });
+    }
+
+    unit.grade = newGrade;
+
+    await student.save();
+
+    res.send({ message: 'Grade updated successfully', student });
+  } catch (error) {
+    res.status(400).send({ error: 'Error updating grade', details: error.message });
   }
 });
 

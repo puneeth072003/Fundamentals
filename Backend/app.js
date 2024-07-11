@@ -29,6 +29,7 @@ const corsOptions = {
 app.use(cors());
 
 app.use("/api/v1/", router);
+app.use(express.json());
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);

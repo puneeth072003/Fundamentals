@@ -1,29 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './teachers.css';
 
 const TeacherComp = () => {
+  const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [selectedUnit, setSelectedUnit] = useState(null);
-  const [score, setScore] = useState(0);
+  const [selectedGrade, setSelectedGrade] = useState('');
 
-  const students = [
-    { id: 1, name: 'Student A', score: 3 },
-    { id: 2, name: 'Student B', score: 7 },
-    { id: 3, name: 'Student C', score: 9 },
-  ];
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/v1/getall'); // Adjust the endpoint as needed
+        const data = await response.json();
+        setStudents(data);
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      }
+    };
 
-  const units = [
-    { id: 1, name: 'Unit 1' },
-    { id: 2, name: 'Unit 2' },
-    { id: 3, name: 'Unit 3' },
-  ];
-
-  const gradings = [
-    { id: 1, label: 'Proficient' },
-    { id: 2, label: 'Mastered' },
-    { id: 3, label: 'Average' },
-    { id: 4, label: 'Need to work hard' },
-  ];
+    fetchStudents();
+  }, []);
 
   const handleStudentClick = (student) => {
     setSelectedStudent(student);
@@ -32,21 +28,46 @@ const TeacherComp = () => {
 
   const handleUnitSelect = (unit) => {
     setSelectedUnit(unit);
-    // You can initialize or fetch any existing score for the selected unit here if needed
+    setSelectedGrade(unit.grade); // Initialize the selected grade with the current grade
   };
 
-  const handleScoreChange = (event) => {
-    setScore(event.target.value);
+  const handleGradeChange = (event) => {
+    setSelectedGrade(event.target.value);
   };
 
-  const handleSubmitScore = () => {
-    // Logic for submitting score (to be implemented)
-    console.log(`Score submitted for ${selectedStudent.name}, Unit ${selectedUnit.name}: ${score}`);
-    // Reset states or perform other actions after submitting score
-  };
-
-  const handleGradingClick = (grading) => {
-    console.log(`Grading selected: ${grading.label}`);
+  const handleGradeSubmit = async () => {
+    try {
+      const updatedUnits = selectedStudent.units.map((unit) =>
+        unit.no === selectedUnit.no ? { ...unit, grade: selectedGrade } : unit
+      );
+  
+      const updatedStudent = { ...selectedStudent, units: updatedUnits };
+  
+      // Update student in the backend
+      await fetch(`http://localhost:3000/api/v1/modifygrade/${selectedStudent._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          unitNo: selectedUnit.no,
+          newGrade: selectedGrade,
+        }),
+      });
+  
+      setStudents((prevStudents) =>
+        prevStudents.map((student) =>
+          student._id === selectedStudent._id ? updatedStudent : student
+        )
+      );
+  
+      setSelectedUnit((prevSelectedUnit) => ({
+        ...prevSelectedUnit,
+        grade: selectedGrade,
+      }));
+    } catch (error) {
+      console.error('Error updating grade:', error);
+    }
   };
 
   return (
@@ -58,7 +79,7 @@ const TeacherComp = () => {
           <ul className="teach-students">
             {students.map((student) => (
               <li
-                key={student.id}
+                key={student._id}
                 className={`teach-student ${selectedStudent === student ? 'selected' : ''}`}
                 onClick={() => handleStudentClick(student)}
               >
@@ -74,42 +95,38 @@ const TeacherComp = () => {
                 <h2>Units for {selectedStudent.name}</h2>
                 <select
                   className="teach-unit-dropdown"
-                  value={selectedUnit ? selectedUnit.id : ''}
-                  onChange={(e) => handleUnitSelect(units.find(unit => unit.id === parseInt(e.target.value)))}
+                  value={selectedUnit ? selectedUnit.no : ''}
+                  onChange={(e) => handleUnitSelect(selectedStudent.units.find(unit => unit.no === parseInt(e.target.value)))}
                 >
                   <option value="">Select a unit</option>
-                  {units.map((unit) => (
-                    <option key={unit.id} value={unit.id}>{unit.name}</option>
+                  {selectedStudent.units.map((unit) => (
+                    <option key={unit._id} value={unit.no}>{`Unit ${unit.no}`}</option>
                   ))}
                 </select>
                 {selectedUnit && (
-                  <div className="teach-score">
-                    <label htmlFor="score">Score:</label>
-                    <input
-                      type="number"
-                      id="score"
-                      className="teach-score-input"
-                      value={score}
-                      onChange={handleScoreChange}
-                      min="0"
-                      max="10"
-                    />
-                    <button className="teach-submit-btn" onClick={handleSubmitScore}>Submit Score</button>
+                  <div className="teach-scores">
+                    <h3>Scores for Unit {selectedUnit.no}</h3>
+                    <p>Quiz Score: {selectedUnit.quizScore}</p>
+                    <p>Unit Test Score: {selectedUnit.unitTest}</p>
                   </div>
                 )}
               </div>
-              <div className="teach-grading">
-                <h2>Gradings</h2>
-                <ul>
-                  {gradings.map((grading) => (
-                    <li key={grading.id} className="teach-grade-item">
-                      <button className="teach-grade-btn" onClick={() => handleGradingClick(grading)}>
-                        {grading.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {selectedUnit && (
+                <div className="teach-grading">
+                  <h3>Grade for Unit {selectedUnit.no}</h3>
+                  <select
+                    className="teach-grade-dropdown"
+                    value={selectedGrade}
+                    onChange={handleGradeChange}
+                  >
+                    <option value="Proficient">Proficient</option>
+                    <option value="Mastered">Mastered</option>
+                    <option value="Average">Average</option>
+                    <option value="Need to Work Hard">Need to Work Hard</option>
+                  </select>
+                  <button className="teach-submit-btn" onClick={handleGradeSubmit}>Submit Grade</button>
+                </div>
+              )}
             </>
           )}
         </div>
