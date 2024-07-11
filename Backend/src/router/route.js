@@ -104,6 +104,40 @@ router.put('/modifygrade/:id', async (req, res) => {
   }
 });
 
+router.put('/students/:username/units/:unitNo', async (req, res) => {
+  const username = req.params.username;
+  const unitNo = req.params.unitNo;
+  const newData = req.body;
+
+  try {
+    // Find student by username
+    let student = await Student.findOne({ name: username });
+
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    // Find the specific unit within the student's units array
+    let unitToUpdate = student.units.find(unit => unit.no === parseInt(unitNo));
+
+    if (!unitToUpdate) {
+      return res.status(404).json({ error: 'Unit not found for the student' });
+    }
+
+    // Update quizScore and unitTest for the found unit
+    unitToUpdate.quizScore = newData.quizScore;
+    unitToUpdate.unitTest = newData.unitTest;
+
+    // Save the updated student object
+    await student.save();
+
+    res.json({ message: 'Student unit data updated successfully', student });
+  } catch (error) {
+    console.error('Error updating student unit data:', error);
+    res.status(500).json({ error: 'Error updating student unit data' });
+  }
+});
+
 router.get('/getuser',getCurrentUser);
 
 module.exports = router;

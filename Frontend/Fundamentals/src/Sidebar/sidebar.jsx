@@ -10,6 +10,8 @@ const StudentApp = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [status,setStatus]=useState("Click on a subunit to continue");
+  const [flag,setFlag]=useState(false);
+  const [unitno,setUnitno]=useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,11 +40,17 @@ const StudentApp = () => {
   };
 
   const handleSubunitClick = (subunit) => {
+    setUnitno(1)
     setSelectedSubunit(subunit);
     if (subunit.type === 'quiz') {
       setQuestions(subunit.questions);
     } else {
       setQuestions([]); // Clear questions if the subunit is not a quiz
+    }
+    if (subunit.name === 'Unit test') {
+      setFlag(true);
+    } else {
+      setFlag(false); // Clear questions if the subunit is not a quiz
     }
   };
 
@@ -62,6 +70,7 @@ const StudentApp = () => {
                       {subunit.name}
                     </li>
                   ))}
+                  <li><button className="finish-button">Finish</button></li>
                 </ul>
               )}
             </li>
@@ -93,7 +102,7 @@ const StudentApp = () => {
         {selectedSubunit && selectedSubunit.type === 'quiz' && (
           <div className="quiz-box">
             <h1>Quiz: {selectedSubunit.quizTitle}</h1>
-            <QuizComponent  questions={questions}/>
+            <QuizComponent  questions={questions} flag={flag} unitno={unitno}/>
           </div>
         )}
       </div>

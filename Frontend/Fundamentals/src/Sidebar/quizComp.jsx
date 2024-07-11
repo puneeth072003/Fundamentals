@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './sidebar.css';
 
-const QuizComponent = ({ questions }) => {
+const QuizComponent = ({ questions, flag, unitno}) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
@@ -93,7 +93,35 @@ const QuizComponent = ({ questions }) => {
 
   if (shuffledQuestions.length === 0) return null;
 
-  const currentQuestion = shuffledQuestions[currentQuestionIndex];
+const currentQuestion = shuffledQuestions[currentQuestionIndex];
+
+const handleSubmitScore = (score, flag) => {
+  const username = localStorage.getItem('username');
+  let updatedScore = score;
+  let updatedUnitTest = null;
+
+  if (flag) {
+    updatedUnitTest = score;
+  } else {
+    updatedScore += score; // Assuming this was a typo, it should probably be: updatedScore += score;
+  }
+
+  const data = {
+    quizScore: updatedScore,
+    unitTest: updatedUnitTest,
+  };
+
+  fetch(`http://localhost:3000/api/v1/students/${username}/units/${unitno}`, {
+    method: 'PUT', 
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then(response => response.json())
+    .then(data => console.log('Updated data:', data)) // Log updated data
+    .catch(error => console.error('Error updating score:', error));
+};
 
   return (
     <div className="quiz-wrapper">
@@ -102,6 +130,9 @@ const QuizComponent = ({ questions }) => {
           <div className="well-done-message">
             <h2>Well done!</h2>
             <p>Your score: {score} / {maxQuestions}</p>
+            <button className="well-done-reset" onClick={handleSubmitScore(score,flag)}>
+              Submit
+            </button><br/>
             <button className="well-done-reset" onClick={handleResetQuiz}>
               Reset Quiz
             </button>
@@ -138,7 +169,7 @@ const QuizComponent = ({ questions }) => {
               <button className="quiz-prev" onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>
                 Previous Question
               </button>
-              <button className="quiz-next" onClick={handleNextQuestion} disabled={currentQuestionIndex === shuffledQuestions.length - 1}>
+              <button className="quiz-next" onClick={handleNextQuestion} disabled={currentQuestionIndex === shuffledQuestions.length}>
                 Next Question
               </button>
             </div>

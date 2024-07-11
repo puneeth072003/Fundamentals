@@ -296,4 +296,32 @@
 .qt-incorrect-answer {
   background-color: rgb(246, 7, 7);
 }
+.subunit-list {
+  list-style-type: none;
+  padding: 0;
+}
 
+.subunit-item {
+  cursor: pointer;
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  background-color: #f0f0f0;
+}
+
+.subunit-item:hover {
+  background-color: #e0e0e0;
+}
+
+.finish-button {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  margin-top: 8px;
+}
+
+.finish-button:hover {
+  background-color: #0056b3;
+}
