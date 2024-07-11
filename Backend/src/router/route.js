@@ -3,6 +3,7 @@ const getHome =require("../controller/tasks.js");
 const { getCurrentUser } = require("../controller/db.js");
 const bcrypt = require('bcrypt');
 const User = require('../controller/models/UserModel.js')
+const Student = require('../controller/models/TeacherModel.js')
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 
@@ -55,6 +56,25 @@ router.get('/class11', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error fetching class11 data' });
+  }
+});
+
+router.post('/create', async (req, res) => {
+  try {
+    const newStudent = new Student(req.body);
+    await newStudent.save();
+    res.status(201).send({message:'Student added'});
+  } catch (error) {
+    res.status(400).send({ error: 'Error creating Student', details: error.message });
+  }
+});
+
+router.get('/getall',async (req, res) => {
+  try {
+    const students = await Student.find({});
+    res.status(200).send(students);
+  } catch (error) {
+    res.status(500).send({ error: 'Error fetching students', details: error.message });
   }
 });
 
