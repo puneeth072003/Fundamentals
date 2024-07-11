@@ -137,9 +137,7 @@
 }
 
 .teach-unit-dropdown:focus,
-.teach-score-input:focus,
-.teach-submit-btn:focus,
-.teach-grade-btn:focus {
+.teach-score-input:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
@@ -155,20 +153,20 @@
 }
 
 /* Buttons */
-.teach-submit-btn {
+/* .teach-submit-btn {
   background-color: #007bff;
   color: white;
   cursor: pointer;
   border: none;
   transition: background-color 0.3s;
   border-radius: 5px;
-}
+} */
 
-.teach-submit-btn:hover {
+/* .teach-submit-btn:hover {
   background-color: #0056b3;
-}
+} */
 
-.teach-grade-btn {
+/* .teach-grade-btn {
   background-color: #28a745;
   color: white;
   cursor: pointer;
@@ -176,12 +174,12 @@
   transition: background-color 0.3s, transform 0.2s;
   border-radius: 5px;
   margin-bottom: 10px;
-}
+} */
 
-.teach-grade-btn:hover {
+/* .teach-grade-btn:hover {
   background-color: #218838;
   transform: scale(1.05);
-}
+} */
 
 .teach-grade-item {
   margin: 10px 0;
@@ -214,9 +212,42 @@
 
 .teach-grading ul {
   list-style-type: none;
-  padding: 0;
+  padding: 10px;
 }
 
 .teach-grade-item {
   margin-bottom: 10px;
+}
+
+.teach-submit-btn,
+.teach-grade-btn {
+  display: inline-table;
+  width: 20%;
+  padding: 10px 20px ;
+  border: 1px solid #ccc;
+  margin-left: 25px;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.teach-submit-btn:hover,
+.teach-grade-btn:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.teach-grade-btn {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.teach-grade-btn:hover {
+  background-color: #218838;
+  border-color: #218838;
 }
