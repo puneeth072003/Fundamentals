@@ -1,8 +1,13 @@
 import './App.css'
 import React from 'react'
+import { useEffect } from 'react';
 
 function App() {
-
+  useEffect(() => {
+    window.addEventListener('beforeunload', () => {
+      localStorage.clear();
+    });
+  }, []);
   return (
     <>
       <div className="fundamentals-page">

@@ -6,7 +6,6 @@ import Logo from '../../assets/plainlogo.png';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [asTeacher,setasTeacher]=useState(true);
 
   const navigate = useNavigate();
 
@@ -14,7 +13,7 @@ function Login() {
     setasTeacher(false)
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/signin', {email,password,asTeacher});
+      const response = await axios.post('http://localhost:3000/api/v1/login', {email,password,asTeacher:false});
       console.log('Login successful', response.data);
       if (response.data.message === "User logged successfully") {
         localStorage.setItem("state",response.data.state);
@@ -31,9 +30,8 @@ function Login() {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    setasTeacher(true);
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/signin', {email,password,asTeacher});
+      const response = await axios.post('http://localhost:3000/api/v1/login', {email,password,asTeacher:true});
       console.log('Login successful', response.data);
       if (response.data.message === "User logged successfully") {
         localStorage.setItem("state",response.data.state);
