@@ -57,13 +57,12 @@ const TeacherComp = () => {
           <h2>Students</h2>
           <ul className="teach-students">
             {students.map((student) => (
-              <li key={student.id}>
-                <button
-                  className={`teach-student ${selectedStudent === student ? 'selected' : ''}`}
-                  onClick={() => handleStudentClick(student)}
-                >
-                  {student.name}
-                </button>
+              <li
+                key={student.id}
+                className={`teach-student ${selectedStudent === student ? 'selected' : ''}`}
+                onClick={() => handleStudentClick(student)}
+              >
+                {student.name}
               </li>
             ))}
           </ul>

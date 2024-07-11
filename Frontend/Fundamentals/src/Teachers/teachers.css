@@ -115,3 +115,113 @@
 .teach-grade-item {
   margin: 10px 0;
 }
+
+.teach-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.teach-head {
+  margin-bottom: 20px;
+}
+
+.teach-container {
+  display: flex;
+  width: 80%;
+}
+
+.teach-sidebar {
+  flex: 1;
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-right: 2px solid #ddd;
+}
+
+.teach-students {
+  list-style-type: none;
+  padding: 0;
+}
+
+.teach-student {
+  cursor: pointer;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.teach-student.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.teach-student:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.teach-content {
+  flex: 3;
+  padding: 20px;
+}
+
+.teach-unit-dropdown {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.teach-score {
+  margin-top: 20px;
+}
+
+.teach-score-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.teach-submit-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.teach-submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.teach-grading {
+  margin-top: 40px;
+}
+
+.teach-grading ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.teach-grade-item {
+  margin-bottom: 10px;
+}
+
+.teach-grade-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.teach-grade-btn:hover {
+  background-color: #218838;
+}
