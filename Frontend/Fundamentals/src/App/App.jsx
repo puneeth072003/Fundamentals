@@ -1,6 +1,7 @@
 import './App.css'
 import React from 'react'
 import { useEffect } from 'react';
+import Login from "../Login/SignUP/Login"
 
 function App() {
   useEffect(() => {
@@ -32,6 +33,8 @@ function App() {
           <h2>ReactJS Introduction</h2>
           <a href="https://legacy.reactjs.org/docs/getting-started.html">Get started with ReactJS, the popular JavaScript library for building user interfaces.</a>
         </section>
+        {/* <button className='submit-btn' onClick={ Login }>Get Started</button> */}
+        <a href='/login' className='start-btn'>Get Started</a>
       </main>
       <footer className="page-footer">
         <p>&copy; 2024 Fundamentals Tutorials. All rights reserved.</p>
