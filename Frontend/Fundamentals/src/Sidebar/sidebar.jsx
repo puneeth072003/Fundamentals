@@ -40,7 +40,7 @@ const StudentApp = () => {
   };
 
   const handleSubunitClick = (subunit) => {
-    setUnitno(1)
+    setUnitno(subunit.no)
     setSelectedSubunit(subunit);
     if (subunit.type === 'quiz') {
       setQuestions(subunit.questions);

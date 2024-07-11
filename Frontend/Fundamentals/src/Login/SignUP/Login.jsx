@@ -9,34 +9,22 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    setasTeacher(false)
+  const handleStudentLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/login', {email,password,asTeacher:false});
-      console.log('Login successful', response.data);
-      if (response.data.message === "User logged successfully") {
-        localStorage.setItem("state",response.data.state);
-        localStorage.setItem("username",response.data.username);
+      const response = await fetch('http://localhost:3000/api/v1/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password, asTeacher: false })
+      });
+      const data = await response.json();
+      console.log('Login successful', data);
+      if (data.message === "User logged successfully") {
+        localStorage.setItem("state", data.state);
+        localStorage.setItem("username", data.username);
         navigate('/class11');
-      } else {
-        alert("Invalid credentials");
-      }
-    } catch (error) {
-      console.error('There was an error logging in!', error);
-      alert('There was an error logging in. Please try again.');
-    }
-  };
-
-  const handleClick = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3000/api/v1/login', {email,password,asTeacher:true});
-      console.log('Login successful', response.data);
-      if (response.data.message === "User logged successfully") {
-        localStorage.setItem("state",response.data.state);
-        localStorage.setItem("username",response.data.username);
-        navigate('/teacher');
       } else {
         alert("Access denied");
       }
@@ -44,13 +32,38 @@ function Login() {
       console.error('There was an error logging in!', error);
       alert('There was an error logging in. Please try again.');
     }
-  }
+  };
+
+  const handleTeacherLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:3000/api/v1/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password, asTeacher: true })
+      });
+      const data = await response.json();
+      console.log('Login successful', data);
+      if (data.message === "User logged successfully") {
+        localStorage.setItem("state", data.state);
+        localStorage.setItem("username", data.username);
+        navigate('/teacher');
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error('There was an error logging in!', error);
+      alert('There was an error logging in. Please try again.');
+    }
+  };
 
   return (
     <div className="log-body">
       <div className="auth-container">
         <img className="logo" src={Logo} alt="Logo" />
-        <form onSubmit={handleSubmit}>
+        <form>
           <div>
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
@@ -58,8 +71,8 @@ function Login() {
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <div className='btn-ctn'>
-            <button type="submit">Login as student</button>
-            <button onClick={handleClick}>Login as a Teacher</button>
+            <button onClick={handleStudentLogin}>Login as Student</button>
+            <button onClick={handleTeacherLogin}>Login as Teacher</button>
           </div>
         </form>
         <p>

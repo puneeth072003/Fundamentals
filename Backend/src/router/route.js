@@ -33,8 +33,11 @@ router.post('/signin', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({ username, email, password: hashedPassword , asTeacher});
+    const count = await Student.countDocuments();
+    const student =new Student({id:String(count),name:username,units:[]});
     try {
       await user.save();
+      await student.save();
       res.send({ message: 'User registered successfully' , username: username ,state: true});
     } catch (err) {
       res.status(400).send({ message: 'Error registering user' });
@@ -105,7 +108,7 @@ router.put('/modifygrade/:id', async (req, res) => {
 });
 
 router.put('/students/:username/units/:unitNo', async (req, res) => {
-  const username = req.params.username;
+  const username = "John Doe";
   const unitNo = req.params.unitNo;
   const newData = req.body;
 
