@@ -71,9 +71,9 @@ function Signup() {
             <button onClick={handleClick}>Sign Up as a Teacher</button>
           </div>
         </form>
-        <p>
+        {/* <p>
           Already have an account? <a href="/login">Login</a>
-        </p>
+        </p> */}
       </div>
     </div>
   );

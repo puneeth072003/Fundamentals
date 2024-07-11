@@ -75,9 +75,9 @@ function Login() {
             <button onClick={handleTeacherLogin}>Login as Teacher</button>
           </div>
         </form>
-        <p>
+        {/* <p>
           Don't have an account? <a href="/signup">Sign Up</a>
-        </p>
+        </p> */}
       </div>
     </div>
   );
