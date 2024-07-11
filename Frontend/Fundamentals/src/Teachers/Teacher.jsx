@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './teachers.css'; // Assuming you have a CSS file for styling
+import './teachers.css';
 
 const TeacherComp = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -51,11 +51,11 @@ const TeacherComp = () => {
 
   return (
     <div className='teach-main'>
-      <h1 className='teach-head'>hello!!! Teacher</h1>
+      <h1 className='teach-head'>Hello!!! Teacher</h1>
       <div className="teach-container">
-        <div className="teach-students">
+        <div className="teach-sidebar">
           <h2>Students</h2>
-          <ul>
+          <ul className="teach-students">
             {students.map((student) => (
               <li
                 key={student.id}
@@ -67,50 +67,52 @@ const TeacherComp = () => {
             ))}
           </ul>
         </div>
-        {selectedStudent && (
-          <>
-            <div className="teach-units">
-              <h2>Units for {selectedStudent.name}</h2>
-              <select
-                className="teach-unit-dropdown"
-                value={selectedUnit ? selectedUnit.id : ''}
-                onChange={(e) => handleUnitSelect(units.find(unit => unit.id === parseInt(e.target.value)))}
-              >
-                <option value="">Select a unit</option>
-                {units.map((unit) => (
-                  <option key={unit.id} value={unit.id}>{unit.name}</option>
-                ))}
-              </select>
-              {selectedUnit && (
-                <div className="teach-score">
-                  <label htmlFor="score">Score:</label>
-                  <input
-                    type="number"
-                    id="score"
-                    className="teach-score-input"
-                    value={score}
-                    onChange={handleScoreChange}
-                    min="0"
-                    max="10"
-                  />
-                  <button className="teach-submit-btn" onClick={handleSubmitScore}>Submit Score</button>
-                </div>
-              )}
-            </div>
-            <div className="teach-grading">
-              <h2>Gradings</h2>
-              <ul>
-                {gradings.map((grading) => (
-                  <li key={grading.id} className="teach-grade-item">
-                    <button className="teach-grade-btn" onClick={() => handleGradingClick(grading)}>
-                      {grading.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </>
-        )}
+        <div className="teach-content">
+          {selectedStudent && (
+            <>
+              <div className="teach-units">
+                <h2>Units for {selectedStudent.name}</h2>
+                <select
+                  className="teach-unit-dropdown"
+                  value={selectedUnit ? selectedUnit.id : ''}
+                  onChange={(e) => handleUnitSelect(units.find(unit => unit.id === parseInt(e.target.value)))}
+                >
+                  <option value="">Select a unit</option>
+                  {units.map((unit) => (
+                    <option key={unit.id} value={unit.id}>{unit.name}</option>
+                  ))}
+                </select>
+                {selectedUnit && (
+                  <div className="teach-score">
+                    <label htmlFor="score">Score:</label>
+                    <input
+                      type="number"
+                      id="score"
+                      className="teach-score-input"
+                      value={score}
+                      onChange={handleScoreChange}
+                      min="0"
+                      max="10"
+                    />
+                    <button className="teach-submit-btn" onClick={handleSubmitScore}>Submit Score</button>
+                  </div>
+                )}
+              </div>
+              <div className="teach-grading">
+                <h2>Gradings</h2>
+                <ul>
+                  {gradings.map((grading) => (
+                    <li key={grading.id} className="teach-grade-item">
+                      <button className="teach-grade-btn" onClick={() => handleGradingClick(grading)}>
+                        {grading.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

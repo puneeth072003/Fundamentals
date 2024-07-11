@@ -1,35 +1,44 @@
 .teach-main {
-  font-family: Arial, sans-serif;
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 20px;
-}
-
-.teach-head {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .teach-container {
   display: flex;
-  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.teach-sidebar {
+  flex: 1;
+  max-width: 250px;
+  border-right: 1px solid #ccc;
+  padding: 20px;
+}
+
+.teach-content {
+  flex: 3;
+  padding: 20px;
 }
 
 .teach-students {
-  flex: 1;
-}
-
-.teach-students h2,
-.teach-units h2,
-.teach-grading h2 {
-  margin-bottom: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .teach-student {
   cursor: pointer;
   padding: 10px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  margin: 5px 0;
+  border: none;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  width: 100%;
+  text-align: left;
 }
 
 .teach-student.selected {
@@ -37,36 +46,147 @@
   color: white;
 }
 
-.teach-units {
+.teach-student:hover {
+  background-color: #e0e0e0;
+}
+
+.teach-units,
+.teach-grading {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.teach-unit-dropdown,
+.teach-score-input,
+.teach-submit-btn,
+.teach-grade-btn {
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.teach-unit-dropdown {
+  cursor: pointer;
+}
+
+.teach-score-input {
+  -moz-appearance: textfield;
+}
+
+.teach-score-input::-webkit-outer-spin-button,
+.teach-score-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.teach-submit-btn {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.teach-submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.teach-grade-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: 10px;
+}
+
+.teach-grade-btn:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+}
+
+.teach-grade-item {
+  margin: 10px 0;
+}
+
+.teach-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.teach-head {
+  margin-bottom: 20px;
+}
+
+.teach-container {
+  display: flex;
+  width: 80%;
+}
+
+.teach-sidebar {
   flex: 1;
-  margin-left: 20px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-right: 2px solid #ddd;
+}
+
+.teach-students {
+  list-style-type: none;
+  padding: 0;
+}
+
+.teach-student {
+  cursor: pointer;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.teach-student.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.teach-student:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.teach-content {
+  flex: 3;
+  padding: 20px;
 }
 
 .teach-unit-dropdown {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .teach-score {
-  margin-bottom: 10px;
-}
-
-.teach-score label {
-  display: block;
-  margin-bottom: 5px;
+  margin-top: 20px;
 }
 
 .teach-score-input {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
 }
 
 .teach-submit-btn {
-  width: 100%;
-  padding: 8px;
+  margin-top: 10px;
+  padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
@@ -79,24 +199,29 @@
 }
 
 .teach-grading {
-  flex: 1;
-  margin-left: 20px;
+  margin-top: 40px;
+}
+
+.teach-grading ul {
+  list-style-type: none;
+  padding: 0;
 }
 
 .teach-grade-item {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .teach-grade-btn {
-  padding: 5px 10px; /* Adjust padding to make the buttons smaller */
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 10px;
 }
 
 .teach-grade-btn:hover {
-  background-color: #007bff;
-  color: white;
+  background-color: #218838;
 }
