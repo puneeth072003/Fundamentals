@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState ,useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '../../assets/plainlogo.png';
+import { UserContext } from '../../redux/user-context';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const { userData, setUserData } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleStudentLogin = async (e) => {
@@ -22,8 +23,7 @@ function Login() {
       const data = await response.json();
       console.log('Login successful', data);
       if (data.message === "User logged successfully") {
-        localStorage.setItem("state", data.state);
-        localStorage.setItem("username", data.username);
+        setUserData({ state: data.state, username: data.username });
         navigate('/class11');
       } else {
         alert("Access denied");
@@ -47,8 +47,7 @@ const handleTeacherLogin = async (e) => {
       const data = await response.json();
       console.log('Login successful', data);
       if (data.message === "User logged successfully") {
-        localStorage.setItem("state", data.state);
-        localStorage.setItem("username", data.username);
+        setUserData({ state: data.state, username: data.username });
         navigate('/teacher');
       } else {
         alert(data.error);

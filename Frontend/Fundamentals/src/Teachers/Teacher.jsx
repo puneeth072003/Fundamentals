@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import './teachers.css';
+import { UserContext } from '../redux/user-context';
 
 const TeacherComp = () => {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedGrade, setSelectedGrade] = useState('');
+  const { userData } = useContext(UserContext);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -72,7 +74,7 @@ const TeacherComp = () => {
 
   return (
     <div className='teach-main'>
-      <h1 className='teach-head'>Hello!!! Teacher</h1>
+      <h1>Welcome, {userData.username}!</h1>
       <div className="teach-container">
         <div className="teach-sidebar">
           <h2>Students</h2>
