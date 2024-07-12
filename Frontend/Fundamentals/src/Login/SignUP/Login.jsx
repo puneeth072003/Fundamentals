@@ -34,7 +34,7 @@ function Login() {
     }
   };
 
-  const handleTeacherLogin = async (e) => {
+const handleTeacherLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch('http://localhost:3000/api/v1/login', {

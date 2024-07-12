@@ -3,7 +3,7 @@ const getHome =require("../controller/tasks.js");
 const { getCurrentUser } = require("../controller/db.js");
 const bcrypt = require('bcrypt');
 const User = require('../controller/models/UserModel.js')
-const Student = require('../controller/models/TeacherModel.js')
+const {Student,Unit} = require('../controller/models/TeacherModel.js');
 const router = express.Router();
 
 const MongoClient = require('mongodb').MongoClient;
@@ -56,7 +56,7 @@ router.get('/class11', async (req, res) => {
     const sidebarData = await collection.findOne();
     const class11 = sidebarData.class11;
 
-    res.json({"content":class11});
+    res.json({"content": class11});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error fetching class11 data' });
@@ -107,37 +107,84 @@ router.put('/modifygrade/:id', async (req, res) => {
   }
 });
 
-router.put('/students/:username/units/:unitNo', async (req, res) => {
-  const username = "John Doe";
-  const unitNo = req.params.unitNo;
-  const newData = req.body;
-
+// student routes begin ############
+router.post('/students', async (req, res) => {
   try {
-    // Find student by username
-    let student = await Student.findOne({ name: username });
-
-    if (!student) {
-      return res.status(404).json({ error: 'Student not found' });
-    }
-
-    // Find the specific unit within the student's units array
-    let unitToUpdate = student.units.find(unit => unit.no === parseInt(unitNo));
-
-    if (!unitToUpdate) {
-      return res.status(404).json({ error: 'Unit not found for the student' });
-    }
-
-    // Update quizScore and unitTest for the found unit
-    unitToUpdate.quizScore = newData.quizScore;
-    unitToUpdate.unitTest = newData.unitTest;
-
-    // Save the updated student object
-    await student.save();
-
-    res.json({ message: 'Student unit data updated successfully', student });
+      const newStudent = new Student({ username: req.body.username });
+      await newStudent.save();
+      res.status(201).json(newStudent);
   } catch (error) {
-    console.error('Error updating student unit data:', error);
-    res.status(500).json({ error: 'Error updating student unit data' });
+      res.status(400).json({ error: error.message });
+  }
+});
+
+// Route to add a new unit with subunits
+router.post('/units', async (req, res) => {
+  try {
+      const newUnit = new Unit({
+          name: req.body.name,
+          subunits: req.body.subunits.map(subunitName => ({ name: subunitName }))
+      });
+      await newUnit.save();
+      res.status(201).json(newUnit);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
+
+// Route to assign a unit to a student
+router.post('/students/:studentId/units/:unitId', async (req, res) => {
+  try {
+      const student = await Student.findById(req.params.studentId);
+      if (!student) return res.status(404).json({ error: 'Student not found' });
+
+      student.units.push(req.params.unitId);
+      await student.save();
+      res.status(200).json(student);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
+
+// Route to update a subunit score
+router.put('/units/:unitId/subunits/:subunitId/score', async (req, res) => {
+  try {
+      const unit = await Unit.findById(req.params.unitId);
+      if (!unit) return res.status(404).json({ error: 'Unit not found' });
+
+      const subunit = unit.subunits.id(req.params.subunitId);
+      if (!subunit) return res.status(404).json({ error: 'Subunit not found' });
+
+      subunit.quiz.score = req.body.score;
+      subunit.quiz.attempts.push(req.body.score);
+
+      await unit.save();
+      res.status(200).json(subunit);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+});
+
+// Route to get all subunit scores for a student
+router.get('/students/:studentId/scores', async (req, res) => {
+  try {
+      const student = await Student.findById(req.params.studentId).populate('units');
+      if (!student) return res.status(404).json({ error: 'Student not found' });
+
+      const scores = student.units.map(unit => {
+          return {
+              unitName: unit.name,
+              subunits: unit.subunits.map(subunit => ({
+                  subunitName: subunit.name,
+                  score: subunit.quiz.score,
+                  attempts: subunit.quiz.attempts
+              }))
+          };
+      });
+
+      res.status(200).json(scores);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
   }
 });
 
