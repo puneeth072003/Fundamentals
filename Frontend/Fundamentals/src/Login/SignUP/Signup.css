@@ -1,0 +1,103 @@
+.log-body {
+    font-family: "spotify-circular";
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:75vh;
+    background-color: #f0f0f0;
+  }
+  
+  .auth-container {
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 15px;
+    height: 80%;
+    box-shadow: 0 6px 12px rgba(26, 152, 255, 0.819);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    /* min-height: 70vh; Ensures it takes at least 70% of viewport height */
+    box-sizing: border-box; /* Ensures padding is included in width/height */
+  }
+  input::placeholder {
+    font-family: "spotify-circular";
+    color: #999;
+    font-size: 14px;
+  }
+  .auth-container .logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .auth-container form div {
+    margin-bottom: 0.2rem;
+    text-align: left;
+  }
+  
+  .auth-container form label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .auth-container form input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .auth-container button {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .auth-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .auth-container p {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .auth-container p a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .auth-container p a:hover {
+    text-decoration: underline;
+  }
+  .btn-ctn {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; 
+  }
+  
+  .btn-ctn button {
+    font-family: "spotify-circular";
+    flex: 1;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .btn-ctn button:hover {
+    background-color: #0056b3; 
+  }

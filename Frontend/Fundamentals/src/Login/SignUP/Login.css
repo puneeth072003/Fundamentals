@@ -39,6 +39,7 @@ input::placeholder {
 .auth-container form div {
   margin-bottom: 1rem;
   text-align: left;
+  padding: 10px 20px;
 }
 
 .auth-container form label {
