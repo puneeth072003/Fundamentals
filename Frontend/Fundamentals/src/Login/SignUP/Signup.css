@@ -39,6 +39,7 @@
   .auth-container form div {
     margin-bottom: 0.2rem;
     text-align: left;
+    padding: 8px 10px;
   }
   
   .auth-container form label {
@@ -67,19 +68,6 @@
     background-color: #0056b3;
   }
   
-  .auth-container p {
-    margin-top: 1rem;
-    text-align: center;
-  }
-  
-  .auth-container p a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .auth-container p a:hover {
-    text-decoration: underline;
-  }
   .btn-ctn {
     display: flex;
     justify-content: space-between;
