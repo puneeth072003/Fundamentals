@@ -4,11 +4,21 @@ import { useEffect } from 'react';
 import Login from "../Login/SignUP/Login"
 
 function App() {
-  useEffect(() => {
-    window.addEventListener('beforeunload', () => {
-      localStorage.clear();
-    });
-  }, []);
+  // to prevent user form leaving the page
+//   useEffect(() => {
+//     const handleBeforeUnload = (e) => {
+//         const message = 'Are you sure you want to leave this page?';
+//         e.returnValue = message;
+//         return message;
+//     };
+
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//         window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+// }, []);
+
   return (
     <>
       <div className="fundamentals-page">

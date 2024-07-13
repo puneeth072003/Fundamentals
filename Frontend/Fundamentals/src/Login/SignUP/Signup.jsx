@@ -10,7 +10,6 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [asTeacher,setasTeacher]=useState(true);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,9 +18,7 @@ function Signup() {
       const response = await axios.post('http://localhost:3000/api/v1/signin', {username,email,password,asTeacher});
       console.log('Login successful', response.data);
       if (response.data.message === "User registered successfully") {
-        localStorage.setItem("state",response.data.state);
-        localStorage.setItem("username",response.data.username);
-        navigate('/class11');
+        alert('Student user created')
       } else {
         alert(response.error);
       }
@@ -38,9 +35,7 @@ function Signup() {
       const response = await axios.post('http://localhost:3000/api/v1/signin', {username,email,password,asTeacher});
       console.log('Login successful', response.data);
       if (response.data.message === "User registered successfully") {
-        localStorage.setItem("state",response.data.state);
-        localStorage.setItem("username",response.data.username);
-        navigate('/teacher');
+        alert('Teacher user created')
       } else {
         alert(response.error);
       }
@@ -71,9 +66,6 @@ function Signup() {
             <button onClick={handleClick}>Create Teacher Account</button>
           </div>
         </form>
-        {/* <p>
-          Already have an account? <a href="/login">Login</a>
-        </p> */}
       </div>
     </div>
   );
