@@ -23,6 +23,11 @@ export default function PositionedMenu() {
     navigate('/signup');
   };
 
+  const handleAddContent = () => {
+    handleClose();
+    navigate('/addsection');
+  };
+
   return (
     <div>
       <Button
@@ -59,7 +64,7 @@ export default function PositionedMenu() {
         }}
       >
         <MenuItem onClick={handleCreateAccount}>Create Account</MenuItem>
-        <MenuItem onClick={handleClose}>Add Contents</MenuItem>
+        <MenuItem onClick={handleAddContent}>Add Contents</MenuItem>
         <MenuItem onClick={handleClose}>
           <a
             href="https://github.com/puneeth072003/Fundamentals/issues/new"

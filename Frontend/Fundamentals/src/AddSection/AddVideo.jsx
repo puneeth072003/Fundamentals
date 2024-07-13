@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 
-const AddQuizComp = () => {
+const AddVideo = () => {
   const [unit, setUnit] = useState('');
   const [subunit, setSubunit] = useState('');
-  const [questions, setQuestions] = useState([
-    { question: '', options: ['', '', '', ''], solution: '' },
-  ]);
+  const [videoUrl, setVideoUrl] = useState('');
 
   const units = [
     'Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5', 
@@ -21,54 +19,36 @@ const AddQuizComp = () => {
     setSubunit(event.target.value);
   };
 
-  const handleQuestionChange = (index, event) => {
-    const newQuestions = [...questions];
-    newQuestions[index].question = event.target.value;
-    setQuestions(newQuestions);
-  };
-
-  const handleOptionChange = (qIndex, oIndex, event) => {
-    const newQuestions = [...questions];
-    newQuestions[qIndex].options[oIndex] = event.target.value;
-    setQuestions(newQuestions);
-  };
-
-  const handleSolutionChange = (index, event) => {
-    const newQuestions = [...questions];
-    newQuestions[index].solution = event.target.value;
-    setQuestions(newQuestions);
-  };
-
-  const addQuestion = () => {
-    setQuestions([...questions, { question: '', options: ['', '', '', ''], solution: '' }]);
+  const handleVideoUrlChange = (event) => {
+    setVideoUrl(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const newQuiz = {
+    const newVideo = {
       unit,
       subunit,
-      questions,
+      videoUrl,
     };
 
     try {
-      const response = await fetch('YOUR_BACKEND_URL/quizzes', {
+      const response = await fetch('YOUR_BACKEND_URL/videos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newQuiz),
+        body: JSON.stringify(newVideo),
       });
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Quiz added:', result);
+        console.log('Video added:', result);
         setUnit('');
         setSubunit('');
-        setQuestions([{ question: '', options: ['', '', '', ''], solution: '' }]); // Clear the form after successful submission
+        setVideoUrl(''); // Clear the input fields after successful submission
       } else {
-        console.error('Failed to add quiz');
+        console.error('Failed to add video');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -94,7 +74,7 @@ const AddQuizComp = () => {
       padding: '20px',
       borderRadius: '8px',
       boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-      width: '50%',
+      width: '300px',
     },
     select: {
       padding: '10px',
@@ -110,14 +90,6 @@ const AddQuizComp = () => {
       borderRadius: '4px',
       width: '100%',
     },
-    textarea: {
-      padding: '10px',
-      margin: '10px 0',
-      border: '1px solid #ccc',
-      borderRadius: '4px',
-      width: '100%',
-      minHeight: '60px',
-    },
     button: {
       padding: '10px 20px',
       backgroundColor: '#007BFF',
@@ -126,7 +98,6 @@ const AddQuizComp = () => {
       borderRadius: '4px',
       cursor: 'pointer',
       transition: 'background-color 0.3s ease',
-      margin: '10px 0',
     },
     buttonHover: {
       backgroundColor: '#0056b3',
@@ -141,19 +112,11 @@ const AddQuizComp = () => {
       backgroundColor: '#ccc',
       margin: '20px 0',
     },
-    questionContainer: {
-      width: '100%',
-    },
-    optionContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
-    },
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Add Quiz</h1>
+      <h1 style={styles.title}>Add Video</h1>
       <form style={styles.form} onSubmit={handleSubmit}>
         <select
           value={unit}
@@ -165,6 +128,7 @@ const AddQuizComp = () => {
             <option key={index} value={unit}>{unit}</option>
           ))}
         </select>
+        <div style={styles.divider}></div>
         <input
           type="text"
           placeholder="Subunit name"
@@ -172,45 +136,14 @@ const AddQuizComp = () => {
           onChange={handleSubunitChange}
           style={styles.input}
         />
-        {questions.map((q, qIndex) => (
-          <div key={qIndex} style={styles.questionContainer}>
-            <div style={styles.divider}></div>
-            <textarea
-              placeholder="Question"
-              value={q.question}
-              onChange={(event) => handleQuestionChange(qIndex, event)}
-              style={styles.textarea}
-            />
-            <div style={styles.optionContainer}>
-              {q.options.map((option, oIndex) => (
-                <input
-                  key={oIndex}
-                  type="text"
-                  placeholder={`Option ${oIndex + 1}`}
-                  value={option}
-                  onChange={(event) => handleOptionChange(qIndex, oIndex, event)}
-                  style={styles.input}
-                />
-              ))}
-            </div>
-            <input
-              type="text"
-              placeholder="Solution"
-              value={q.solution}
-              onChange={(event) => handleSolutionChange(qIndex, event)}
-              style={styles.input}
-            />
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={addQuestion}
-          style={styles.button}
-          onMouseEnter={(e) => (e.target.style.backgroundColor = styles.buttonHover.backgroundColor)}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = styles.button.backgroundColor)}
-        >
-          Add Question
-        </button>
+        <div style={styles.divider}></div>
+        <input
+          type="text"
+          placeholder="Video URL"
+          value={videoUrl}
+          onChange={handleVideoUrlChange}
+          style={styles.input}
+        />
         <button
           type="submit"
           style={styles.button}
@@ -224,4 +157,4 @@ const AddQuizComp = () => {
   );
 };
 
-export default AddQuizComp;
+export default AddVideo;

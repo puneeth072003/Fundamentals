@@ -36,7 +36,7 @@ const StudentApp = () => {
 
   const handleUnitClick = (unit) => {
     setSelectedUnit(unit);
-    setSelectedSubunit(null); // Reset selected subunit when a new unit is clicked
+    setSelectedSubunit(null); 
   };
 
   const handleSubunitClick = (subunit) => {
@@ -45,12 +45,12 @@ const StudentApp = () => {
     if (subunit.type === 'quiz') {
       setQuestions(subunit.questions);
     } else {
-      setQuestions([]); // Clear questions if the subunit is not a quiz
+      setQuestions([]); 
     }
     if (subunit.name === 'Unit test') {
       setFlag(true);
     } else {
-      setFlag(false); // Clear questions if the subunit is not a quiz
+      setFlag(false); 
     }
   };
 
