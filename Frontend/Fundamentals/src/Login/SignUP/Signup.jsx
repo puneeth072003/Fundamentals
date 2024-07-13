@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import "./Login.css";
+import "./Signup.css";
 import Logo from '../../assets/plainlogo.png';
 
 function Signup() {
@@ -67,13 +67,13 @@ function Signup() {
             <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
           </div>
           <div className='btn-ctn'>
-            <button type="submit">Sign Up as student</button>
-            <button onClick={handleClick}>Sign Up as a Teacher</button>
+            <button type="submit">Create Student Account</button>
+            <button onClick={handleClick}>Create Teacher Account</button>
           </div>
         </form>
-        <p>
+        {/* <p>
           Already have an account? <a href="/login">Login</a>
-        </p>
+        </p> */}
       </div>
     </div>
   );

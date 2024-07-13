@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height:75vh;
   background-color: #f0f0f0;
 }
 
@@ -13,6 +13,7 @@
   background-color: white;
   padding: 2rem;
   border-radius: 15px;
+  height: 80%;
   box-shadow: 0 6px 12px rgba(26, 152, 255, 0.819);
   text-align: center;
   display: flex;
@@ -21,7 +22,7 @@
   width: 90%;
   max-width: 500px;
   margin: auto;
-  min-height: 70vh; /* Ensures it takes at least 70% of viewport height */
+  /* min-height: 70vh; Ensures it takes at least 70% of viewport height */
   box-sizing: border-box; /* Ensures padding is included in width/height */
 }
 input::placeholder {
@@ -38,6 +39,7 @@ input::placeholder {
 .auth-container form div {
   margin-bottom: 1rem;
   text-align: left;
+  padding: 10px 20px;
 }
 
 .auth-container form label {
