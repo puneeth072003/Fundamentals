@@ -74,7 +74,11 @@ const TeacherComp = () => {
 
   return (
     <div className='teach-main'>
-      <h1>Welcome, {userData.username}!</h1>
+      {/* <h1 className='teach-head'>Hello!!! Teacher</h1> */}
+      <div className='new-usr'>
+        <h1 className='teach-head'>Welcome, {userData.username}!</h1>
+        <a href="/signup" className="btn-add-user">Add New User</a>
+      </div>
       <div className="teach-container">
         <div className="teach-sidebar">
           <h2>Students</h2>

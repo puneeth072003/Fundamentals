@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '../../assets/plainlogo.png';
 import { UserContext } from '../../redux/user-context';
+import "./Login.css"
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -74,9 +75,9 @@ const handleTeacherLogin = async (e) => {
             <button onClick={handleTeacherLogin}>Login as Teacher</button>
           </div>
         </form>
-        <p>
+        {/* <p>
           Don't have an account? <a href="/signup">Sign Up</a>
-        </p>
+        </p> */}
       </div>
     </div>
   );
