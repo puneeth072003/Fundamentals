@@ -19,10 +19,6 @@ const TeacherComp = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!isLoggedIn && !hasConfirmed) {
-      // const confirmResubmission = window.confirm("Do you confirm resubmission? All the changes may be lost");
-      // if (confirmResubmission) {
-      //   window.location.href = '/login';
-      // }
       navigate('/login')
       setHasConfirmed(true);
     }

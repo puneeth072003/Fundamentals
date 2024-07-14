@@ -11,38 +11,58 @@ const MongoClient = require('mongodb').MongoClient;
 router.get("/", getHome);
 
 router.post('/login', async (req, res) => {
-    const {email, password, asTeacher } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+  try {
+    const { email, password, asTeacher } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).send({ message: 'Email not found',state: false });
+      return res.status(401).send({ message: 'Email not found', state: false });
     }
-    const isMatch = await bcrypt.compare(password, hashedPassword);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).send({ message: 'Incorrect password' ,state: false});
+      return res.status(401).send({ message: 'Incorrect password', state: false });
     }
-    if (asTeacher != user.asTeacher){
-      return res.status(401).send({ message: 'Permission denied',state: false });
+    if (asTeacher) {
+      // If logging in as a teacher
+      if (!user.asTeacher) {
+        return res.status(401).send({ message: 'Permission denied. This is not a teacher account.', state: false });
+      }
+    } else {
+      // If logging in as a student
+      if (user.asTeacher) {
+        return res.status(401).send({ message: 'Permission denied. This is a teacher account.', state: false });
+      }
     }
-    res.send({ message: 'User logged successfully', username: user.username ,state: true});
-  });
+    res.send({ message: 'User logged in successfully', username: user.username, state: true });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+});
 
-
-router.post('/signin', async (req, res) => {
-    const { username, email, password , asTeacher} = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new User({ username, email, password: hashedPassword , asTeacher});
-    const count = await Student.countDocuments();
-    const student =new Student({id:String(count),name:username,units:[]});
+  router.post('/signin', async (req, res) => {
+    const { username, email, password, asTeacher } = req.body;
+    const user = new User({ username, email, password, asTeacher });
     try {
-      await user.save();
-      await student.save();
-      res.send({ message: 'User registered successfully' , username: username ,state: true});
+      if (asTeacher === false) {
+        const existingStudent = await Student.findOne({ username: req.body.username });
+        if (existingStudent) {
+          return res.status(400).send({ message: 'User already registered as a student' });
+        }
+        const newStudent = new Student({ username: req.body.username });
+        await newStudent.save();
+        await user.save();
+        res.send({ message: 'Student registered successfully', username: username, state: true });
+      } else {
+        const existingUser = await User.findOne({ username: req.body.username });
+        if (existingUser) {
+          return res.status(400).send({ message: 'User already registered as a teacher' });
+        }
+        await user.save();
+        res.send({ message: 'Teacher registered successfully', username: username, state: true });
+      }
     } catch (err) {
-      res.status(400).send({ message: 'Error registering user' });
+      res.status(400).send({ message: err.message});
     }
-  });
+  });  
 
 router.get('/class11', async (req, res) => {
   try {
@@ -104,17 +124,6 @@ router.put('/modifygrade/:id', async (req, res) => {
     res.send({ message: 'Grade updated successfully', student });
   } catch (error) {
     res.status(400).send({ error: 'Error updating grade', details: error.message });
-  }
-});
-
-// student routes begin ############
-router.post('/students', async (req, res) => {
-  try {
-      const newStudent = new Student({ username: req.body.username });
-      await newStudent.save();
-      res.status(201).json(newStudent);
-  } catch (error) {
-      res.status(400).json({ error: error.message });
   }
 });
 

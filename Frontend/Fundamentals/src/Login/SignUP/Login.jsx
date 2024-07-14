@@ -22,16 +22,14 @@ function Login() {
         body: JSON.stringify({ email, password, asTeacher: false })
       });
       const data = await response.json();
-      console.log('Login successful', data);
-      if (data.message === "User logged successfully") {
+      if (data.message === "User logged in successfully") {
         setUserData({ state: data.state, username: data.username });
         navigate('/class11');
       } else {
-        alert("Access denied");
+        alert(data.message);
       }
     } catch (error) {
-      console.error('There was an error logging in!', error);
-      alert('There was an error logging in. Please try again.');
+      alert(error.message);
     }
   };
 
@@ -46,16 +44,14 @@ const handleTeacherLogin = async (e) => {
         body: JSON.stringify({ email, password, asTeacher: true })
       });
       const data = await response.json();
-      console.log('Login successful', data);
-      if (data.message === "User logged successfully") {
+      if (data.message === "User logged in successfully") {
         setUserData({ state: data.state, username: data.username });
         navigate('/teacher');
       } else {
-        alert(data.error);
+        alert(data.message);
       }
     } catch (error) {
-      console.error('There was an error logging in!', error);
-      alert('There was an error logging in. Please try again.');
+      alert(error.message);
     }
   };
 
@@ -75,9 +71,6 @@ const handleTeacherLogin = async (e) => {
             <button onClick={handleTeacherLogin}>Login as Teacher</button>
           </div>
         </form>
-        {/* <p>
-          Don't have an account? <a href="/signup">Sign Up</a>
-        </p> */}
       </div>
     </div>
   );
