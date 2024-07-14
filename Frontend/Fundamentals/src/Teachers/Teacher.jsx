@@ -17,6 +17,7 @@ const TeacherComp = () => {
   const isLoggedIn = userData.state;
   console.log(isLoggedIn);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!isLoggedIn && !hasConfirmed) {
       navigate('/login')
@@ -104,7 +105,7 @@ const TeacherComp = () => {
                 className={`teach-student ${selectedStudent === student ? 'selected' : ''}`}
                 onClick={() => handleStudentClick(student)}
               >
-                {student.name}
+                {student.username}
               </li>
             ))}
           </ul>
@@ -113,7 +114,7 @@ const TeacherComp = () => {
           {selectedStudent && (
             <>
               <div className="teach-units">
-                <h2>Units for {selectedStudent.name}</h2>
+                <h2>Units for {selectedStudent.username}</h2>
                 <select
                   className="teach-unit-dropdown"
                   value={selectedUnit ? selectedUnit.no : ''}
