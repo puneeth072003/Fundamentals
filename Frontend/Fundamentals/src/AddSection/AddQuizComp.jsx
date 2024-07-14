@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AddSection.css'; 
-// import AddSection from '../AddSection';
+import AddSection from './AddSection';
 
 const AddQuizComp = () => {
   const [unit, setUnit] = useState('');
