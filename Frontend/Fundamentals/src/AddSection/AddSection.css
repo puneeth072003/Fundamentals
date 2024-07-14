@@ -44,69 +44,63 @@
   }
   
   .unit-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
     height: 70vh;
     width: 80%;
-    background-color: #f5f5f5;
-    padding: 20px;
-    box-sizing: border-box;
+    /* max-width: 600px; */
+    /* margin-top: 20px; */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .unit-title {
+    text-align: center;
+    color: #333;
   }
   
   .unit-form {
     display: flex;
-    height: 100%;
-    width: 50%;
     flex-direction: column;
     align-items: center;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .unit-cont {
-    display: flex;
-  }
-  
-  .unit-input {
-    padding: 10px 90px;
-    margin-top: 15px;
-    margin-right: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 80%;
-  }
-  
-  .unit-button {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    font-size: 16px;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.1);
-    margin-top: 15px;
-  }
-  
-  .unit-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .unit-title {
-    margin-bottom: 20px;
-    color: #333;
   }
   
   .unit-logo {
     width: 100px;
-    height: auto;
+    height: 100px;
     margin-bottom: 20px;
+  }
+  
+  .unit-cont {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .unit-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .unit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .unit-button:hover {
+    background-color: #0056b3;
   }
   
   .add-vid-container {
