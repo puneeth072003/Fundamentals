@@ -15,14 +15,14 @@ router.post('/login', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).send({ message: 'Email not found' });
+      return res.status(401).send({ message: 'Email not found',state: false });
     }
     const isMatch = await bcrypt.compare(password, hashedPassword);
     if (!isMatch) {
-      return res.status(401).send({ message: 'Incorrect password' });
+      return res.status(401).send({ message: 'Incorrect password' ,state: false});
     }
     if (asTeacher != user.asTeacher){
-      return res.status(401).send({ message: 'Permission denied' });
+      return res.status(401).send({ message: 'Permission denied',state: false });
     }
     res.send({ message: 'User logged successfully', username: user.username ,state: true});
   });

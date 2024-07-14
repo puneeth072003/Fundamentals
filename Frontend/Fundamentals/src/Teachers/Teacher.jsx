@@ -1,6 +1,8 @@
 import React, { useState, useEffect ,useContext} from 'react';
 import './teachers.css';
 import { UserContext } from '../redux/user-context';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const TeacherComp = () => {
   const [students, setStudents] = useState([]);
@@ -8,11 +10,28 @@ const TeacherComp = () => {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedGrade, setSelectedGrade] = useState('');
   const { userData } = useContext(UserContext);
+  
 
+  // redirect to login page if the page is reloaded
+  const [hasConfirmed, setHasConfirmed] = useState(false);
+  const isLoggedIn = userData.state;
+  console.log(isLoggedIn);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isLoggedIn && !hasConfirmed) {
+      // const confirmResubmission = window.confirm("Do you confirm resubmission? All the changes may be lost");
+      // if (confirmResubmission) {
+      //   window.location.href = '/login';
+      // }
+      navigate('/login')
+      setHasConfirmed(true);
+    }
+  }, [isLoggedIn, hasConfirmed]);
+  
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/v1/getall'); // Adjust the endpoint as needed
+        const response = await fetch('http://localhost:3000/api/v1/getall'); 
         const data = await response.json();
         setStudents(data);
       } catch (error) {
