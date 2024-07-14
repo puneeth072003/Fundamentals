@@ -3,6 +3,7 @@ import './teachers.css';
 import { UserContext } from '../redux/user-context';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import PositionedMenu from './Menu';
 
 const TeacherComp = () => {
   const [students, setStudents] = useState([]);
@@ -93,7 +94,7 @@ const TeacherComp = () => {
       {/* <h1 className='teach-head'>Hello!!! Teacher</h1> */}
       <div className='new-usr'>
         <h1 className='teach-head'>Welcome, {userData.username}!</h1>
-        <a href="/signup" className="btn-add-user">Add New User</a>
+        <PositionedMenu/>
       </div>
       <div className="teach-container">
         <div className="teach-sidebar">

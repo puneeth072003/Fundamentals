@@ -34,9 +34,21 @@ const StudentApp = () => {
   }, []);
 
 
-  const handleUnitClick = (unit) => {
+  const handleUnitClick = async(unit) => {
     setSelectedUnit(unit);
-    setSelectedSubunit(null); // Reset selected subunit when a new unit is clicked
+    setSelectedSubunit(null);
+    try {
+      const response = await axios.post('http://localhost:3000/api/v1/class11');
+      if (Array.isArray(response.data.content)) {
+        setData(response.data.content);
+        setStatus("Click on a subunit to continue");
+      } else {
+        console.error('Response data is not an array:', response.data);
+        setStatus(error.message);
+      }
+    } catch (err) {
+      setError(err);
+    }
   };
 
   const handleSubunitClick = (subunit) => {

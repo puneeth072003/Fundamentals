@@ -142,12 +142,11 @@ router.post('/units', async (req, res) => {
 });
 
 // Route to assign a unit to a student
-router.post('/students/:studentId/units/:unitId', async (req, res) => {
+router.post('/students/:username/units/:unit', async (req, res) => {
   try {
-      const student = await Student.findById(req.params.studentId);
+      const student = await Student.findOne(req.params.username);
       if (!student) return res.status(404).json({ error: 'Student not found' });
-
-      student.units.push(req.params.unitId);
+      student.units.push(req.params.unit);
       await student.save();
       res.status(200).json(student);
   } catch (error) {
@@ -194,6 +193,85 @@ router.get('/students/:studentId/scores', async (req, res) => {
       res.status(200).json(scores);
   } catch (error) {
       res.status(400).json({ error: error.message });
+  }
+});
+
+
+// ############## unit routes begin
+// Create a new unit
+router.post('/newunit', async (req, res) => {
+  try {
+    const { title1, title2 } = req.body;
+    const unit = new Class11({
+      class11: [{ title1, title2, subunits: [] }]
+    });
+    await unit.save();
+    res.status(201).send(unit);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+// Create a new video subunit
+router.post('/units/:unitId/subunits/video', async (req, res) => {
+  try {
+    const unitId = req.params.unitId;
+    const { name, videoUrl } = req.body;
+    const unit = await Class11.findOne({ 'class11._id': unitId });
+    if (!unit) {
+      return res.status(404).send({ message: 'Unit not found' });
+    }
+    const subunit = {
+      type: 'video',
+      video: { name, videoUrl }
+    };
+    unit.class11[0].subunits.push(subunit);
+    await unit.save();
+    res.status(201).send(subunit);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+// Create a new quiz subunit
+router.post('/units/:unitId/subunits/quiz', async (req, res) => {
+  try {
+    const unitId = req.params.unitId;
+    const { name, quizTitle, questions } = req.body;
+    const unit = await Class11.findOne({ 'class11._id': unitId });
+    if (!unit) {
+      return res.status(404).send({ message: 'Unit not found' });
+    }
+    const subunit = {
+      type: 'quiz',
+      quiz: { name, quizTitle, questions }
+    };
+    unit.class11[0].subunits.push(subunit);
+    await unit.save();
+    res.status(201).send(subunit);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+// Create a new unit test subunit
+router.post('/units/:unitId/subunits/unit-test', async (req, res) => {
+  try {
+    const unitId = req.params.unitId;
+    const { name } = req.body;
+    const unit = await Class11.findOne({ 'class11._id': unitId });
+    if (!unit) {
+      return res.status(404).send({ message: 'Unit not found' });
+    }
+    const subunit = {
+      type: 'unitTest',
+      unitTest: { name }
+    };
+    unit.class11[0].subunits.push(subunit);
+    await unit.save();
+    res.status(201).send(subunit);
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
