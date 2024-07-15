@@ -35,6 +35,10 @@ const AddUnits = () => {
       if (response.ok) {
         const result = await response.json();
         console.log('Unit added:', result);
+
+        // Log the entered data in JSON format
+        console.log('Entered Data:', JSON.stringify(newUnit, null, 2));
+
         setTitle1(''); // Clear the input fields after successful submission
         setTitle2('');
       } else {

@@ -3,8 +3,7 @@ import './AddSection.css';
 import AddSection from './AddSection';
 
 const AddQuizComp = () => {
-  const [unit, setUnit] = useState('');
-  const [subunit, setSubunit] = useState('');
+  const [unit, setUnit] = useState('');  const [subunit, setSubunit] = useState('');
   const [questions, setQuestions] = useState([
     { question: '', options: ['', '', '', ''], correctOption: '', solution: '' },
   ]);

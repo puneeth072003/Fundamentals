@@ -141,6 +141,9 @@ router.post('/units', async (req, res) => {
   }
 });
 
+// Triggering when student clicks on unit
+router.post('/students/:')
+
 // Route to assign a unit to a student
 router.post('/students/:username/units/:unit', async (req, res) => {
   try {
@@ -153,6 +156,8 @@ router.post('/students/:username/units/:unit', async (req, res) => {
       res.status(400).json({ error: error.message });
   }
 });
+
+//
 
 // Route to update a subunit score
 router.put('/units/:unitId/subunits/:subunitId/score', async (req, res) => {
