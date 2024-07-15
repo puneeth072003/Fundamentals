@@ -8,6 +8,8 @@ const UnifiedComponent = () => {
   const [quizForms, setQuizForms] = useState([]);
   const [videoForms, setVideoForms] = useState([]);
   const [unitForms, setUnitForms] = useState([]);
+  const [addUnitsClicked, setAddUnitsClicked] = useState(false); // State to track button click
+  const [finalForm , setFinalfrom]=useState([]);
 
   const handleTitle1Change = (event) => {
     setTitle1(event.target.value);
@@ -23,6 +25,9 @@ const UnifiedComponent = () => {
     const newUnit = {
       title1,
       title2,
+      quizForms,
+      videoForms,
+      unitForms
     };
 
     try {
@@ -38,8 +43,13 @@ const UnifiedComponent = () => {
         const result = await response.json();
         console.log('Unit added:', result);
 
-        setTitle1(''); // Clear the input fields after successful submission
+        // Clear the input fields and forms after successful submission
+        setTitle1('');
         setTitle2('');
+        setQuizForms([]);
+        setVideoForms([]);
+        setUnitForms([]);
+        setAddUnitsClicked(true); // Disable add units button after successful submission
       } else {
         console.error('Failed to add unit');
       }
@@ -50,14 +60,18 @@ const UnifiedComponent = () => {
 
   const addQuizForm = () => {
     setQuizForms([...quizForms, { subUnit: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] }]);
+    setFinalfrom([...finalForm,{ type:"quiz",quiz:{name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }]}}]);
   };
 
   const addVideoForm = () => {
-    setVideoForms([...videoForms, { videoURL: '' }]);
+    setVideoForms([...videoForms, { subUnit: '', videoURL: '' }]);
+    setFinalfrom([...finalForm, {type:"video",video:{name:'',videoUrl:''}}]);
   };
 
   const addUnitForm = () => {
-    setUnitForms([...unitForms, { questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] }]);
+    setUnitForms([...unitForms, { subUnit: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] }]);
+    setAddUnitsClicked(true); // Disable add units button after it's clicked once
+    setFinalfrom([...finalForm, {type:"unitTest",unitTest:{name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }]}}]);
   };
 
   const handleQuizSubUnitChange = (formIndex, event) => {
@@ -67,15 +81,15 @@ const UnifiedComponent = () => {
   };
 
   const handleVideoSubUnitChange = (formIndex, event) => {
-    const newQuizForms = [...quizForms];
-    newQuizForms[formIndex].subUnit = event.target.value;
-    setQuizForms(newQuizForms);
+    const newVideoForms = [...videoForms];
+    newVideoForms[formIndex].subUnit = event.target.value;
+    setVideoForms(newVideoForms);
   };
 
   const handleUnitTestSubUnitChange = (formIndex, event) => {
-    const newQuizForms = [...quizForms];
-    newQuizForms[formIndex].subUnit = event.target.value;
-    setQuizForms(newQuizForms);
+    const newUnitForms = [...unitForms];
+    newUnitForms[formIndex].subUnit = event.target.value;
+    setUnitForms(newUnitForms);
   };
 
   const handleQuestionChange = (formIndex, questionIndex, event) => {
@@ -114,83 +128,39 @@ const UnifiedComponent = () => {
     setQuizForms(newQuizForms);
   };
 
-  const handleQuizSubmit = async (event, formIndex) => {
-    event.preventDefault();
-    const { subUnit, questions } = quizForms[formIndex];
-
-    if (questions.length < 10) {
-      console.error('Please add at least 10 questions.');
-      return;
-    }
-
-    const newQuiz = {
-      unit: title1,
-      subunit: subUnit,
-      questions,
-    };
-
-    try {
-      const response = await fetch('YOUR_BACKEND_URL/quizzes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newQuiz),
+  const handleCloseSection = (sectionIndex) => {
+    if (sectionIndex < quizForms.length) {
+      setQuizForms((prevForms) => {
+        const updatedForms = [...prevForms];
+        updatedForms.splice(sectionIndex, 1);
+        return updatedForms;
       });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Quiz added:', result);
-
-        // Remove submitted form
-        setQuizForms(quizForms.filter((_, index) => index !== formIndex));
-      } else {
-        console.error('Failed to add quiz');
-      }
-    } catch (error) {
-      console.error('Error:', error);
+    } else if (sectionIndex < quizForms.length + videoForms.length) {
+      setVideoForms((prevForms) => {
+        const updatedForms = [...prevForms];
+        const adjustedIndex = sectionIndex - quizForms.length;
+        updatedForms.splice(adjustedIndex, 1);
+        return updatedForms;
+      });
+    } else if (sectionIndex < quizForms.length + videoForms.length + unitForms.length) {
+      setUnitForms((prevForms) => {
+        const updatedForms = [...prevForms];
+        const adjustedIndex = sectionIndex - quizForms.length - videoForms.length;
+        updatedForms.splice(adjustedIndex, 1);
+        return updatedForms;
+      });
     }
   };
 
-  const handleVideoSubmit = async (event, formIndex) => {
-    event.preventDefault();
-    const { videoURL } = videoForms[formIndex];
-
-    // Simple regex pattern to validate YouTube URLs (change as per your requirement)
-    const urlPattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})$/;
-
-    if (!urlPattern.test(videoURL)) {
-      console.error('Please enter a valid YouTube video URL.');
-      return;
+  const logFormData = () => {
+    const final={
+      title1,
+      title2,
+      subunits:[
+        finalForm.map(element => {return element})
+      ]
     }
-
-    const newVideo = {
-      unit: title1,
-      subunit: title2,
-      videoURL,
-    };
-
-    try {
-      const response = await fetch('YOUR_BACKEND_URL/videos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newVideo),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Video added:', result);
-
-        // Remove submitted form
-        setVideoForms(videoForms.filter((_, index) => index !== formIndex));
-      } else {
-        console.error('Failed to add video');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    console.log(JSON.stringify(final, null, 2));
   };
 
   return (
@@ -235,7 +205,7 @@ const UnifiedComponent = () => {
               type="button"
               className="sub-button"
               onClick={addUnitForm}
-              disabled={!title1 || !title2}
+              disabled={!title1 || !title2 || addUnitsClicked} // Disable if already clicked
             >
               Add Units
             </button>
@@ -243,7 +213,8 @@ const UnifiedComponent = () => {
           <button
             type="submit"
             className="form-button"
-            disabled={!title1 || !title2 || (quizForms.length === 0 && videoForms.length === 0 && unitForms.length === 0)}
+            onClick={logFormData}
+            disabled={!title1 || !title2 || quizForms.length === 0 || videoForms.length === 0 || unitForms.length === 0}
           >
             Submit
           </button>
@@ -252,6 +223,7 @@ const UnifiedComponent = () => {
 
       {quizForms.map((quizForm, formIndex) => (
         <div key={formIndex} className="section-container">
+          <div className="close-btn" onClick={() => handleCloseSection(formIndex)}>X</div>
           <h2 className="section-title">Add Quiz</h2>
           <input
             type="text"
@@ -304,19 +276,13 @@ const UnifiedComponent = () => {
             >
               Add Question
             </button>
-            <button
-              type="submit"
-              className="form-button"
-              disabled={quizForm.questions.length < 10}
-            >
-              Submit Quiz
-            </button>
           </form>
         </div>
       ))}
 
       {videoForms.map((videoForm, formIndex) => (
         <div key={formIndex} className="section-container">
+          <div className="close-btn" onClick={() => handleCloseSection(formIndex + quizForms.length)}>X</div>
           <h2 className="section-title">Add Video</h2>
           <input
             type="text"
@@ -330,22 +296,16 @@ const UnifiedComponent = () => {
               type="text"
               placeholder="Enter YouTube Video URL"
               value={videoForm.videoURL}
-              onChange={(e) => handleVideoURLChange(formIndex, e)}
+              onChange={(event) => handleVideoURLChange(formIndex, event)}
               className="form-input"
             />
-            <button
-              type="submit"
-              className="form-button"
-              disabled={!videoForm.videoURL}
-            >
-              Submit Video
-            </button>
           </form>
         </div>
       ))}
 
       {unitForms.map((unitForm, formIndex) => (
         <div key={formIndex} className="section-container">
+          <div className="close-btn" onClick={() => handleCloseSection(formIndex + quizForms.length + videoForms.length)}>X</div>
           <h2 className="section-title">Add Unit-Test</h2>
           <input
             type="text"
@@ -398,16 +358,11 @@ const UnifiedComponent = () => {
             >
               Add Question
             </button>
-            <button
-              type="submit"
-              className="form-button"
-              disabled={unitForm.questions.length < 10}
-            >
-              Submit Units
-            </button>
           </form>
         </div>
       ))}
+
+      {/* <button  className="form-button">Log Form Data</button> */}
     </div>
   );
 };
