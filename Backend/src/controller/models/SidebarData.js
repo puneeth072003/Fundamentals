@@ -23,9 +23,9 @@ const unitTestSubunitSchema = new Schema({
 
 const subunitSchema = new Schema({
   type: { type: String, required: true, enum: ['video', 'quiz', 'unitTest'] },
-  video: { type: videoSubunitSchema, required: function() { return this.type === 'video'; } },
-  quiz: { type: quizSubunitSchema, required: function() { return this.type === 'quiz'; } },
-  unitTest: { type: unitTestSubunitSchema, required: function() { return this.type === 'unitTest'; } }
+  video: videoSubunitSchema,
+  quiz: quizSubunitSchema,
+  unitTest: unitTestSubunitSchema
 });
 
 const unitSchema = new Schema({
@@ -34,10 +34,9 @@ const unitSchema = new Schema({
   subunits: [subunitSchema]
 });
 
-const class11Schema = new Schema({
+const sidebarSchema = new Schema({
   class11: [unitSchema]
 });
 
-const Class11 = mongoose.model('Class11', class11Schema);
-
-module.exports = { Class11 };
+const SidebarData = mongoose.model('SidebarData', sidebarSchema);
+module.exports = { SidebarData };

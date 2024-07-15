@@ -1,9 +1,9 @@
 const express = require("express");
 const getHome =require("../controller/tasks.js");
-const { getCurrentUser } = require("../controller/db.js");
 const bcrypt = require('bcrypt');
 const User = require('../controller/models/UserModel.js')
 const {Student,Unit} = require('../controller/models/TeacherModel.js');
+const { SidebarData, Subunit } = require("../controller/models/SidebarData.js");
 const router = express.Router();
 
 const MongoClient = require('mongodb').MongoClient;
@@ -201,85 +201,23 @@ router.get('/students/:studentId/scores', async (req, res) => {
   }
 });
 
-
 // ############## unit routes begin
 // Create a new unit
-router.post('/newunit', async (req, res) => {
-  try {
-    const { title1, title2 } = req.body;
-    const unit = new Class11({
-      class11: [{ title1, title2, subunits: [] }]
-    });
-    await unit.save();
-    res.status(201).send(unit);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
+router.post('/createunit', async (req, res) => {
+  const { newUnit } = req.body;
 
-// Create a new video subunit
-router.post('/units/:unitId/subunits/video', async (req, res) => {
   try {
-    const unitId = req.params.unitId;
-    const { name, videoUrl } = req.body;
-    const unit = await Class11.findOne({ 'class11._id': unitId });
-    if (!unit) {
-      return res.status(404).send({ message: 'Unit not found' });
+    const sidebarData = await SidebarData.findOne({ _id: "668fa8131b239a3ed858b6bd" });
+    if (!sidebarData) {
+      return res.status(404).send('Document not found');
     }
-    const subunit = {
-      type: 'video',
-      video: { name, videoUrl }
-    };
-    unit.class11[0].subunits.push(subunit);
-    await unit.save();
-    res.status(201).send(subunit);
+    sidebarData.class11.push(newUnit);
+    await sidebarData.save();
+    res.status(200).send('New unit added successfully');
   } catch (error) {
-    res.status(400).send(error);
+    console.error('Error adding new unit:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
-
-// Create a new quiz subunit
-router.post('/units/:unitId/subunits/quiz', async (req, res) => {
-  try {
-    const unitId = req.params.unitId;
-    const { name, quizTitle, questions } = req.body;
-    const unit = await Class11.findOne({ 'class11._id': unitId });
-    if (!unit) {
-      return res.status(404).send({ message: 'Unit not found' });
-    }
-    const subunit = {
-      type: 'quiz',
-      quiz: { name, quizTitle, questions }
-    };
-    unit.class11[0].subunits.push(subunit);
-    await unit.save();
-    res.status(201).send(subunit);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
-
-// Create a new unit test subunit
-router.post('/units/:unitId/subunits/unit-test', async (req, res) => {
-  try {
-    const unitId = req.params.unitId;
-    const { name } = req.body;
-    const unit = await Class11.findOne({ 'class11._id': unitId });
-    if (!unit) {
-      return res.status(404).send({ message: 'Unit not found' });
-    }
-    const subunit = {
-      type: 'unitTest',
-      unitTest: { name }
-    };
-    unit.class11[0].subunits.push(subunit);
-    await unit.save();
-    res.status(201).send(subunit);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-});
-
-router.get('/getuser',getCurrentUser);
 
 module.exports = router;
