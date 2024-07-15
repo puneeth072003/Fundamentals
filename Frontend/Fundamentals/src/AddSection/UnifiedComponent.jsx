@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Addsection.css';
+import './AddSection.css';
 import Logo from "../assets/plainlogo.png";
 
 const UnifiedComponent = () => {

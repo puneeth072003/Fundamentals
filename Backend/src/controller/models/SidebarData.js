@@ -8,17 +8,22 @@ const videoSubunitSchema = new Schema({
 
 const quizSubunitSchema = new Schema({
   name: { type: String, required: true },
-  quizTitle: { type: String, required: true },
   questions: [{
     question: { type: String, required: true },
     options: [{ type: String, required: true }],
-    correctAnswer: { type: String, required: true },
+    correctOption: { type: String, required: true },
     solution: { type: String, required: true }
   }]
 });
 
 const unitTestSubunitSchema = new Schema({
-  name: { type: String, required: true }
+  name: { type: String, required: true },
+  questions: [{
+    question: { type: String, required: true },
+    options: [{ type: String, required: true }],
+    correctOption: { type: String, required: true },
+    solution: { type: String, required: true }
+  }]
 });
 
 const subunitSchema = new Schema({

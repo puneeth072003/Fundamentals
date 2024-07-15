@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './sidebar.css';
+import { UserContext } from '../redux/user-context'; // Adjust this import according to your file structure
 
-const QuizComponent = ({ questions, flag, unitno}) => {
+const QuizComponent = ({ questions, flag, unitName, subunitName }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
@@ -17,9 +18,7 @@ const QuizComponent = ({ questions, flag, unitno}) => {
   const maxQuestions = 10;
   const totalQuestions = 10;
 
-  useEffect(() => {
-    shuffleQuestions();
-  }, []);
+  const { userData } = useContext(UserContext);
 
   useEffect(() => {
     shuffleQuestions();
@@ -30,11 +29,11 @@ const QuizComponent = ({ questions, flag, unitno}) => {
     setShuffledQuestions(shuffled);
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
-    setScore(0); // Reset score when questions are shuffled
-    setAttendedQuestions([]); // Reset attended questions when shuffled
+    setScore(0);
+    setAttendedQuestions([]);
     setMessage('');
-    setShowSolution(false); // Reset solution visibility
-    setShowTeacherMessage(false); // Reset teacher message visibility
+    setShowSolution(false);
+    setShowTeacherMessage(false);
   };
 
   const handleAnswerClick = (answer) => {
@@ -42,7 +41,7 @@ const QuizComponent = ({ questions, flag, unitno}) => {
     const currentQuestion = shuffledQuestions[currentQuestionIndex];
     const isCorrect = answer === currentQuestion.correctAnswer;
     if (isCorrect) {
-      setScore(score + 1); // Increment score on correct answer
+      setScore(score + 1);
       setMessage('Right Answer!');
     } else {
       setMessage('Wrong Answer!');
@@ -62,7 +61,7 @@ const QuizComponent = ({ questions, flag, unitno}) => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
       setMessage('');
-      setShowSolution(false); // Reset solution visibility for the next question
+      setShowSolution(false);
     } else {
       setShowWellDone(true);
     }
@@ -73,7 +72,7 @@ const QuizComponent = ({ questions, flag, unitno}) => {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
       setSelectedAnswer(null);
       setMessage('');
-      setShowSolution(false); // Reset solution visibility for the previous question
+      setShowSolution(false);
     }
   };
 
@@ -91,37 +90,24 @@ const QuizComponent = ({ questions, flag, unitno}) => {
     setShowSolution(true);
   };
 
-  if (shuffledQuestions.length === 0) return null;
-
-const currentQuestion = shuffledQuestions[currentQuestionIndex];
-
-const handleSubmitScore = (score, flag) => {
-  const username = localStorage.getItem('username');
-  let updatedScore = score;
-  let updatedUnitTest = null;
-
-  if (flag) {
-    updatedUnitTest = score;
-  } else {
-    updatedScore += score; // Assuming this was a typo, it should probably be: updatedScore += score;
-  }
-
-  const data = {
-    quizScore: updatedScore,
-    unitTest: updatedUnitTest,
+  const handleSubmitScore = () => {
+    const username = userData.username;
+    const data = { score };
+    fetch(`http://localhost:3000/api/students/${username}/units/${unitName}/subunits/${subunitName}/score`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => console.log('Updated data:', data))
+      .catch(error => console.error('Error updating score:', error));
   };
 
-  fetch(`http://localhost:3000/api/v1/students/${username}/units/${unitno}`, {
-    method: 'PUT', 
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then(response => response.json())
-    .then(data => console.log('Updated data:', data)) // Log updated data
-    .catch(error => console.error('Error updating score:', error));
-};
+  if (shuffledQuestions.length === 0) return null;
+
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
 
   return (
     <div className="quiz-wrapper">
@@ -130,7 +116,7 @@ const handleSubmitScore = (score, flag) => {
           <div className="well-done-message">
             <h2>Well done!</h2>
             <p>Your score: {score} / {maxQuestions}</p>
-            <button className="well-done-reset" onClick={handleSubmitScore(score,flag)}>
+            <button className="well-done-reset" onClick={handleSubmitScore}>
               Submit
             </button><br/>
             <button className="well-done-reset" onClick={handleResetQuiz}>
@@ -179,22 +165,22 @@ const handleSubmitScore = (score, flag) => {
               </button>
             </div>
             <div className="qt-attended-questions">
-            <h3 className="qt-heading">Attended Questions:</h3>
-            <ul className="qt-questions-list">
-              {[...Array(totalQuestions)].map((_, index) => {
-                const attendedQuestion = attendedQuestions.find(item => item.questionNumber === index + 1);
-                let circleClass = 'qt-circle';
-                
-                if (attendedQuestion) {
-                  circleClass += attendedQuestion.isCorrect ? ' qt-correct-answer' : ' qt-incorrect-answer';
-                }
+              <h3 className="qt-heading">Attended Questions:</h3>
+              <ul className="qt-questions-list">
+                {[...Array(totalQuestions)].map((_, index) => {
+                  const attendedQuestion = attendedQuestions.find(item => item.questionNumber === index + 1);
+                  let circleClass = 'qt-circle';
 
-                return (
-                  <li key={index} className={circleClass}></li>
-                );
-              })}
-            </ul>
-          </div>
+                  if (attendedQuestion) {
+                    circleClass += attendedQuestion.isCorrect ? ' qt-correct-answer' : ' qt-incorrect-answer';
+                  }
+
+                  return (
+                    <li key={index} className={circleClass}></li>
+                  );
+                })}
+              </ul>
+            </div>
           </>
         )}
       </div>

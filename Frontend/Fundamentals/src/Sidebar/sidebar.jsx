@@ -55,11 +55,11 @@ const StudentApp = () => {
     setUnitno(subunit.no)
     setSelectedSubunit(subunit);
     if (subunit.type === 'quiz') {
-      setQuestions(subunit.questions);
+      setQuestions(subunit.quiz.questions);
     } else {
       setQuestions([]); // Clear questions if the subunit is not a quiz
     }
-    if (subunit.name === 'Unit test') {
+    if (subunit.quiz.quizTitle === 'Unit test') {
       setFlag(true);
     } else {
       setFlag(false); // Clear questions if the subunit is not a quiz
@@ -79,7 +79,7 @@ const StudentApp = () => {
                 <ul className="subunit-list">
                   {unit.subunits.map((subunit, subunitIndex) => (
                     <li key={subunitIndex} className="subunit-item" onClick={() => handleSubunitClick(subunit)}>
-                      {subunit.name}
+                      {subunit.quiz ? subunit.quiz.quizTitle : subunit.video ? subunit.video.name : 'Unknown Subunit'}
                     </li>
                   ))}
                   <li><button className="finish-button">Finish</button></li>
@@ -103,7 +103,7 @@ const StudentApp = () => {
             <iframe
               width="1000"
               height="550"
-              src={selectedSubunit.videoUrl}
+              src={selectedSubunit.video.videoUrl}
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -113,7 +113,7 @@ const StudentApp = () => {
         )}
         {selectedSubunit && selectedSubunit.type === 'quiz' && (
           <div className="quiz-box">
-            <h1>Quiz: {selectedSubunit.quizTitle}</h1>
+            <h1>Quiz: {selectedSubunit.quiz.quizTitle}</h1>
             <QuizComponent  questions={questions} flag={flag} unitno={unitno}/>
           </div>
         )}

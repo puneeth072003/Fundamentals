@@ -68,7 +68,7 @@ router.get('/class11', async (req, res) => {
   try {
     const url = 'mongodb+srv://pyd773:pyd773@cluster0.i0exuyl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
     const dbName = 'test';
-    const collectionName = 'SidebarData';
+    const collectionName = 'sidebardatas';
     const client = new MongoClient(url);
     const db = client.db(dbName);
     const collection = db.collection(collectionName);
@@ -141,14 +141,13 @@ router.post('/units', async (req, res) => {
   }
 });
 
-// Triggering when student clicks on unit
-router.post('/students/:')
 
 // Route to assign a unit to a student
 router.post('/students/:username/units/:unit', async (req, res) => {
   try {
-      const student = await Student.findOne(req.params.username);
+      const student = await Student.findOne({username: req.params.username});
       if (!student) return res.status(404).json({ error: 'Student not found' });
+      console.log(req.params.unit);
       student.units.push(req.params.unit);
       await student.save();
       res.status(200).json(student);
@@ -157,55 +156,38 @@ router.post('/students/:username/units/:unit', async (req, res) => {
   }
 });
 
-//
+//route to add score
+router.post('/:username/addscore', async (req, res) => {
+  const { username } = req.params;
+  const { name, subunits } = req.body;
 
-// Route to update a subunit score
-router.put('/units/:unitId/subunits/:subunitId/score', async (req, res) => {
   try {
-      const unit = await Unit.findById(req.params.unitId);
-      if (!unit) return res.status(404).json({ error: 'Unit not found' });
+    // Find the student by username
+    const student = await Student.findOne({ username: username });
 
-      const subunit = unit.subunits.id(req.params.subunitId);
-      if (!subunit) return res.status(404).json({ error: 'Subunit not found' });
+    if (!student) {
+      return res.status(404).send('Student not found');
+    }
 
-      subunit.quiz.score = req.body.score;
-      subunit.quiz.attempts.push(req.body.score);
+    // Add the new subunits to the existing units array
+    student.units.push({ name: name, subunits: subunits });
 
-      await unit.save();
-      res.status(200).json(subunit);
+    // Save the updated student document
+    await student.save();
+
+    res.status(200).send('Score unit added successfully');
+
   } catch (error) {
-      res.status(400).json({ error: error.message });
+    console.error('Error adding score unit:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
-// Route to get all subunit scores for a student
-router.get('/students/:studentId/scores', async (req, res) => {
-  try {
-      const student = await Student.findById(req.params.studentId).populate('units');
-      if (!student) return res.status(404).json({ error: 'Student not found' });
-
-      const scores = student.units.map(unit => {
-          return {
-              unitName: unit.name,
-              subunits: unit.subunits.map(subunit => ({
-                  subunitName: subunit.name,
-                  score: subunit.quiz.score,
-                  attempts: subunit.quiz.attempts
-              }))
-          };
-      });
-
-      res.status(200).json(scores);
-  } catch (error) {
-      res.status(400).json({ error: error.message });
-  }
-});
 
 // ############## unit routes begin
 // Create a new unit
 router.post('/createunit', async (req, res) => {
   const { newUnit } = req.body;
-
   try {
     const sidebarData = await SidebarData.findOne({ _id: "668fa8131b239a3ed858b6bd" });
     if (!sidebarData) {
