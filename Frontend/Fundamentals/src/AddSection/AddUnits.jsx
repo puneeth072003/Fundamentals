@@ -4,17 +4,23 @@ import './AddSection.css'; // Import the CSS file
 import Logo from "../assets/plainlogo.png";
 
 const AddUnits = () => {
-  const [unitName, setUnitName] = useState('');
+  const [title1, setTitle1] = useState('');
+  const [title2, setTitle2] = useState('');
 
-  const handleInputChange = (event) => {
-    setUnitName(event.target.value);
+  const handleTitle1Change = (event) => {
+    setTitle1(event.target.value);
+  };
+
+  const handleTitle2Change = (event) => {
+    setTitle2(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const newUnit = {
-      name: unitName,
+      title1,
+      title2,
     };
 
     try {
@@ -29,7 +35,12 @@ const AddUnits = () => {
       if (response.ok) {
         const result = await response.json();
         console.log('Unit added:', result);
-        setUnitName(''); // Clear the input field after successful submission
+
+        // Log the entered data in JSON format
+        console.log('Entered Data:', JSON.stringify(newUnit, null, 2));
+
+        setTitle1(''); // Clear the input fields after successful submission
+        setTitle2('');
       } else {
         console.error('Failed to add unit');
       }
@@ -44,21 +55,28 @@ const AddUnits = () => {
       <div className="unit-container">
         <h1 className="unit-title">Add Unit</h1>
         <form className="unit-form" onSubmit={handleSubmit}>
-        <img src={Logo} alt="Logo" className="unit-logo" />
-        <div className='unit-cont'>
-          <input
-            type="text"
-            placeholder="Unit name"
-            value={unitName}
-            onChange={handleInputChange}
-            className="unit-input"
-          />
-          <button
-            type="submit"
-            className="unit-button"
-          >
-            Submit
-          </button>
+          <img src={Logo} alt="Logo" className="unit-logo" />
+          <div className='unit-cont'>
+            <input
+              type="text"
+              placeholder="Title 1"
+              value={title1}
+              onChange={handleTitle1Change}
+              className="unit-input"
+            />
+            <input
+              type="text"
+              placeholder="Title 2"
+              value={title2}
+              onChange={handleTitle2Change}
+              className="unit-input"
+            />
+            <button
+              type="submit"
+              className="unit-button"
+            >
+              Submit
+            </button>
           </div>
         </form>
       </div>

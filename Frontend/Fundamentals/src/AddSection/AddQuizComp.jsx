@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import './AddSection.css'; 
-// import AddSection from '../AddSection';
+import AddSection from './AddSection';
 
 const AddQuizComp = () => {
-  const [unit, setUnit] = useState('');
-  const [subunit, setSubunit] = useState('');
+  const [unit, setUnit] = useState('');  const [subunit, setSubunit] = useState('');
   const [questions, setQuestions] = useState([
-    { question: '', options: ['', '', '', ''], solution: '' },
+    { question: '', options: ['', '', '', ''], correctOption: '', solution: '' },
   ]);
   const [units, setUnits] = useState([]);
 
-  useEffect(() => {
-    // Fetch units from backend when component mounts
-    fetchUnits();
-  }, []);
+  // useEffect(() => {
+  //   // Fetch units from backend when component mounts
+  //   fetchUnits();
+  // }, []);
 
-  const fetchUnits = async () => {
-    try {
-      const response = await fetch('YOUR_BACKEND_URL/units');
-      if (response.ok) {
-        const data = await response.json();
-        setUnits(data.units); // Assuming backend returns an object with units array
-      } else {
-        console.error('Failed to fetch units');
-      }
-    } catch (error) {
-      console.error('Error fetching units:', error);
-    }
-  };
+  // const fetchUnits = async () => {
+  //   try {
+  //     const response = await fetch('YOUR_BACKEND_URL/units');
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setUnits(data.units); // Assuming backend returns an object with units array
+  //     } else {
+  //       console.error('Failed to fetch units');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching units:', error);
+  //   }
+  // };
 
   const handleUnitChange = (event) => {
     setUnit(event.target.value);
@@ -45,7 +44,11 @@ const AddQuizComp = () => {
 
   const handleOptionChange = (qIndex, oIndex, event) => {
     const newQuestions = [...questions];
-    newQuestions[qIndex].options[oIndex] = event.target.value;
+    if (oIndex < 4) {
+      newQuestions[qIndex].options[oIndex] = event.target.value;
+    } else {
+      newQuestions[qIndex].correctOption = event.target.value;
+    }
     setQuestions(newQuestions);
   };
 
@@ -56,11 +59,17 @@ const AddQuizComp = () => {
   };
 
   const addQuestion = () => {
-    setQuestions([...questions, { question: '', options: ['', '', '', ''], solution: '' }]);
+    setQuestions([...questions, { question: '', options: ['', '', '', ''], correctOption: '', solution: '' }]);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Ensure at least 10 questions are added before submitting
+    if (questions.length < 10) {
+      console.error('Please add at least 10 questions.');
+      return;
+    }
 
     const newQuiz = {
       unit,
@@ -80,9 +89,13 @@ const AddQuizComp = () => {
       if (response.ok) {
         const result = await response.json();
         console.log('Quiz added:', result);
+
+        // Log the filled form data in JSON format
+        console.log('Filled Form Data:', JSON.stringify(newQuiz, null, 2));
+
         setUnit('');
         setSubunit('');
-        setQuestions([{ question: '', options: ['', '', '', ''], solution: '' }]); // Clear the form after successful submission
+        setQuestions([{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }]); // Clear the form after successful submission
         fetchUnits(); // Refresh units list after adding new quiz
       } else {
         console.error('Failed to add quiz');
@@ -138,6 +151,13 @@ const AddQuizComp = () => {
             </div>
             <input
               type="text"
+              placeholder="Correct Option"
+              value={q.correctOption}
+              onChange={(event) => handleOptionChange(qIndex, 4, event)} // Index 4 for the correct option
+              className="quiz-input"
+            />
+            <input
+              type="text"
               placeholder="Solution"
               value={q.solution}
               onChange={(event) => handleSolutionChange(qIndex, event)}
@@ -155,6 +175,7 @@ const AddQuizComp = () => {
         <button
           type="submit"
           className="quiz-button"
+          disabled={questions.length < 10} // Disable submit button if less than 10 questions
         >
           Submit
         </button>
