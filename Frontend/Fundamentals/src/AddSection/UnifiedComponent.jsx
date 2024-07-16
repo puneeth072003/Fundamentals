@@ -8,8 +8,8 @@ const UnifiedComponent = () => {
   const [quizForms, setQuizForms] = useState([]);
   const [videoForms, setVideoForms] = useState([]);
   const [unitForms, setUnitForms] = useState([]);
-  const [addUnitsClicked, setAddUnitsClicked] = useState(false); // State to track button click
-  const [finalForm , setFinalfrom]=useState([]);
+  const [addUnitsClicked, setAddUnitsClicked] = useState(false);
+  const [finalForm, setFinalForm] = useState([]);
 
   const handleTitle1Change = (event) => {
     setTitle1(event.target.value);
@@ -25,13 +25,11 @@ const UnifiedComponent = () => {
     const newUnit = {
       title1,
       title2,
-      quizForms,
-      videoForms,
-      unitForms
+      subunits: finalForm
     };
 
     try {
-      const response = await fetch('YOUR_BACKEND_URL/units', {
+      const response = await fetch('http://localhost:3000/api/v1/createunit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,14 +40,13 @@ const UnifiedComponent = () => {
       if (response.ok) {
         const result = await response.json();
         console.log('Unit added:', result);
-
-        // Clear the input fields and forms after successful submission
         setTitle1('');
         setTitle2('');
         setQuizForms([]);
         setVideoForms([]);
         setUnitForms([]);
-        setAddUnitsClicked(true); // Disable add units button after successful submission
+        setFinalForm([]);
+        setAddUnitsClicked(false);
       } else {
         console.error('Failed to add unit');
       }
@@ -59,73 +56,108 @@ const UnifiedComponent = () => {
   };
 
   const addQuizForm = () => {
-    setQuizForms([...quizForms, { subUnit: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] }]);
-    setFinalfrom([...finalForm,{ type:"quiz",quiz:{name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }]}}]);
+    setQuizForms([...quizForms, { name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] }]);
+    setFinalForm([...finalForm, { type: 'quiz', quiz: { name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] } }]);
   };
 
   const addVideoForm = () => {
-    setVideoForms([...videoForms, { subUnit: '', videoURL: '' }]);
-    setFinalfrom([...finalForm, {type:"video",video:{name:'',videoUrl:''}}]);
+    setVideoForms([...videoForms, { name: '', videoUrl: '' }]);
+    setFinalForm([...finalForm, { type: 'video', video: { name: '', videoUrl: '' } }]);
   };
 
   const addUnitForm = () => {
-    setUnitForms([...unitForms, { subUnit: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] }]);
-    setAddUnitsClicked(true); // Disable add units button after it's clicked once
-    setFinalfrom([...finalForm, {type:"unitTest",unitTest:{name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }]}}]);
+    setUnitForms([...unitForms, { name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] }]);
+    setFinalForm([...finalForm, { type: 'unitTest', unitTest: { name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] } }]);
   };
 
-  const handleQuizSubUnitChange = (formIndex, event) => {
+  const handleQuizChange = (formIndex, event) => {
     const newQuizForms = [...quizForms];
-    newQuizForms[formIndex].subUnit = event.target.value;
+    newQuizForms[formIndex].name = event.target.value;
     setQuizForms(newQuizForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex].quiz.name = event.target.value;
+    setFinalForm(newFinalForm);
   };
 
-  const handleVideoSubUnitChange = (formIndex, event) => {
+  const handleVideoChange = (formIndex, event) => {
     const newVideoForms = [...videoForms];
-    newVideoForms[formIndex].subUnit = event.target.value;
+    newVideoForms[formIndex].name = event.target.value;
     setVideoForms(newVideoForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex + quizForms.length].video.name = event.target.value;
+    setFinalForm(newFinalForm);
   };
 
-  const handleUnitTestSubUnitChange = (formIndex, event) => {
+  const handleUnitChange = (formIndex, event) => {
     const newUnitForms = [...unitForms];
-    newUnitForms[formIndex].subUnit = event.target.value;
+    newUnitForms[formIndex].name = event.target.value;
     setUnitForms(newUnitForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex + quizForms.length + videoForms.length].unitTest.name = event.target.value;
+    setFinalForm(newFinalForm);
   };
 
   const handleQuestionChange = (formIndex, questionIndex, event) => {
     const newQuizForms = [...quizForms];
     newQuizForms[formIndex].questions[questionIndex].question = event.target.value;
     setQuizForms(newQuizForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex].quiz.questions[questionIndex].question = event.target.value;
+    setFinalForm(newFinalForm);
   };
 
   const handleOptionChange = (formIndex, questionIndex, optionIndex, event) => {
     const newQuizForms = [...quizForms];
     newQuizForms[formIndex].questions[questionIndex].options[optionIndex] = event.target.value;
     setQuizForms(newQuizForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex].quiz.questions[questionIndex].options[optionIndex] = event.target.value;
+    setFinalForm(newFinalForm);
   };
 
   const handleCorrectOptionChange = (formIndex, questionIndex, event) => {
     const newQuizForms = [...quizForms];
     newQuizForms[formIndex].questions[questionIndex].correctOption = event.target.value;
     setQuizForms(newQuizForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex].quiz.questions[questionIndex].correctOption = event.target.value;
+    setFinalForm(newFinalForm);
   };
 
   const handleSolutionChange = (formIndex, questionIndex, event) => {
     const newQuizForms = [...quizForms];
     newQuizForms[formIndex].questions[questionIndex].solution = event.target.value;
     setQuizForms(newQuizForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex].quiz.questions[questionIndex].solution = event.target.value;
+    setFinalForm(newFinalForm);
   };
 
   const handleVideoURLChange = (formIndex, event) => {
     const newVideoForms = [...videoForms];
-    newVideoForms[formIndex].videoURL = event.target.value;
+    newVideoForms[formIndex].videoUrl = event.target.value;
     setVideoForms(newVideoForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex + quizForms.length].video.videoUrl = event.target.value;
+    setFinalForm(newFinalForm);
   };
 
   const addQuestionToQuizForm = (formIndex) => {
     const newQuizForms = [...quizForms];
     newQuizForms[formIndex].questions.push({ question: '', options: ['', '', '', ''], correctOption: '', solution: '' });
     setQuizForms(newQuizForms);
+
+    const newFinalForm = [...finalForm];
+    newFinalForm[formIndex].quiz.questions.push({ question: '', options: ['', '', '', ''], correctOption: '', solution: '' });
+    setFinalForm(newFinalForm);
   };
 
   const handleCloseSection = (sectionIndex) => {
@@ -135,31 +167,49 @@ const UnifiedComponent = () => {
         updatedForms.splice(sectionIndex, 1);
         return updatedForms;
       });
+
+      setFinalForm((prevForms) => {
+        const updatedForms = [...prevForms];
+        updatedForms.splice(sectionIndex, 1);
+        return updatedForms;
+      });
     } else if (sectionIndex < quizForms.length + videoForms.length) {
+      const adjustedIndex = sectionIndex - quizForms.length;
       setVideoForms((prevForms) => {
         const updatedForms = [...prevForms];
-        const adjustedIndex = sectionIndex - quizForms.length;
         updatedForms.splice(adjustedIndex, 1);
         return updatedForms;
       });
+
+      setFinalForm((prevForms) => {
+        const updatedForms = [...prevForms];
+        updatedForms.splice(sectionIndex, 1);
+        return updatedForms;
+      });
     } else if (sectionIndex < quizForms.length + videoForms.length + unitForms.length) {
+      const adjustedIndex = sectionIndex - quizForms.length - videoForms.length;
       setUnitForms((prevForms) => {
         const updatedForms = [...prevForms];
-        const adjustedIndex = sectionIndex - quizForms.length - videoForms.length;
         updatedForms.splice(adjustedIndex, 1);
+        return updatedForms;
+      });
+
+      setFinalForm((prevForms) => {
+        const updatedForms = [...prevForms];
+        updatedForms.splice(sectionIndex, 1);
         return updatedForms;
       });
     }
   };
 
   const logFormData = () => {
-    const final={
-      title1,
-      title2,
-      subunits:[
-        finalForm.map(element => {return element})
-      ]
-    }
+    const final = {
+      newUnit: {
+        title1,
+        title2,
+        subunits: finalForm
+      }
+    };
     console.log(JSON.stringify(final, null, 2));
   };
 
@@ -205,7 +255,7 @@ const UnifiedComponent = () => {
               type="button"
               className="sub-button"
               onClick={addUnitForm}
-              disabled={!title1 || !title2 || addUnitsClicked} // Disable if already clicked
+              disabled={!title1 || !title2 || addUnitsClicked}
             >
               Add Units
             </button>
@@ -214,7 +264,7 @@ const UnifiedComponent = () => {
             type="submit"
             className="form-button"
             onClick={logFormData}
-            disabled={!title1 || !title2 || quizForms.length === 0 || videoForms.length === 0 || unitForms.length === 0}
+            disabled={!title1 || !title2 || finalForm.length === 0}
           >
             Submit
           </button>
@@ -228,55 +278,53 @@ const UnifiedComponent = () => {
           <input
             type="text"
             placeholder="Sub-Unit Name"
-            value={quizForm.subUnit}
-            onChange={(event) => handleQuizSubUnitChange(formIndex, event)}
+            value={quizForm.name}
+            onChange={(event) => handleQuizChange(formIndex, event)}
             className="form-input"
           />
-          <form onSubmit={(event) => handleQuizSubmit(event, formIndex)}>
-            {quizForm.questions.map((q, qIndex) => (
-              <div key={qIndex} className="question-container">
-                <textarea
-                  placeholder={`Question ${qIndex + 1}`}
-                  value={q.question}
-                  onChange={(event) => handleQuestionChange(formIndex, qIndex, event)}
-                  className="form-textarea"
-                />
-                <div className="option-container">
-                  {q.options.map((option, oIndex) => (
-                    <input
-                      key={oIndex}
-                      type="text"
-                      placeholder={`Option ${oIndex + 1}`}
-                      value={option}
-                      onChange={(event) => handleOptionChange(formIndex, qIndex, oIndex, event)}
-                      className="form-input"
-                    />
-                  ))}
-                </div>
-                <input
-                  type="text"
-                  placeholder="Correct Option"
-                  value={q.correctOption}
-                  onChange={(event) => handleCorrectOptionChange(formIndex, qIndex, event)}
-                  className="form-input"
-                />
-                <input
-                  type="text"
-                  placeholder="Solution"
-                  value={q.solution}
-                  onChange={(event) => handleSolutionChange(formIndex, qIndex, event)}
-                  className="form-input"
-                />
+          {quizForm.questions.map((q, qIndex) => (
+            <div key={qIndex} className="question-container">
+              <textarea
+                placeholder={`Question ${qIndex + 1}`}
+                value={q.question}
+                onChange={(event) => handleQuestionChange(formIndex, qIndex, event)}
+                className="form-textarea"
+              />
+              <div className="option-container">
+                {q.options.map((option, oIndex) => (
+                  <input
+                    key={oIndex}
+                    type="text"
+                    placeholder={`Option ${oIndex + 1}`}
+                    value={option}
+                    onChange={(event) => handleOptionChange(formIndex, qIndex, oIndex, event)}
+                    className="form-input"
+                  />
+                ))}
               </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addQuestionToQuizForm(formIndex)}
-              className="form-button"
-            >
-              Add Question
-            </button>
-          </form>
+              <input
+                type="text"
+                placeholder="Correct Option"
+                value={q.correctOption}
+                onChange={(event) => handleCorrectOptionChange(formIndex, qIndex, event)}
+                className="form-input"
+              />
+              <input
+                type="text"
+                placeholder="Solution"
+                value={q.solution}
+                onChange={(event) => handleSolutionChange(formIndex, qIndex, event)}
+                className="form-input"
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addQuestionToQuizForm(formIndex)}
+            className="form-button"
+          >
+            Add Question
+          </button>
         </div>
       ))}
 
@@ -287,19 +335,17 @@ const UnifiedComponent = () => {
           <input
             type="text"
             placeholder="Sub-Unit Name"
-            value={videoForm.subUnit}
-            onChange={(event) => handleVideoSubUnitChange(formIndex, event)}
+            value={videoForm.name}
+            onChange={(event) => handleVideoChange(formIndex, event)}
             className="form-input"
           />
-          <form onSubmit={(event) => handleVideoSubmit(event, formIndex)}>
-            <input
-              type="text"
-              placeholder="Enter YouTube Video URL"
-              value={videoForm.videoURL}
-              onChange={(event) => handleVideoURLChange(formIndex, event)}
-              className="form-input"
-            />
-          </form>
+          <input
+            type="text"
+            placeholder="Enter YouTube Video URL"
+            value={videoForm.videoUrl}
+            onChange={(event) => handleVideoURLChange(formIndex, event)}
+            className="form-input"
+          />
         </div>
       ))}
 
@@ -310,59 +356,55 @@ const UnifiedComponent = () => {
           <input
             type="text"
             placeholder="Sub-Unit Name"
-            value={unitForm.subUnit}
-            onChange={(event) => handleUnitTestSubUnitChange(formIndex, event)}
+            value={unitForm.name}
+            onChange={(event) => handleUnitChange(formIndex, event)}
             className="form-input"
           />
-          <form onSubmit={(event) => handleQuizSubmit(event, formIndex)}>
-            {unitForm.questions.map((q, qIndex) => (
-              <div key={qIndex} className="question-container">
-                <textarea
-                  placeholder={`Question ${qIndex + 1}`}
-                  value={q.question}
-                  onChange={(event) => handleQuestionChange(formIndex, qIndex, event)}
-                  className="form-textarea"
-                />
-                <div className="option-container">
-                  {q.options.map((option, oIndex) => (
-                    <input
-                      key={oIndex}
-                      type="text"
-                      placeholder={`Option ${oIndex + 1}`}
-                      value={option}
-                      onChange={(event) => handleOptionChange(formIndex, qIndex, oIndex, event)}
-                      className="form-input"
-                    />
-                  ))}
-                </div>
-                <input
-                  type="text"
-                  placeholder="Correct Option"
-                  value={q.correctOption}
-                  onChange={(event) => handleCorrectOptionChange(formIndex, qIndex, event)}
-                  className="form-input"
-                />
-                <input
-                  type="text"
-                  placeholder="Solution"
-                  value={q.solution}
-                  onChange={(event) => handleSolutionChange(formIndex, qIndex, event)}
-                  className="form-input"
-                />
+          {unitForm.questions.map((q, qIndex) => (
+            <div key={qIndex} className="question-container">
+              <textarea
+                placeholder={`Question ${qIndex + 1}`}
+                value={q.question}
+                onChange={(event) => handleQuestionChange(formIndex, qIndex, event)}
+                className="form-textarea"
+              />
+              <div className="option-container">
+                {q.options.map((option, oIndex) => (
+                  <input
+                    key={oIndex}
+                    type="text"
+                    placeholder={`Option ${oIndex + 1}`}
+                    value={option}
+                    onChange={(event) => handleOptionChange(formIndex, qIndex, oIndex, event)}
+                    className="form-input"
+                  />
+                ))}
               </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addQuestionToQuizForm(formIndex)}
-              className="form-button"
-            >
-              Add Question
-            </button>
-          </form>
+              <input
+                type="text"
+                placeholder="Correct Option"
+                value={q.correctOption}
+                onChange={(event) => handleCorrectOptionChange(formIndex, qIndex, event)}
+                className="form-input"
+              />
+              <input
+                type="text"
+                placeholder="Solution"
+                value={q.solution}
+                onChange={(event) => handleSolutionChange(formIndex, qIndex, event)}
+                className="form-input"
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addQuestionToQuizForm(formIndex)}
+            className="form-button"
+          >
+            Add Question
+          </button>
         </div>
       ))}
-
-      {/* <button  className="form-button">Log Form Data</button> */}
     </div>
   );
 };
