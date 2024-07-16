@@ -162,27 +162,38 @@ router.post('/:username/addscore', async (req, res) => {
   const { name, subunits } = req.body;
 
   try {
-    // Find the student by username
-    const student = await Student.findOne({ username: username });
+    let student = await Student.findOne({ username: username });
 
+    // If student doesn't exist, create a new one
     if (!student) {
-      return res.status(404).send('Student not found');
+      student = new Student({ username: username, units: [] });
     }
 
-    // Add the new subunits to the existing units array
-    student.units.push({ name: name, subunits: subunits });
+    // Check if the unit already exists for the student
+    let unit = student.units.find(unit => unit.name === name);
 
-    // Save the updated student document
+    if (unit) {
+      // If the unit exists, update the subunits
+      subunits.forEach(subunit => {
+        const existingSubunit = unit.subunits.find(s => s.name === subunit.name);
+        if (existingSubunit) {
+          existingSubunit.score = subunit.score;
+        } else {
+          unit.subunits.push(subunit);
+        }
+      });
+    } else {
+      // If the unit doesn't exist, add a new one
+      student.units.push({ name: name, subunits: subunits });
+    }
+
     await student.save();
-
-    res.status(200).send('Score unit added successfully');
-
+    res.status(200).send('Score unit added/updated successfully');
   } catch (error) {
-    console.error('Error adding score unit:', error);
+    console.error('Error adding/updating score unit:', error);
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 // ############## unit routes begin
 // Create a new unit

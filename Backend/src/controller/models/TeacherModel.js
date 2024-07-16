@@ -13,10 +13,9 @@ const unitSchema = new Schema({
 
 const studentSchema = new Schema({
     username: { type: String, required: true, unique: true },
-    units: [{ type: Schema.Types.ObjectId, ref: 'Unit' }]
+    units: [unitSchema]
 });
 
 const Student = mongoose.model('Student', studentSchema);
-const Unit = mongoose.model('Unit', unitSchema);
 
-module.exports = { Student, Unit };
+module.exports = { Student };
