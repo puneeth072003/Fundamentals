@@ -186,8 +186,20 @@ router.post('/:username/addscore', async (req, res) => {
 
 // ############## unit routes begin
 // Create a new unit
-router.post('/createunit', async (req, res) => {
+const validateNewUnit = (req, res, next) => {
   const { newUnit } = req.body;
+  if (!newUnit) {
+    return res.status(400).send('newUnit is required');
+  }
+  const { title1, title2, subunits } = newUnit;
+  if (!title1 || !title2 || !Array.isArray(subunits)) {
+    return res.status(400).send('Invalid newUnit structure');
+  }
+  next();
+};
+
+router.post('/createunit', validateNewUnit, async (req, res) => {
+  const { newUnit } = req.body;// Log the incoming data
   try {
     const sidebarData = await SidebarData.findOne({ _id: "668fa8131b239a3ed858b6bd" });
     if (!sidebarData) {
