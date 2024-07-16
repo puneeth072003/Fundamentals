@@ -19,41 +19,6 @@ const UnifiedComponent = () => {
     setTitle2(event.target.value);
   };
 
-  const handleUnitSubmit = async (event) => {
-    event.preventDefault();
-
-    const newUnit = {
-      title1,
-      title2,
-      subunits: finalForm
-    };
-
-    try {
-      const response = await fetch('http://localhost:3000/api/v1/createunit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUnit),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Unit added:', result);
-        setTitle1('');
-        setTitle2('');
-        setQuizForms([]);
-        setVideoForms([]);
-        setUnitForms([]);
-        setFinalForm([]);
-        setAddUnitsClicked(false);
-      } else {
-        console.error('Failed to add unit');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   const addQuizForm = () => {
     setQuizForms([...quizForms, { name: '', questions: [{ question: '', options: ['', '', '', ''], correctOption: '', solution: '' }] }]);
@@ -201,8 +166,9 @@ const UnifiedComponent = () => {
       });
     }
   };
-
-  const logFormData = () => {
+    
+  const handleUnitSubmit = async (event) => {
+    event.preventDefault();
     const final = {
       newUnit: {
         title1,
@@ -211,12 +177,37 @@ const UnifiedComponent = () => {
       }
     };
     console.log(JSON.stringify(final, null, 2));
+
+    try {
+      const response = await fetch('http://localhost:3000/api/v1/createunit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(final),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Unit added:', result);
+        setTitle1('');
+        setTitle2('');
+        setQuizForms([]);
+        setVideoForms([]);
+        setUnitForms([]);
+        setFinalForm([]);
+        setAddUnitsClicked(false);
+      } else {
+        console.error('Failed to add unit');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
     <div className="container">
       <h1 className="section-title">Adding Contents</h1>
-      <form className="section-container" onSubmit={handleUnitSubmit}>
+      <form className="section-container">
         <img src={Logo} alt="Logo" className="section-logo" />
         <div className="form-group">
           <label>Unit Name</label>
@@ -261,9 +252,9 @@ const UnifiedComponent = () => {
             </button>
           </div>
           <button
-            type="submit"
+            // type="submit"
             className="form-button"
-            onClick={logFormData}
+            onClick={handleUnitSubmit}
             disabled={!title1 || !title2 || finalForm.length === 0}
           >
             Submit
