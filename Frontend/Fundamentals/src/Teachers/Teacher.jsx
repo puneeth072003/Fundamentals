@@ -1,7 +1,6 @@
-import React, { useState, useEffect ,useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './teachers.css';
 import { UserContext } from '../redux/user-context';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import PositionedMenu from './Menu';
 
@@ -9,27 +8,26 @@ const TeacherComp = () => {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [selectedUnit, setSelectedUnit] = useState(null);
+  const [selectedSubunit, setSelectedSubunit] = useState(null);
   const [selectedGrade, setSelectedGrade] = useState('');
   const { userData } = useContext(UserContext);
-  
 
   // redirect to login page if the page is reloaded
   const [hasConfirmed, setHasConfirmed] = useState(false);
   const isLoggedIn = userData.state;
-  console.log(isLoggedIn);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!isLoggedIn && !hasConfirmed) {
-      navigate('/login')
+      navigate('/login');
       setHasConfirmed(true);
     }
-  }, [isLoggedIn, hasConfirmed]);
-  
+  }, [isLoggedIn, hasConfirmed, navigate]);
+
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/v1/getall'); 
+        const response = await fetch('http://localhost:3000/api/v1/getall');
         const data = await response.json();
         setStudents(data);
       } catch (error) {
@@ -42,59 +40,39 @@ const TeacherComp = () => {
 
   const handleStudentClick = (student) => {
     setSelectedStudent(student);
-    setSelectedUnit(null); // Reset selected unit when a new student is clicked
+    setSelectedUnit(null);
+    setSelectedSubunit(null);
   };
 
   const handleUnitSelect = (unit) => {
     setSelectedUnit(unit);
-    setSelectedGrade(unit.grade); // Initialize the selected grade with the current grade
+    setSelectedSubunit(null);
   };
 
-  const handleGradeChange = (event) => {
-    setSelectedGrade(event.target.value);
+  const handleSubunitSelect = (subunit) => {
+    setSelectedSubunit(subunit);
+    setSelectedGrade(subunit.score);
   };
 
-  const handleGradeSubmit = async () => {
-    try {
-      const updatedUnits = selectedStudent.units.map((unit) =>
-        unit.no === selectedUnit.no ? { ...unit, grade: selectedGrade } : unit
-      );
-  
-      const updatedStudent = { ...selectedStudent, units: updatedUnits };
-  
-      // Update student in the backend
-      await fetch(`http://localhost:3000/api/v1/modifygrade/${selectedStudent._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          unitNo: selectedUnit.no,
-          newGrade: selectedGrade,
-        }),
-      });
-  
-      setStudents((prevStudents) =>
-        prevStudents.map((student) =>
-          student._id === selectedStudent._id ? updatedStudent : student
-        )
-      );
-  
-      setSelectedUnit((prevSelectedUnit) => ({
-        ...prevSelectedUnit,
-        grade: selectedGrade,
-      }));
-    } catch (error) {
-      console.error('Error updating grade:', error);
+  const calculateGrade = (score) => {
+    if (score >= 1 && score <= 3) {
+      return 'Need to Work Hard';
+    } else if (score >= 4 && score <= 6) {
+      return 'Average';
+    } else if (score >= 7 && score <= 8) {
+      return 'Good';
+    } else if (score >= 9 && score <= 10) {
+      return 'Excellent';
+    } else {
+      return 'Not Graded';
     }
-  };
+  }
 
   return (
     <div className='teach-main'>
-      {/* <h1 className='teach-head'>Hello!!! Teacher</h1> */}
       <div className='new-usr'>
         <h1 className='teach-head'>Welcome, {userData.username}!</h1>
-        <PositionedMenu/>
+        <PositionedMenu />
       </div>
       <div className="teach-container">
         <div className="teach-sidebar">
@@ -118,38 +96,35 @@ const TeacherComp = () => {
                 <h2>Units for {selectedStudent.username}</h2>
                 <select
                   className="teach-unit-dropdown"
-                  value={selectedUnit ? selectedUnit.no : ''}
-                  onChange={(e) => handleUnitSelect(selectedStudent.units.find(unit => unit.no === parseInt(e.target.value)))}
+                  onChange={(e) => handleUnitSelect(selectedStudent.units.find(unit => unit._id === e.target.value))}
                 >
                   <option value="">Select a unit</option>
                   {selectedStudent.units.map((unit) => (
-                    <option key={unit._id} value={unit.no}>{`Unit ${unit.no}`}</option>
+                    <option key={unit._id} value={unit._id}>{`Unit ${unit.name}`}</option>
                   ))}
                 </select>
                 {selectedUnit && (
-                  <div className="teach-scores">
-                    <h3>Scores for Unit {selectedUnit.no}</h3>
-                    <p>Quiz Score: {selectedUnit.quizScore}</p>
-                    <p>Unit Test Score: {selectedUnit.unitTest}</p>
+                  <div className="teach-subunits">
+                    <h3>Subunits for {selectedUnit.name}</h3>
+                    <select
+                      className="teach-subunit-dropdown"
+                      onChange={(e) => handleSubunitSelect(selectedUnit.subunits.find(subunit => subunit._id === e.target.value))}
+                    >
+                      <option value="">Select a subunit</option>
+                      {selectedUnit.subunits.map((subunit) => (
+                        <option key={subunit._id} value={subunit._id}>{subunit.name}</option>
+                      ))}
+                    </select>
+                    {selectedSubunit && (
+                      <div className="teach-scores">
+                        <h3>Scores for {selectedSubunit.name}</h3>
+                        <p>Score: {selectedSubunit.score}</p>
+                        <p>Grade: {calculateGrade(selectedSubunit.score)}</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-              {selectedUnit && (
-                <div className="teach-grading">
-                  <h3>Grade for Unit {selectedUnit.no}</h3>
-                  <select
-                    className="teach-grade-dropdown"
-                    value={selectedGrade}
-                    onChange={handleGradeChange}
-                  >
-                    <option value="Proficient">Proficient</option>
-                    <option value="Mastered">Mastered</option>
-                    <option value="Average">Average</option>
-                    <option value="Need to Work Hard">Need to Work Hard</option>
-                  </select>
-                  <button className="teach-submit-btn" onClick={handleGradeSubmit}>Submit Grade</button>
-                </div>
-              )}
             </>
           )}
         </div>
