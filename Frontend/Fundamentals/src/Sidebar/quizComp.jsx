@@ -39,7 +39,7 @@ const QuizComponent = ({ questions, flag, unitName, subunitName }) => {
   const handleAnswerClick = (answer) => {
     setSelectedAnswer(answer);
     const currentQuestion = shuffledQuestions[currentQuestionIndex];
-    const isCorrect = answer === currentQuestion.correctAnswer;
+    const isCorrect = answer === currentQuestion.correctOption;
     if (isCorrect) {
       setScore(score + 1);
       setMessage('Right Answer!');
@@ -92,17 +92,31 @@ const QuizComponent = ({ questions, flag, unitName, subunitName }) => {
 
   const handleSubmitScore = () => {
     const username = userData.username;
-    const data = { score };
-    fetch(`http://localhost:3000/api/students/${username}/units/${unitName}/subunits/${subunitName}/score`, {
-      method: 'PUT',
+    const data = {
+      name: unitName,
+      subunits: [
+        {
+          name: subunitName,
+          score: score
+        }
+      ]
+    };
+  
+    console.log(console.log(JSON.stringify(data)));
+    fetch(`http://localhost:3000/api/v1/${username}/addscore`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => console.log('Updated data:', data))
-      .catch(error => console.error('Error updating score:', error));
   };
 
   if (shuffledQuestions.length === 0) return null;
@@ -134,7 +148,7 @@ const QuizComponent = ({ questions, flag, unitName, subunitName }) => {
                 <button
                   key={index}
                   className={`quiz-option ${
-                    selectedAnswer && (option === currentQuestion.correctAnswer ? 'quiz-correct' : 'quiz-incorrect')
+                    selectedAnswer && (option === currentQuestion.correctOption ? 'quiz-correct' : 'quiz-incorrect')
                   } ${selectedAnswer === option ? 'quiz-selected' : ''}`}
                   onClick={() => handleAnswerClick(option)}
                   disabled={selectedAnswer !== null}

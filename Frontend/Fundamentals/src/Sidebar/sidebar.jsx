@@ -20,6 +20,7 @@ const StudentApp = () => {
         const response = await axios.get('http://localhost:3000/api/v1/class11');
         if (Array.isArray(response.data.content)) {
           setData(response.data.content);
+          console.log(data);
           setStatus("Click on a subunit to continue");
         } else {
           console.error('Response data is not an array:', response.data);
@@ -79,10 +80,10 @@ const StudentApp = () => {
                 <ul className="subunit-list">
                   {unit.subunits.map((subunit, subunitIndex) => (
                     <li key={subunitIndex} className="subunit-item" onClick={() => handleSubunitClick(subunit)}>
-                      {subunit.quiz ? subunit.quiz.quizTitle : subunit.video ? subunit.video.name : 'Unknown Subunit'}
+                      {subunit.quiz ? subunit.quiz.name : subunit.video ? subunit.video.name : 'Unknown Subunit'}
                     </li>
                   ))}
-                  <li><button className="finish-button">Finish</button></li>
+                  {/* <li><button className="finish-button">Finish</button></li> */}
                 </ul>
               )}
             </li>
@@ -113,13 +114,13 @@ const StudentApp = () => {
         )}
         {selectedSubunit && selectedSubunit.type === 'quiz' && (
           <div className="quiz-box">
-            <h1>Quiz: {selectedSubunit.quiz.quizTitle}</h1>
-            <QuizComponent  questions={questions} flag={flag} unitno={unitno}/>
+            <h1>Quiz: {selectedSubunit.quiz.name}</h1>
+            <QuizComponent  questions={questions} flag={flag} unitName={selectedUnit.title2} subunitName={selectedSubunit.quiz.name}/>
           </div>
         )}
       </div>
     </div>
-  );
+  ); 
 };
 
 export default StudentApp;
