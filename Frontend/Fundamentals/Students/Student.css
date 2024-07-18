@@ -1,0 +1,63 @@
+.student-container {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 10px 20px ;
+  
+}
+
+.center-image {
+  display: block;
+  margin: 0 auto 20px auto;
+  max-width: 100%;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.class-button {
+  padding: 10px;
+  margin: 5px 0;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.subject-button {
+  padding: 10px 20px; /* Adjusted padding for better spacing */
+  margin: 5px 0;
+  border: none;
+  width: 30%;
+  border-radius: 5px; /* Added rounded corners */
+  background-color: #007bff;
+  color: white;
+  font-size: 16px; /* Increased font size */
+  font-weight: bold; /* Made the text bold */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Added smooth transition for background color */
+}
+
+.subject-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.subject-button:active {
+  background-color: #004494; /* Even darker blue on click */
+}
+
+.subject-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px #007bff; /* Added focus shadow */
+}

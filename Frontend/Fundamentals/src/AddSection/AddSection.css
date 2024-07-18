@@ -1,97 +1,112 @@
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.section-container {
-  width: 80%;
-  max-width: 800px;
-  margin: 20px;
+.add-unit {
+  max-width: 600px;
+  margin: 0 auto;
   padding: 20px;
+  background-color: #f0f0f0;
   border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.section-title {
+.add-unit img {
+  display: block;
+  margin: 0 auto;
+}
+
+.add-unit h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.section-logo {
-  display: block;
-  margin: 0 auto 20px;
-  width: 100px;
-  height: auto;
-}
-
-.form-group {
+.add-section-form {
   display: flex;
   flex-direction: column;
+}
+
+.class-subject-dropdowns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-.form-input, .form-textarea {
+.class-subject-dropdowns label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.class-subject-dropdowns select {
+  width: 45%;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 8px;
+  font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
-.form-button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  width: 30%;
-  margin-left: 30%;
-}
-
-.form-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-around;
-  width: 80%;
-  max-width: 800px;
-}
-
-.sub-button {
+.form-group button {
   padding: 10px 20px;
   font-size: 16px;
-  font-weight: bold;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  background-color: #007bff; /* Primary color for the button */
-  color: white; /* Text color */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  transition: background-color 0.3s ease; 
-  margin: 5% 2% 0% 20%; 
+  transition: background-color 0.3s ease;
 }
 
-.sub-button:disabled {
-  background-color: #cccccc; 
-  cursor: not-allowed; 
-}
-
-.sub-button:not(:disabled):hover {
+.form-group button:hover {
   background-color: #0056b3;
 }
 
-.question-container {
-  margin-top: 20px;
+.question-group {
+  margin-bottom: 20px;
 }
 
-.option-container {
-  display: flex;
-  flex-direction: column;
+.question-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.question-group input,
+.question-group select,
+.question-group textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.question-group button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.question-group button:hover {
+  background-color: #218838;
 }
