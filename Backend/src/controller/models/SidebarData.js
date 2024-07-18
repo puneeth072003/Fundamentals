@@ -36,11 +36,13 @@ const subunitSchema = new Schema({
 const unitSchema = new Schema({
   title1: { type: String, required: true },
   title2: { type: String, required: true },
+  class: { type: Number },
+  subject: { type: String, enum: ['physics', 'chemistry', 'maths','biology']},
   subunits: [subunitSchema]
 });
 
 const sidebarSchema = new Schema({
-  class11: [unitSchema]
+  data: [unitSchema]
 });
 
 const SidebarData = mongoose.model('SidebarData', sidebarSchema);

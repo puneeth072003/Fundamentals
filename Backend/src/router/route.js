@@ -64,24 +64,39 @@ router.post('/login', async (req, res) => {
     }
   });  
 
-router.get('/class11', async (req, res) => {
-  try {
+router.get('/:className/:subject', async (req, res) => {
+    const { className, subject } = req.params;
+    const classNo =Number(className);
     const url = 'mongodb+srv://pyd773:pyd773@cluster0.i0exuyl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
     const dbName = 'test';
     const collectionName = 'sidebardatas';
     const client = new MongoClient(url);
-    const db = client.db(dbName);
-    const collection = db.collection(collectionName);
-
-    const sidebarData = await collection.findOne();
-    const class11 = sidebarData.class11;
-
-    res.json({"content": class11});
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error fetching class11 data' });
-  }
-});
+    try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection(collectionName);
+  
+      const sidebarData = await collection.findOne();
+      if (!sidebarData) {
+        return res.status(404).json({ message: 'Sidebar data not found' });
+      }
+      const classData = sidebarData.data;
+      if (!classData) {
+        return res.status(404).json({ message: `data not found` });
+      }
+      const finalData = classData.filter(item => item.subject === subject && item.class === classNo);
+      if (!finalData.length) {
+        return res.status(404).json({ message: `Subject ${subject} not found in class ${className}` });
+      }
+      res.json({ "content": finalData });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Error fetching data' });
+    } finally {
+      await client.close();
+    }
+  });
+  
 
 router.post('/create', async (req, res) => {
   try {
@@ -102,46 +117,6 @@ router.get('/getall',async (req, res) => {
   }
 });
 
-router.put('/modifygrade/:id', async (req, res) => {
-  try {
-    const studentId = req.params.id;
-    const { unitNo, newGrade } = req.body;
-
-    const student = await Student.findById(studentId);
-    if (!student) {
-      return res.status(404).send({ error: 'Student not found' });
-    }
-
-    const unit = student.units.find((unit) => unit.no === unitNo);
-    if (!unit) {
-      return res.status(404).send({ error: 'Unit not found' });
-    }
-
-    unit.grade = newGrade;
-
-    await student.save();
-
-    res.send({ message: 'Grade updated successfully', student });
-  } catch (error) {
-    res.status(400).send({ error: 'Error updating grade', details: error.message });
-  }
-});
-
-// Route to add a new unit with subunits
-router.post('/units', async (req, res) => {
-  try {
-      const newUnit = new Unit({
-          name: req.body.name,
-          subunits: req.body.subunits.map(subunitName => ({ name: subunitName }))
-      });
-      await newUnit.save();
-      res.status(201).json(newUnit);
-  } catch (error) {
-      res.status(400).json({ error: error.message });
-  }
-});
-
-
 // Route to assign a unit to a student
 router.post('/students/:username/units/:unit', async (req, res) => {
   try {
@@ -160,7 +135,6 @@ router.post('/students/:username/units/:unit', async (req, res) => {
 router.post('/:username/addscore', async (req, res) => {
   const { username } = req.params;
   const { name, subunits } = req.body;
-
   try {
     let student = await Student.findOne({ username: username });
 
@@ -202,21 +176,24 @@ const validateNewUnit = (req, res, next) => {
   if (!newUnit) {
     return res.status(400).send('newUnit is required');
   }
-  const { title1, title2, subunits } = newUnit;
-  if (!title1 || !title2 || !Array.isArray(subunits)) {
+  const { title1, title2, subject, subunits } = newUnit;
+  if (!title1 || !title2 || !subject || !Array.isArray(subunits)) {
     return res.status(400).send('Invalid newUnit structure');
   }
   next();
 };
 
 router.post('/createunit', validateNewUnit, async (req, res) => {
-  const { newUnit } = req.body;// Log the incoming data
+  const { newUnit } = req.body;
   try {
     const sidebarData = await SidebarData.findOne({ _id: "668fa8131b239a3ed858b6bd" });
     if (!sidebarData) {
       return res.status(404).send('Document not found');
     }
-    sidebarData.class11.push(newUnit);
+    if (!newUnit.subject) {
+      unit.subject = 'physics';
+    }
+    sidebarData.data.push(newUnit);
     await sidebarData.save();
     res.status(200).send('New unit added successfully');
   } catch (error) {
