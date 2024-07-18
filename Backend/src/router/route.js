@@ -64,6 +64,7 @@ router.post('/login', async (req, res) => {
     }
   });  
 
+// get specific data
 router.get('/:className/:subject', async (req, res) => {
     const { className, subject } = req.params;
     const classNo =Number(className);
@@ -96,22 +97,19 @@ router.get('/:className/:subject', async (req, res) => {
       await client.close();
     }
   });
-  
 
-router.post('/create', async (req, res) => {
+// get all specific students
+router.get('/getall/:className/:subject', async (req, res) => {
   try {
-    const newStudent = new Student(req.body);
-    await newStudent.save();
-    res.status(201).send({message:'Student added'});
-  } catch (error) {
-    res.status(400).send({ error: 'Error creating Student', details: error.message });
-  }
-});
-
-router.get('/getall',async (req, res) => {
-  try {
+    const { className, subject } = req.params;
+    const classNo = Number(className);
     const students = await Student.find({});
-    res.status(200).send(students);
+    const filteredStudents = students.filter(student =>
+      student.units.some(unit =>
+        unit.subunits.some(subunit => subunit.subject === subject && subunit.class === classNo)
+      )
+    );
+    res.status(200).send(filteredStudents);
   } catch (error) {
     res.status(500).send({ error: 'Error fetching students', details: error.message });
   }
@@ -134,18 +132,14 @@ router.post('/students/:username/units/:unit', async (req, res) => {
 //route to add score
 router.post('/:username/addscore', async (req, res) => {
   const { username } = req.params;
-  const { name, subunits } = req.body;
+  const { name, className, subject, subunits } = req.body;
+  const classNo = Number(className);
   try {
     let student = await Student.findOne({ username: username });
-
-    // If student doesn't exist, create a new one
     if (!student) {
       student = new Student({ username: username, units: [] });
     }
-
-    // Check if the unit already exists for the student
     let unit = student.units.find(unit => unit.name === name);
-
     if (unit) {
       // If the unit exists, update the subunits
       subunits.forEach(subunit => {
@@ -158,7 +152,7 @@ router.post('/:username/addscore', async (req, res) => {
       });
     } else {
       // If the unit doesn't exist, add a new one
-      student.units.push({ name: name, subunits: subunits });
+      student.units.push({ name: name, class: classNo, subject: subject, subunits: subunits });
     }
 
     await student.save();
