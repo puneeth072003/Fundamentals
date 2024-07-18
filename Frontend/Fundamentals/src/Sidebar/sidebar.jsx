@@ -14,12 +14,13 @@ const StudentApp = () => {
   const [status, setStatus] = useState("Click on a subunit to continue");
   const [flag, setFlag] = useState(false);
   const [unitno, setUnitno] = useState(1);
+  const classNo=Number(className);
 
   useEffect(() => {
     const fetchData = async () => {
       setStatus("Loading....");
       try {
-        const response = await axios.get(`http://localhost:3000/api/v1/${className}/${subject}`);
+        const response = await axios.get(`http://localhost:3000/api/v1/${classNo}/${subject}`);
         if (Array.isArray(response.data.content)) {
           setData(response.data.content);
           setStatus("Click on a subunit to continue");
@@ -111,7 +112,7 @@ const StudentApp = () => {
         {selectedSubunit && selectedSubunit.type === 'quiz' && (
           <div className="quiz-box">
             <h1>Quiz: {selectedSubunit.quiz.name}</h1>
-            <QuizComponent questions={questions} flag={flag} unitName={selectedUnit.title2} subunitName={selectedSubunit.quiz.name} />
+            <QuizComponent questions={questions} classNo={classNo} subject={subject} unitName={selectedUnit.title2} subunitName={selectedSubunit.quiz.name} />
           </div>
         )}
       </div>

@@ -11,15 +11,15 @@ const StudentDashBoard = () => {
   };
 
   const handleSubjectClick = (subject) => {
-    navigate(`/${selectedClass.toLowerCase()}/${subject.toLowerCase()}`);
+    navigate(`/${Number(selectedClass)}/${subject.toLowerCase()}`);
   };
 
   return (
     <div className="student-container">
       <div className="sidebar">
         <h2>Classes: </h2>
-        <button className="class-button" onClick={() => handleClassClick('Class 11')}>Class 11</button>
-        <button className="class-button" onClick={() => handleClassClick('Class 12')}>Class 12</button>
+        <button className="class-button" onClick={() => handleClassClick('11')}>Class 11</button>
+        <button className="class-button" onClick={() => handleClassClick('12')}>Class 12</button>
       </div>
       <div className="content">
         {/* <img src="computer.css" alt="Sample" className="center-image" /> */}

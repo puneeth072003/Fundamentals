@@ -3,7 +3,7 @@ import './AddSection.css';
 import Logo from "../assets/plainlogo.png";
 
 const UnifiedComponent = () => {
-  const [classOptions] = useState(['Class 11', 'Class 12']);
+  const [classOptions] = useState([11, 12]);
   const [subjectOptions, setSubjectOptions] = useState([]);
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
@@ -16,7 +16,7 @@ const UnifiedComponent = () => {
 
   useEffect(() => {
     if (selectedClass) {
-      setSubjectOptions(['Physics', 'Chemistry', 'Maths', 'Biology']);
+      setSubjectOptions(['physics', 'chemistry', 'maths', 'biology']);
     }
   }, [selectedClass]);
 
@@ -221,7 +221,7 @@ const UnifiedComponent = () => {
         updatedForms.splice(sectionIndex, 1);
         return updatedForms;
       });
-    } else {
+    } else if (sectionIndex === quizForms.length + videoForms.length) {
       setUnitForm(null);
 
       setFinalForm((prevForms) => {
@@ -232,139 +232,206 @@ const UnifiedComponent = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Process and send the finalForm data to the backend
-    console.log(finalForm);
+
+    const finalFormData = {
+      newUnit: {
+        title1: title1,
+        title2: title2,
+        class: Number(selectedClass),
+        subject: selectedSubject,
+        subunits: []
+      }
+    };
+
+    quizForms.forEach((quizForm) => {
+      finalFormData.newUnit.subunits.push({
+        type: 'quiz',
+        quiz: {
+          name: quizForm.name,
+          questions: quizForm.questions.map((question) => ({
+            question: question.question,
+            options: question.options,
+            correctOption: question.correctOption,
+            solution: question.solution
+          }))
+        }
+      });
+    });
+
+    videoForms.forEach((videoForm) => {
+      finalFormData.newUnit.subunits.push({
+        type: 'video',
+        video: {
+          name: videoForm.name,
+          videoUrl: videoForm.videoUrl
+        }
+      });
+    });
+
+    if (unitForm) {
+      finalFormData.newUnit.subunits.push({
+        type: 'unitTest',
+        unitTest: {
+          name: unitForm.name,
+          questions: unitForm.questions.map((question) => ({
+            question: question.question,
+            options: question.options,
+            correctOption: question.correctOption,
+            solution: question.solution
+          }))
+        }
+      });
+    }
+
+    console.log(JSON.stringify(finalFormData, null, 2));
+
+    try {
+      const response = await fetch('http://localhost:3000/api/v1/createunit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(finalFormData),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Unit added:', result);
+        setTitle1('');
+        setTitle2('');
+        setQuizForms([]);
+        setVideoForms([]);
+        setUnitForms([]);
+        setFinalForm([]);
+        setAddUnitsClicked(false);
+      } else {
+        console.error('Failed to add unit');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
-    <div className="main-content">
-      <img className="logo" src={Logo} alt="Logo" />
-      <h1>Add Unit, Quiz, Video, and Unit Test</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="container">
+      <form onSubmit={handleSubmit} className="add-section-form">
+      <img src={Logo} alt="Logo" className="navbar-logo" />
+      <h2 className="title">Add Section</h2>
         <div className="form-group">
-          <label>Select Class:</label>
-          <select value={selectedClass} onChange={handleClassChange}>
-            <option value="">Select Class</option>
-            {classOptions.map((classOption, index) => (
-              <option key={index} value={classOption}>
-                {classOption}
-              </option>
+          <label htmlFor="classSelect">Class</label>
+          <select id="classSelect" value={selectedClass} onChange={handleClassChange} required>
+            <option value="">Select a class</option>
+            {classOptions.map((classOption) => (
+              <option key={classOption} value={classOption}>{classOption}</option>
             ))}
           </select>
         </div>
-        {selectedClass && (
-          <div className="form-group">
-            <label>Select Subject:</label>
-            <select value={selectedSubject} onChange={handleSubjectChange}>
-              <option value="">Select Subject</option>
-              {subjectOptions.map((subjectOption, index) => (
-                <option key={index} value={subjectOption}>
-                  {subjectOption}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
         <div className="form-group">
-          <label>Title 1:</label>
-          <input type="text" value={title1} onChange={handleTitle1Change} />
+          <label htmlFor="subjectSelect">Subject</label>
+          <select id="subjectSelect" value={selectedSubject} onChange={handleSubjectChange} required>
+            <option value="">Select a subject</option>
+            {subjectOptions.map((subjectOption) => (
+              <option key={subjectOption} value={subjectOption}>{subjectOption}</option>
+            ))}
+          </select>
         </div>
         <div className="form-group">
-          <label>Title 2:</label>
-          <input type="text" value={title2} onChange={handleTitle2Change} />
+          <label htmlFor="title1">Title 1</label>
+          <input type="text" id="title1" value={title1} onChange={handleTitle1Change} required />
+        </div>
+        <div className="form-group">
+          <label htmlFor="title2">Title 2</label>
+          <input type="text" id="title2" value={title2} onChange={handleTitle2Change} required />
         </div>
         {quizForms.map((quizForm, formIndex) => (
           <div key={formIndex} className="quiz-form">
-            <div className="form-header">
-              <h2>Quiz Form {formIndex + 1}</h2>
-              <button type="button" onClick={() => handleCloseSection(formIndex)}>X</button>
-            </div>
+            <h3>Quiz Form {formIndex + 1}</h3>
+            <button type="button" className="close-button" onClick={() => handleCloseSection(formIndex)}>X</button>
             <div className="form-group">
-              <label>Quiz Name:</label>
-              <input type="text" value={quizForm.name} onChange={(event) => handleQuizChange(formIndex, event)} />
+              <label htmlFor={`quizName${formIndex}`}>Quiz Name</label>
+              <input type="text" id={`quizName${formIndex}`} value={quizForm.name} onChange={(event) => handleQuizChange(formIndex, event)} required />
             </div>
             {quizForm.questions.map((question, questionIndex) => (
               <div key={questionIndex} className="question-form">
                 <div className="form-group">
-                  <label>Question {questionIndex + 1}:</label>
-                  <input type="text" value={question.question} onChange={(event) => handleQuestionChange(formIndex, questionIndex, event)} />
+                  <label htmlFor={`question${formIndex}-${questionIndex}`}>Question</label>
+                  <input type="text" id={`question${formIndex}-${questionIndex}`} value={question.question} onChange={(event) => handleQuestionChange(formIndex, questionIndex, event)} required />
                 </div>
                 {question.options.map((option, optionIndex) => (
                   <div key={optionIndex} className="form-group">
-                    <label>Option {optionIndex + 1}:</label>
-                    <input type="text" value={option} onChange={(event) => handleOptionChange(formIndex, questionIndex, optionIndex, event)} />
+                    <label htmlFor={`option${formIndex}-${questionIndex}-${optionIndex}`}>Option {optionIndex + 1}</label>
+                    <input type="text" id={`option${formIndex}-${questionIndex}-${optionIndex}`} value={option} onChange={(event) => handleOptionChange(formIndex, questionIndex, optionIndex, event)} required />
                   </div>
                 ))}
                 <div className="form-group">
-                  <label>Correct Option:</label>
-                  <input type="text" value={question.correctOption} onChange={(event) => handleCorrectOptionChange(formIndex, questionIndex, event)} />
+                  <label htmlFor={`correctOption${formIndex}-${questionIndex}`}>Correct Option</label>
+                  <input type="text" id={`correctOption${formIndex}-${questionIndex}`} value={question.correctOption} onChange={(event) => handleCorrectOptionChange(formIndex, questionIndex, event)} required />
                 </div>
                 <div className="form-group">
-                  <label>Solution:</label>
-                  <input type="text" value={question.solution} onChange={(event) => handleSolutionChange(formIndex, questionIndex, event)} />
+                  <label htmlFor={`solution${formIndex}-${questionIndex}`}>Solution</label>
+                  <input type="text" id={`solution${formIndex}-${questionIndex}`} value={question.solution} onChange={(event) => handleSolutionChange(formIndex, questionIndex, event)} required />
                 </div>
               </div>
             ))}
-            <button type="button" onClick={() => addQuestionToQuizForm(formIndex)}>Add Question</button>
+            <button type="button" className="add-question-button" onClick={() => addQuestionToQuizForm(formIndex)}>Add Question</button>
           </div>
         ))}
         {videoForms.map((videoForm, formIndex) => (
           <div key={formIndex} className="video-form">
-            <div className="form-header">
-              <h2>Video Form {formIndex + 1}</h2>
-              <button type="button" onClick={() => handleCloseSection(formIndex + quizForms.length)}>X</button>
+            <h3>Video Form {formIndex + 1}</h3>
+            <button type="button" className="close-button" onClick={() => handleCloseSection(formIndex + quizForms.length)}>X</button>
+            <div className="form-group">
+              <label htmlFor={`videoName${formIndex}`}>Video Name</label>
+              <input type="text" id={`videoName${formIndex}`} value={videoForm.name} onChange={(event) => handleVideoChange(formIndex, event)} required />
             </div>
             <div className="form-group">
-              <label>Video Name:</label>
-              <input type="text" value={videoForm.name} onChange={(event) => handleVideoChange(formIndex, event)} />
-            </div>
-            <div className="form-group">
-              <label>Video URL:</label>
-              <input type="text" value={videoForm.videoUrl} onChange={(event) => handleVideoURLChange(formIndex, event)} />
+              <label htmlFor={`videoURL${formIndex}`}>Video URL</label>
+              <input type="text" id={`videoURL${formIndex}`} value={videoForm.videoUrl} onChange={(event) => handleVideoURLChange(formIndex, event)} required />
             </div>
           </div>
         ))}
         {unitForm && (
           <div className="unit-form">
-            <div className="form-header">
-              <h2>Unit Test Form</h2>
-              <button type="button" onClick={() => handleCloseSection(quizForms.length + videoForms.length)}>X</button>
-            </div>
+            <h3>Unit Test</h3>
+            <button type="button" className="close-button" onClick={() => handleCloseSection(quizForms.length + videoForms.length)}>X</button>
             <div className="form-group">
-              <label>Unit Test Name:</label>
-              <input type="text" value={unitForm.name} onChange={handleUnitChange} />
+              <label htmlFor="unitTestName">Unit Test Name</label>
+              <input type="text" id="unitTestName" value={unitForm.name} onChange={handleUnitChange} required />
             </div>
             {unitForm.questions.map((question, questionIndex) => (
               <div key={questionIndex} className="question-form">
                 <div className="form-group">
-                  <label>Question {questionIndex + 1}:</label>
-                  <input type="text" value={question.question} onChange={(event) => handleUnitQuestionChange(questionIndex, event)} />
+                  <label htmlFor={`unitQuestion${questionIndex}`}>Question</label>
+                  <input type="text" id={`unitQuestion${questionIndex}`} value={question.question} onChange={(event) => handleUnitQuestionChange(questionIndex, event)} required />
                 </div>
                 {question.options.map((option, optionIndex) => (
                   <div key={optionIndex} className="form-group">
-                    <label>Option {optionIndex + 1}:</label>
-                    <input type="text" value={option} onChange={(event) => handleUnitOptionChange(questionIndex, optionIndex, event)} />
+                    <label htmlFor={`unitOption${questionIndex}-${optionIndex}`}>Option {optionIndex + 1}</label>
+                    <input type="text" id={`unitOption${questionIndex}-${optionIndex}`} value={option} onChange={(event) => handleUnitOptionChange(questionIndex, optionIndex, event)} required />
                   </div>
                 ))}
                 <div className="form-group">
-                  <label>Correct Option:</label>
-                  <input type="text" value={question.correctOption} onChange={(event) => handleUnitCorrectOptionChange(questionIndex, event)} />
+                  <label htmlFor={`unitCorrectOption${questionIndex}`}>Correct Option</label>
+                  <input type="text" id={`unitCorrectOption${questionIndex}`} value={question.correctOption} onChange={(event) => handleUnitCorrectOptionChange(questionIndex, event)} required />
                 </div>
                 <div className="form-group">
-                  <label>Solution:</label>
-                  <input type="text" value={question.solution} onChange={(event) => handleUnitSolutionChange(questionIndex, event)} />
+                  <label htmlFor={`unitSolution${questionIndex}`}>Solution</label>
+                  <input type="text" id={`unitSolution${questionIndex}`} value={question.solution} onChange={(event) => handleUnitSolutionChange(questionIndex, event)} required />
                 </div>
               </div>
             ))}
-            <button type="button" onClick={addQuestionToUnitForm}>Add Question</button>
+            <button type="button" className="add-question-button" onClick={addQuestionToUnitForm}>Add Question</button>
           </div>
         )}
-        <button type="button" onClick={addQuizForm}>Add Quiz</button>
-        <button type="button" onClick={addVideoForm}>Add Video</button>
-        <button type="button" onClick={addUnitForm}>Add Unit Test</button>
-        <button type="submit">Submit</button>
+        <div className="form-group">
+          <button type="button" className="add-quiz-button" onClick={addQuizForm}>Add Quiz Form</button>
+          <button type="button" className="add-video-button" onClick={addVideoForm}>Add Video Form</button>
+          {!unitForm && <button type="button" className="add-unit-button" onClick={addUnitForm}>Add Unit Test</button>}
+        </div>
+        <div className="form-group">
+          <button type="submit" className="submit-button">Submit</button>
+        </div>
       </form>
     </div>
   );

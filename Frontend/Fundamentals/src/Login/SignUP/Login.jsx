@@ -24,7 +24,7 @@ function Login() {
       const data = await response.json();
       if (data.message === "User logged in successfully") {
         setUserData({ state: data.state, username: data.username });
-        navigate('/class11');
+        navigate('/student');
       } else {
         alert(data.message);
       }

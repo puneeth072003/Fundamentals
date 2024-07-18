@@ -1,21 +1,17 @@
-.add-unit {
-  max-width: 600px;
+.container {
+  width: 80%;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
+  background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.add-unit img {
-  display: block;
-  margin: 0 auto;
-}
 
-.add-unit h2 {
-  text-align: center;
-  margin-bottom: 20px;
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .add-section-form {
@@ -23,90 +19,93 @@
   flex-direction: column;
 }
 
-.class-subject-dropdowns {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.class-subject-dropdowns label {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.class-subject-dropdowns select {
-  width: 45%;
-  padding: 8px;
-  font-size: 16px;
-}
-
 .form-group {
   margin-bottom: 20px;
 }
 
-.form-group label {
+label {
   display: block;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+input[type="text"], select {
   width: 100%;
-  padding: 8px;
-  font-size: 16px;
+  padding: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
-.form-group button {
+button {
   padding: 10px 20px;
-  font-size: 16px;
-  background-color: #007bff;
-  color: #fff;
   border: none;
   border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.form-group button:hover {
+button:hover {
   background-color: #0056b3;
 }
 
-.question-group {
+/* Quiz and video form styles */
+.quiz-form, .video-form, .unit-form {
+  padding: 20px;
+  background-color: #e9e9e9;
+  border-radius: 8px;
   margin-bottom: 20px;
 }
 
-.question-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.question-group input,
-.question-group select,
-.question-group textarea {
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
+.question-form {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.question-group button {
-  padding: 8px 16px;
-  font-size: 14px;
+.close-button {
+  float: right;
+  background-color: #dc3545;
+}
+
+.close-button:hover {
+  background-color: #c82333;
+}
+
+.add-question-button {
   background-color: #28a745;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.question-group button:hover {
+.add-question-button:hover {
   background-color: #218838;
+}
+
+.add-quiz-button, .add-video-button, .add-unit-button {
+  background-color: #17a2b8;
+  margin-right: 10px;
+}
+
+.add-quiz-button:hover, .add-video-button:hover, .add-unit-button:hover {
+  background-color: #138496;
+}
+
+.submit-button {
+  background-color: #007bff;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.navbar-logo {
+  width: 150px; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
+  padding: 10px; /* Add some padding for spacing */
+  margin: 0; /* Reset margin */
+  display: block; /* Make it a block element */
+  transition: transform 0.3s ease; /* Smooth transform on hover */
 }
