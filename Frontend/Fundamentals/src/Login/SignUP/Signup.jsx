@@ -24,7 +24,7 @@ function Signup() {
       const data = await response.json();
       console.log('Login successful', data);
       if (data.message === "Student registered successfully") {
-        alert('Student user created');
+        alert(data.message);
       } else {
         alert(data.message);
       }
@@ -48,7 +48,7 @@ function Signup() {
       const data = await response.json();
       console.log('Login successful', data);
       if (data.message === "Teacher registered successfully") {
-        alert('Teacher user created');
+        alert(data.message);
       } else {
         alert(data.message);
       }
