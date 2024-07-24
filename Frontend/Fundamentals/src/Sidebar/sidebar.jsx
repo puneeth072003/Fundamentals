@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import "./sidebar.css";
+import { useParams } from 'react-router-dom';
+import './sidebar.css';
 import QuizComponent from './quizComp';
 import axios from 'axios';
 
 const StudentApp = () => {
+  const { className, subject } = useParams();
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedSubunit, setSelectedSubunit] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const [status,setStatus]=useState("Click on a subunit to continue");
-  const [flag,setFlag]=useState(false);
-  const [unitno,setUnitno]=useState(1);
+  const [status, setStatus] = useState("Click on a subunit to continue");
+  const [flag, setFlag] = useState(false);
+  const [unitno, setUnitno] = useState(1);
+  const classNo=Number(className);
 
   useEffect(() => {
     const fetchData = async () => {
-      setStatus("Loading....")
+      setStatus("Loading....");
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/class11');
+        const response = await axios.get(`http://localhost:3000/api/v1/${classNo}/${subject}`);
         if (Array.isArray(response.data.content)) {
           setData(response.data.content);
-          console.log(data);
           setStatus("Click on a subunit to continue");
         } else {
           console.error('Response data is not an array:', response.data);
@@ -32,14 +34,13 @@ const StudentApp = () => {
     };
 
     fetchData();
-  }, []);
+  }, [className, subject]);
 
-
-  const handleUnitClick = async(unit) => {
+  const handleUnitClick = async (unit) => {
     setSelectedUnit(unit);
     setSelectedSubunit(null);
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/class11');
+      const response = await axios.post(`http://localhost:3000/api/v1/${className}/${subject}`);
       if (Array.isArray(response.data.content)) {
         setData(response.data.content);
         setStatus("Click on a subunit to continue");
@@ -53,7 +54,7 @@ const StudentApp = () => {
   };
 
   const handleSubunitClick = (subunit) => {
-    setUnitno(subunit.no)
+    setUnitno(subunit.no);
     setSelectedSubunit(subunit);
     if (subunit.type === 'quiz') {
       setQuestions(subunit.quiz.questions);
@@ -83,14 +84,10 @@ const StudentApp = () => {
                       {subunit.quiz ? subunit.quiz.name : subunit.video ? subunit.video.name : 'Unknown Subunit'}
                     </li>
                   ))}
-                  {/* <li><button className="finish-button">Finish</button></li> */}
                 </ul>
               )}
             </li>
           ))}
-        </ul>
-        <ul>
-            
         </ul>
       </div>
       <div className="main-content">
@@ -115,12 +112,12 @@ const StudentApp = () => {
         {selectedSubunit && selectedSubunit.type === 'quiz' && (
           <div className="quiz-box">
             <h1>Quiz: {selectedSubunit.quiz.name}</h1>
-            <QuizComponent  questions={questions} flag={flag} unitName={selectedUnit.title2} subunitName={selectedSubunit.quiz.name}/>
+            <QuizComponent questions={questions} classNo={classNo} subject={subject} unitName={selectedUnit.title2} subunitName={selectedSubunit.quiz.name} />
           </div>
         )}
       </div>
     </div>
-  ); 
+  );
 };
 
 export default StudentApp;

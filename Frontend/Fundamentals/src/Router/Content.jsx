@@ -6,6 +6,7 @@ import TeacherComp from "../Teachers/Teacher";
 import Loogin from "../Login/SignUP/Login";
 import Signup from "../Login/SignUP/Signup";
 import UnifiedComponent from "../AddSection/UnifiedComponent"
+import StudentDashboard from "../../Students/Student";
 
 // import ProtectedRoute from "./ProtectedRoute";
 
@@ -17,7 +18,8 @@ const Content = () => {
         
         {/* <ProtectedRoute path="/class11" element={<StudentApp/>} requiredRole={true}/>
         <ProtectedRoute path="/teacher" element={<TeacherComp/>} requiredRole={true}/> */}
-        <Route path="/class11" element={<StudentApp/>}/>
+        <Route path="/:className/:subject" element={<StudentApp/>}/>
+        <Route path="/student" element={<StudentDashboard/>}/>
         <Route path="/teacher" element={<TeacherComp/>}/>
         <Route path="/login" element={<Loogin/>}/>
         <Route path="/signup" element={<Signup/>}/>

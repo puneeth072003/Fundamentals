@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import './sidebar.css';
 import { UserContext } from '../redux/user-context'; // Adjust this import according to your file structure
 
-const QuizComponent = ({ questions, flag, unitName, subunitName }) => {
+const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
@@ -97,6 +97,8 @@ const QuizComponent = ({ questions, flag, unitName, subunitName }) => {
       subunits: [
         {
           name: subunitName,
+          className: classNo,
+          subject: subject,
           score: score
         }
       ]

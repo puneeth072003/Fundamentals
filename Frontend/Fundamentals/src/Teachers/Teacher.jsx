@@ -12,6 +12,9 @@ const TeacherComp = () => {
   const [selectedGrade, setSelectedGrade] = useState('');
   const { userData } = useContext(UserContext);
 
+  const [selectedClassName, setSelectedClassName] = useState('');
+  const [selectedClassSubject, setSelectedClassSubject] = useState('');
+
   // redirect to login page if the page is reloaded
   const [hasConfirmed, setHasConfirmed] = useState(false);
   const isLoggedIn = userData.state;
@@ -26,17 +29,20 @@ const TeacherComp = () => {
 
   useEffect(() => {
     const fetchStudents = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/v1/getall');
-        const data = await response.json();
-        setStudents(data);
-      } catch (error) {
-        console.error('Error fetching students:', error);
+      if (selectedClassName && selectedClassSubject) {
+        try {
+          const classNo = Number(selectedClassName);
+          const response = await fetch(`http://localhost:3000/api/v1/getall/${classNo}/${selectedClassSubject}`);
+          const data = await response.json();
+          setStudents(data);
+        } catch (error) {
+          console.error('Error fetching students:', error);
+        }
       }
     };
 
     fetchStudents();
-  }, []);
+  }, [selectedClassName, selectedClassSubject]);
 
   const handleStudentClick = (student) => {
     setSelectedStudent(student);
@@ -66,7 +72,7 @@ const TeacherComp = () => {
     } else {
       return 'Not Graded';
     }
-  }
+  };
 
   return (
     <div className='teach-main'>
@@ -76,18 +82,45 @@ const TeacherComp = () => {
       </div>
       <div className="teach-container">
         <div className="teach-sidebar">
-          <h2>Students</h2>
-          <ul className="teach-students">
-            {students.map((student) => (
-              <li
-                key={student._id}
-                className={`teach-student ${selectedStudent === student ? 'selected' : ''}`}
-                onClick={() => handleStudentClick(student)}
-              >
-                {student.username}
-              </li>
-            ))}
-          </ul>
+          <h2>Class Details</h2>
+          <select
+            className="teach-classname-dropdown"
+            value={selectedClassName}
+            onChange={(e) => setSelectedClassName(e.target.value)}
+          >
+            <option value="">Select a class name</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+          </select>
+          {selectedClassName && (
+            <select
+              className="teach-classsubject-dropdown"
+              value={selectedClassSubject}
+              onChange={(e) => setSelectedClassSubject(e.target.value)}
+            >
+              <option value="">Select a class subject</option>
+              <option value="physics">Physics</option>
+              <option value="chemistry">Chemistry</option>
+              <option value="maths">Maths</option>
+              <option value="biology">Biology</option>
+            </select>
+          )}
+          {selectedClassName && selectedClassSubject && (
+            <>
+              <h2>Students</h2>
+              <ul className="teach-students">
+                {students.map((student) => (
+                  <li
+                    key={student._id}
+                    className={`teach-student ${selectedStudent === student ? 'selected' : ''}`}
+                    onClick={() => handleStudentClick(student)}
+                  >
+                    {student.username}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
         <div className="teach-content">
           {selectedStudent && (
