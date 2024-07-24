@@ -103,17 +103,25 @@ router.get('/getall/:className/:subject', async (req, res) => {
   try {
     const { className, subject } = req.params;
     const classNo = Number(className);
-    const students = await Student.find({});
-    const filteredStudents = students.filter(student =>
-      student.units.some(unit =>
-        unit.subunits.some(subunit => subunit.subject === subject && subunit.class === classNo)
-      )
-    );
-    res.status(200).send(filteredStudents);
+    const students = await Student.find({
+      units: {
+        $elemMatch: {
+          subunits: {
+            $elemMatch: {
+              cls: classNo,
+              subject: subject
+            }
+          }
+        }
+      }
+    });
+    console.log(students);
+    res.status(200).send(students);
   } catch (error) {
     res.status(500).send({ error: 'Error fetching students', details: error.message });
   }
 });
+
 
 // Route to assign a unit to a student
 router.post('/students/:username/units/:unit', async (req, res) => {

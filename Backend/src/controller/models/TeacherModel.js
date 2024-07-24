@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const subunitSchema = new Schema({
     name: { type: String, required: true },
-    class: { type: Number },
+    cls: { type: Number },
     subject: { type: String, enum: ['physics', 'chemistry', 'maths','biology']},
     score: { type: Number, default: 0 }
 });
