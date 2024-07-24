@@ -14,14 +14,14 @@ const Content = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<Loogin />} />
         
         {/* <ProtectedRoute path="/class11" element={<StudentApp/>} requiredRole={true}/>
         <ProtectedRoute path="/teacher" element={<TeacherComp/>} requiredRole={true}/> */}
         <Route path="/:className/:subject" element={<StudentApp/>}/>
         <Route path="/student" element={<StudentDashboard/>}/>
         <Route path="/teacher" element={<TeacherComp/>}/>
-        <Route path="/login" element={<Loogin/>}/>
+        {/* <Route path="/login" element={<Loogin/>}/> */}
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/addsection" element={<UnifiedComponent/>}/>
       </Routes>

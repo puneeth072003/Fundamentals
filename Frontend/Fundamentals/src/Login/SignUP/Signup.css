@@ -1,11 +1,9 @@
 .log-body {
     font-family: "spotify-circular";
-    margin: 0;
-    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height:75vh;
+    /* height: 80%; */
     background-color: #f0f0f0;
   }
   
@@ -20,10 +18,8 @@
     flex-direction: column;
     align-items: center;
     width: 90%;
-    max-width: 500px;
     margin: auto;
-    /* min-height: 70vh; Ensures it takes at least 70% of viewport height */
-    box-sizing: border-box; /* Ensures padding is included in width/height */
+    box-sizing: border-box;
   }
   input::placeholder {
     font-family: "spotify-circular";

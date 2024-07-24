@@ -97,14 +97,14 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
       subunits: [
         {
           name: subunitName,
-          className: classNo,
+          cls: classNo,
           subject: subject,
           score: score
         }
       ]
     };
   
-    console.log(console.log(JSON.stringify(data)));
+    console.log('Submitting data:', JSON.stringify(data));
     fetch(`http://localhost:3000/api/v1/${username}/addscore`, {
       method: 'POST',
       headers: {
@@ -118,7 +118,16 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
         }
         return response.json();
       })
-      .then(data => console.log('Updated data:', data))
+      .then(data => console.log('Updated data:', data));
+  };
+
+  const handleSubmitQuestion = () => {
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+      handleNextQuestion();
+    } else {
+      handleSubmitScore();
+      setShowWellDone(true);
+    }
   };
 
   if (shuffledQuestions.length === 0) return null;
@@ -132,10 +141,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
           <div className="well-done-message">
             <h2>Well done!</h2>
             <p>Your score: {score} / {maxQuestions}</p>
-            <button className="well-done-reset" onClick={handleSubmitScore}>
-              Submit
-            </button><br/>
-            <button className="well-done-reset" onClick={handleResetQuiz}>
+            <button className="quiz-reset" onClick={handleResetQuiz}>
               Reset Quiz
             </button>
           </div>
@@ -171,8 +177,8 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
               <button className="quiz-prev" onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>
                 Previous Question
               </button>
-              <button className="quiz-next" onClick={handleNextQuestion} disabled={currentQuestionIndex === shuffledQuestions.length}>
-                Next Question
+              <button className="quiz-next" onClick={handleSubmitQuestion} disabled={selectedAnswer === null}>
+                {currentQuestionIndex === shuffledQuestions.length - 1 ? 'Submit Quiz' : 'Next Question'}
               </button>
             </div>
             <div className="quiz-reset">

@@ -22,14 +22,21 @@ const StudentDashBoard = () => {
         <button className="class-button" onClick={() => handleClassClick('12')}>Class 12</button>
       </div>
       <div className="content">
-        {/* <img src="computer.css" alt="Sample" className="center-image" /> */}
         <div className="button-container">
           {selectedClass && (
             <>
-              <button className="subject-button" onClick={() => handleSubjectClick('Physics')}>Physics</button>
-              <button className="subject-button" onClick={() => handleSubjectClick('Chemistry')}>Chemistry</button>
-              <button className="subject-button" onClick={() => handleSubjectClick('Maths')}>Maths</button>
-              <button className="subject-button" onClick={() => handleSubjectClick('Biology')}>Biology</button>
+              <button className="subject-button" onClick={() => handleSubjectClick('Physics')}>
+                Class {selectedClass} Physics
+              </button>
+              <button className="subject-button" onClick={() => handleSubjectClick('Chemistry')}>
+                Class {selectedClass} Chemistry
+              </button>
+              <button className="subject-button" onClick={() => handleSubjectClick('Maths')}>
+                Class {selectedClass} Maths
+              </button>
+              <button className="subject-button" onClick={() => handleSubjectClick('Biology')}>
+                Class {selectedClass} Biology
+              </button>
             </>
           )}
         </div>

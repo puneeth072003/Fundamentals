@@ -19,7 +19,7 @@ function Signup() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, email, password, asTeacher })
+        body: JSON.stringify({ username, email, password, asTeacher :false })
       });
       const data = await response.json();
       console.log('Login successful', data);
@@ -43,7 +43,7 @@ function Signup() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, email, password, asTeacher })
+        body: JSON.stringify({ username, email, password, asTeacher:true })
       });
       const data = await response.json();
       console.log('Login successful', data);

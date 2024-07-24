@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './AddSection.css';
 import Logo from "../assets/plainlogo.png";
+import Latex from 'react-latex'
+import LatexRenderer from './LatexRenderer';
+
 
 const UnifiedComponent = () => {
   const [classOptions] = useState([11, 12]);
@@ -22,7 +25,7 @@ const UnifiedComponent = () => {
 
   const handleClassChange = (event) => {
     setSelectedClass(event.target.value);
-    setSelectedSubject(''); // Reset subject when class changes
+    setSelectedSubject('');
   };
 
   const handleSubjectChange = (event) => {
@@ -194,6 +197,7 @@ const UnifiedComponent = () => {
     setFinalForm(newFinalForm);
   };
 
+
   const handleCloseSection = (sectionIndex) => {
     if (sectionIndex < quizForms.length) {
       setQuizForms((prevForms) => {
@@ -314,7 +318,7 @@ const UnifiedComponent = () => {
   };
 
   return (
-    <div className="container">
+    <div className="add-container">
       <form onSubmit={handleSubmit} className="add-section-form">
       <img src={Logo} alt="Logo" className="navbar-logo" />
       <h2 className="title">Add Section</h2>
@@ -357,20 +361,24 @@ const UnifiedComponent = () => {
                 <div className="form-group">
                   <label htmlFor={`question${formIndex}-${questionIndex}`}>Question</label>
                   <input type="text" id={`question${formIndex}-${questionIndex}`} value={question.question} onChange={(event) => handleQuestionChange(formIndex, questionIndex, event)} required />
+                  <LatexRenderer latex={question.question.replace(/e\+?/, '\\times 10^{').replace(/e-/, '\\times 10^{-') } />
                 </div>
                 {question.options.map((option, optionIndex) => (
                   <div key={optionIndex} className="form-group">
                     <label htmlFor={`option${formIndex}-${questionIndex}-${optionIndex}`}>Option {optionIndex + 1}</label>
                     <input type="text" id={`option${formIndex}-${questionIndex}-${optionIndex}`} value={option} onChange={(event) => handleOptionChange(formIndex, questionIndex, optionIndex, event)} required />
+                    <LatexRenderer latex={option.replace(/e\+?/, '\\times 10^{').replace(/e-/, '\\times 10^{-') } />
                   </div>
                 ))}
                 <div className="form-group">
                   <label htmlFor={`correctOption${formIndex}-${questionIndex}`}>Correct Option</label>
                   <input type="text" id={`correctOption${formIndex}-${questionIndex}`} value={question.correctOption} onChange={(event) => handleCorrectOptionChange(formIndex, questionIndex, event)} required />
+                  <LatexRenderer latex={question.correctOption.replace(/e\+?/, '\\times 10^{').replace(/e-/, '\\times 10^{-') } />
                 </div>
                 <div className="form-group">
                   <label htmlFor={`solution${formIndex}-${questionIndex}`}>Solution</label>
                   <input type="text" id={`solution${formIndex}-${questionIndex}`} value={question.solution} onChange={(event) => handleSolutionChange(formIndex, questionIndex, event)} required />
+                  <LatexRenderer latex={question.solution.replace(/e\+?/, '\\times 10^{').replace(/e-/, '\\times 10^{-') } />
                 </div>
               </div>
             ))}
@@ -403,21 +411,25 @@ const UnifiedComponent = () => {
               <div key={questionIndex} className="question-form">
                 <div className="form-group">
                   <label htmlFor={`unitQuestion${questionIndex}`}>Question</label>
-                  <input type="text" id={`unitQuestion${questionIndex}`} value={question.question} onChange={(event) => handleUnitQuestionChange(questionIndex, event)} required />
+                  <input type="text" id={`unitQuestion${questionIndex}`} value={question.question} onChange={(event) => handleUnitQuestionChange(questionIndex, event)} style={{ textTransform: 'none' }} required />
+                  <LatexRenderer latex={question.question.replace(/e\+?/, '\\times 10^{').replace(/e-/, '\\times 10^{-') } />
                 </div>
                 {question.options.map((option, optionIndex) => (
                   <div key={optionIndex} className="form-group">
                     <label htmlFor={`unitOption${questionIndex}-${optionIndex}`}>Option {optionIndex + 1}</label>
                     <input type="text" id={`unitOption${questionIndex}-${optionIndex}`} value={option} onChange={(event) => handleUnitOptionChange(questionIndex, optionIndex, event)} required />
+                    <LatexRenderer latex={option.replace(/e\+?/, '\\times 10^{').replace(/e-/, '\\times 10^{-') } />
                   </div>
                 ))}
                 <div className="form-group">
                   <label htmlFor={`unitCorrectOption${questionIndex}`}>Correct Option</label>
                   <input type="text" id={`unitCorrectOption${questionIndex}`} value={question.correctOption} onChange={(event) => handleUnitCorrectOptionChange(questionIndex, event)} required />
+                  <LatexRenderer latex={question.correctOption.replace(/e\+?/, '\\times 10^{').replace(/e-/, '\\times 10^{-') } />
                 </div>
                 <div className="form-group">
                   <label htmlFor={`unitSolution${questionIndex}`}>Solution</label>
                   <input type="text" id={`unitSolution${questionIndex}`} value={question.solution} onChange={(event) => handleUnitSolutionChange(questionIndex, event)} required />
+                  <LatexRenderer latex={question.solutionS.replace(/e\+?/, '\\times 10^{').replace(/e-/, '\\times 10^{-') } />
                 </div>
               </div>
             ))}
