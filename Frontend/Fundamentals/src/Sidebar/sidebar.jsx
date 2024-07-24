@@ -70,7 +70,7 @@ const StudentApp = () => {
 
   return (
     <div className="student_app">
-      <div className="sidebar">
+      <div className="stu-sidebar">
         <ul className="sidebar-list">
           {data.map((unit, unitIndex) => (
             <li key={unitIndex} className="sidebar-item">

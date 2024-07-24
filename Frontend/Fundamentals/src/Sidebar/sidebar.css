@@ -1,12 +1,12 @@
 .student_app {
   display: flex;
-  height: 100vh; /* Ensure the app takes full viewport height */
+  height: 100vh;
 }
 
-.sidebar {
-  background-color: #ffffff; /* white background */
-  border-right: 1px solid #cccccc; /* light gray border */
-  width: 400px; /* Increase the width of the sidebar */
+.stu-sidebar {
+  background-color: #ffffff; 
+  border-right: 1px solid #cccccc;
+  width: 25%; 
   display: flex;
   flex-direction: column;
 }
@@ -15,46 +15,47 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
-  flex: 1; /* Allow the list to grow and fill the available space */
-  overflow-y: auto; /* Make the list scrollable */
+  flex: 1; 
+  overflow-y: auto; 
 }
 
 .sidebar-item {
   padding: 10px;
-  border-bottom: 1px solid #cccccc; /* light gray line between items */
+  border-bottom: 1px solid #cccccc; 
   cursor: pointer;
 }
 
 .sidebar-item:hover {
-  background-color: #f0f0f0; /* light gray on hover */
+  background-color: #f0f0f0; 
 }
 
 .sidebar-item-title {
-  color: #007bff; /* blue text */
+  color: #007bff; 
+  font-size: large;
 }
 
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center items horizontally */
+  align-items: center; 
   padding: 20px;
 }
 
 .video-container {
   display: flex;
-  justify-content: center; /* Center video horizontally */
-  width: 100%; /* Ensure the container takes full width */
+  justify-content: center;
+  width: 100%; 
   margin-bottom: 20px;
 }
 
 .quiz-container {
-  border-top: 1px solid #cccccc; /* light gray line on top */
+  border-top: 1px solid #cccccc; 
   padding-top: 20px;
-  width: 759px; /* Ensure the container takes full width */
-  overflow-y: auto; /* Make the quiz container scrollable */
-  height: 400px; /* Set a fixed height for the quiz container */
-  margin-bottom: 20px; /* Add margin at the bottom */
+  width: 759px; 
+  overflow-y: auto;
+  height: 400px; 
+  margin-bottom: 20px; 
   overflow-y: scroll;
 }
 
@@ -62,7 +63,6 @@
   margin-bottom: 20px;
 }
 
-/* quiz component styles */
 .quiz-container.scrollable {
   margin: 0 auto;
   padding: 20px;
@@ -142,7 +142,7 @@
 }
 
 .quiz-reset button {
-  background-color: #ff4500;
+  background-color: green;
   color: white;
   border: none;
   border-radius: 5px;
@@ -176,7 +176,6 @@
   background-color: #e03e00;
 }
 
-/* Attended questions styles */
 .attended-questions {
   margin-top: 20px;
   text-align: left;
@@ -206,13 +205,12 @@
   accent-color: #ff6347;
 }
 
-/* Solution section */
 .quiz-wrapper {
   display: flex;
 }
 
 .quiz-solution {
-  flex: 0 0 300px; /* Adjust the width as needed */
+  flex: 0 0 300px; 
   margin-left: 20px;
   padding: 10px;
   border: 1px solid #ffeeba;
@@ -324,4 +322,19 @@
 
 .finish-button:hover {
   background-color: #0056b3;
+}
+
+.quiz-reset{
+  background-color: #4CAF50; 
+  border: none; 
+  color: white; 
+  padding: 15px 32px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block;
+  font-size: 16px;
+  margin: 20px 0; 
+  cursor: pointer;
+  border-radius: 12px; 
+  transition-duration: 0.4s;
 }

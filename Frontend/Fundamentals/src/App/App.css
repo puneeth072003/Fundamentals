@@ -1,3 +1,5 @@
+/* App.css */
+
 .fundamentals-page {
   font-family: Arial, sans-serif;
   max-width: 800px;
@@ -8,33 +10,26 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.page-header {
+.fundamentals-page .page-header {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.page-content {
+.fundamentals-page .page-content {
   padding: 20px;
   background-color: #fff;
   border-radius: 5px;
 }
 
-.tutorial-section {
+.fundamentals-page .tutorial-section {
   margin-bottom: 20px;
 }
 
-.tutorial-section h2 {
+.fundamentals-page .tutorial-section h2 {
   color: #333;
 }
 
-.page-footer {
-  text-align: center;
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 1px solid #ccc;
-  color: #666;
-}
-.start-btn {
+.fundamentals-page .start-btn {
   display: inline-block;
   padding: 10px 20px;
   margin-top: 20px;
@@ -49,6 +44,14 @@
   cursor: pointer;
 }
 
-.start-btn:hover {
+.fundamentals-page .start-btn:hover {
   background-color: #0056b3;
+}
+
+.fundamentals-page .page-footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+  color: #666;
 }

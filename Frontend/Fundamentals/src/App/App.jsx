@@ -46,9 +46,9 @@ function App() {
         {/* <button className='submit-btn' onClick={ Login }>Get Started</button> */}
         <a href='/login' className='start-btn'>Get Started</a>
       </main>
-      <footer className="page-footer">
+      {/* <footer className="page-footer">
         <p>&copy; 2024 Fundamentals Tutorials. All rights reserved.</p>
-      </footer>
+      </footer> */}
     </div>
     </>
   )
