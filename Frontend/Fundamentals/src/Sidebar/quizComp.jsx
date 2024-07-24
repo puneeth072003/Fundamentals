@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './sidebar.css';
-import { UserContext } from '../redux/user-context'; // Adjust this import according to your file structure
-import LatexRenderer from '../AddSection/LatexRenderer'; // Make sure this path is correct
-  
+import { UserContext } from '../redux/user-context';
+import LatexRenderer from '../AddSection/LatexRenderer';
+
 const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -17,6 +17,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
 
   const maxResets = 3;
   const maxQuestions = 10;
+  const totalQuestions = 10;
 
   const { userData } = useContext(UserContext);
 
@@ -148,7 +149,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
         ) : (
           <>
             <div className="quiz-question">
-              <h2><LatexRenderer latex={currentQuestion.question} /></h2>
+              <h3><LatexRenderer latex={currentQuestion.question} /></h3>
               <p>Question {currentQuestionIndex + 1} of {maxQuestions}</p>
             </div>
             <div className="quiz-options">
@@ -168,27 +169,54 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
             {selectedAnswer && (
               <div className="quiz-answer">
                 <p>{message}</p>
-                {showSolution && (
-                  <div className="solution">
-                    <LatexRenderer latex={currentQuestion.solution} />
-                  </div>
-                )}
+                <button className="show-solution-button" onClick={handleShowSolution}>
+                  Show Solution
+                </button>
               </div>
             )}
-            <div className="quiz-controls">
-              <button onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>
-                Previous
+            <div className="quiz-navigation">
+              <button className="quiz-prev" onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>
+                Previous Question
               </button>
-              <button onClick={handleSubmitQuestion}>
-                {currentQuestionIndex === shuffledQuestions.length - 1 ? 'Submit' : 'Next'}
+              <button className="quiz-next" onClick={handleSubmitQuestion} disabled={selectedAnswer === null}>
+                {currentQuestionIndex === shuffledQuestions.length - 1 ? 'Submit Quiz' : 'Next Question'}
               </button>
             </div>
-            {showSolution && (
-              <button onClick={handleShowSolution}>Show Solution</button>
-            )}
+            <div className="quiz-reset">
+              <button onClick={handleResetQuiz}>
+                Reset Quiz
+              </button>
+            </div>
+            <div className="qt-attended-questions">
+              <h3 className="qt-heading">Attended Questions:</h3>
+              <ul className="qt-questions-list">
+                {[...Array(totalQuestions)].map((_, index) => {
+                  const attendedQuestion = attendedQuestions.find(item => item.questionNumber === index + 1);
+                  let circleClass = 'qt-circle';
+
+                  if (attendedQuestion) {
+                    circleClass += attendedQuestion.isCorrect ? ' qt-correct-answer' : ' qt-incorrect-answer';
+                  }
+
+                  return (
+                    <li key={index} className={circleClass}></li>
+                  );
+                })}
+              </ul>
+            </div>
           </>
         )}
       </div>
+      {showSolution && (
+        <div className="quiz-solution">
+          <p>Solution: <LatexRenderer latex={currentQuestion.solution} /></p>
+        </div>
+      )}
+      {showTeacherMessage && (
+        <div className="quiz-solution">
+          <p>For mastering the topic you need to contact the respective teacher.</p>
+        </div>
+      )}
     </div>
   );
 };
