@@ -115,7 +115,6 @@ router.get('/getall/:className/:subject', async (req, res) => {
         }
       }
     });
-    console.log(students);
     res.status(200).send(students);
   } catch (error) {
     res.status(500).send({ error: 'Error fetching students', details: error.message });
