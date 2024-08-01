@@ -6,7 +6,7 @@ import TeacherComp from "../Teachers/Teacher";
 import Loogin from "../Login/SignUP/Login";
 import Signup from "../Login/SignUP/Signup";
 import UnifiedComponent from "../AddSection/UnifiedComponent"
-import StudentDashboard from "../../Students/Student";
+import StudentDashboard from "../Students/Student";
 
 // import ProtectedRoute from "./ProtectedRoute";
 

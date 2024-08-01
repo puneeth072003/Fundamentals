@@ -9,6 +9,12 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { userData, setUserData } = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const navigate = useNavigate();
 
   const handleStudentLogin = async (e) => {
@@ -61,14 +67,28 @@ const handleTeacherLogin = async (e) => {
         <img className="logo" src={Logo} alt="Logo" />
         <form>
           <div>
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="email" className="log-email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
-          <div>
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <div className="pass-container">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className="log-pass"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="show-pass-button"
+              onClick={toggleShowPassword} 
+            >
+              {showPassword ? <i className="fas fa-eye-slash"></i> : <i className="fas fa-eye"></i>}
+            </button>
           </div>
-          <div className='btn-ctn'>
-            <button onClick={handleStudentLogin}>Login as Student</button>
-            <button onClick={handleTeacherLogin}>Login as Teacher</button>
+          <div className='lg-btn-ctn'>
+            <button className='lg-btn' onClick={handleStudentLogin}>Login as Student</button>
+            <button className='lg-btn' onClick={handleTeacherLogin}>Login as Teacher</button>
           </div>
         </form>
       </div>

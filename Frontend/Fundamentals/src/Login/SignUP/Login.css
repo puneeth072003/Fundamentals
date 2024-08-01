@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Spotify+Circular&display=swap');
+
+body {
+  font-family: "spotify-circular";
+  margin: 0;
+  padding: 0;
+}
+
 .log-body {
   font-family: "spotify-circular";
   margin: 0;
@@ -7,6 +15,13 @@
   align-items: center;
   height:75vh;
   background-color: #f0f0f0;
+}
+
+.log-email,
+.log-pass {
+  font-family: "spotify-circular";
+  color: #999;
+  font-size: 14px;
 }
 
 .auth-container {
@@ -23,11 +38,13 @@
   margin: auto;
   box-sizing: border-box; 
 }
+
 input::placeholder {
   font-family: "spotify-circular";
   color: #999;
   font-size: 14px;
 }
+
 .auth-container .logo {
   width: 80px;
   height: auto;
@@ -79,24 +96,20 @@ input::placeholder {
 .auth-container p a:hover {
   text-decoration: underline;
 }
-.btn-ctn {
+
+.lg-btn-ctn {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 5px;
 }
 
-.btn-ctn button {
+.lg-btn{
   font-family: "spotify-circular";
-  flex: 1;
-  padding: 10px 20px;
+  padding: 10px 30px;
   font-size: 14px;
   cursor: pointer;
-  background-color: #007bff;
-  color: white;
   border: none;
   border-radius: 5px;
-}
-
-.btn-ctn button:hover {
-  background-color: #0056b3; /* Optional: change to your desired hover color */
+  background-color: #007bff;
+  color: white;
 }
