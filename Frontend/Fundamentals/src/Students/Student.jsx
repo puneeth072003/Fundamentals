@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Student.css';
 import { styled } from "@mui/material/styles";
@@ -11,6 +11,7 @@ import physicsImg from './assets/physics.jpg';
 import chemistryImg from './assets/chemistry.jpg';
 import mathsImg from './assets/maths.jpg';
 import biologyImg from './assets/biology.jpg';
+import { UserContext } from '../redux/user-context';
 
 const images = [
   {
@@ -103,6 +104,7 @@ const StudentDashBoard = () => {
   const navigate = useNavigate();
   const [selectedClass, setSelectedClass] = useState(null);
   const [selectedButton, setSelectedButton] = React.useState(null);
+  const { userData } = useContext(UserContext);
 
   const handleClassClick = (button) => {
     setSelectedButton(button);
@@ -115,7 +117,7 @@ const StudentDashBoard = () => {
 
   return (
     <div className="std-container">
-      <h1>Hi Puneeth</h1> 
+      <h1>Hello {userData.username}!!!</h1> 
       <p className='std-text'>What are you looking to study today?</p>
         <ButtonGroup
         disableElevation

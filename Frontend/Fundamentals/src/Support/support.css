@@ -1,7 +1,7 @@
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css);
 
 footer {
-  background-color: #09247b;
+  background-color: #04123e;
   position: relative;
   left: 0;
   bottom: 0;
@@ -12,25 +12,27 @@ footer {
 }
 .container {
   display: flex;
+  padding: 2%;
 }
 .child-cont {
   flex: 1;
 }
 .license {
   text-align: end;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   margin-bottom: 1px;
   margin-right: 1rem;
 }
 .final {
-  color: #a0a0a0;
+  color: #0d2e58;
   text-align: end;
 }
 .text {
   padding: 10px;
   text-align: end;
-  font-style: normal;
   color: #fffefe;
-  font-family: sans-serif;
+  font-style: italic;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .support-logo {
   margin-top: 1rem;
