@@ -1,102 +1,113 @@
 .log-body {
-  font-family: "spotify-circular";
-  margin: 0;
-  padding: 0;
+  font-family: "spotify-circular", sans-serif;
+  margin: 0; 
+  padding: 0; 
   display: flex;
   justify-content: center;
   align-items: center;
-  height:75vh;
-  background-color: #f0f0f0;
+  height: 70vh;
+  background: linear-gradient(135deg, #007bff, #00d4ff);
 }
 
 .auth-container {
   background-color: white;
-  padding: 2rem;
+  padding: 3rem;
   border-radius: 15px;
-  height: 80%;
-  box-shadow: 0 6px 12px rgba(26, 152, 255, 0.819);
+  box-shadow: 0 8px 16px rgba(0, 123, 255, 0.4);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 40%;
-  margin: auto;
-  box-sizing: border-box; 
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
 }
-input::placeholder {
-  font-family: "spotify-circular";
-  color: #999;
-  font-size: 14px;
-}
+
 .auth-container .logo {
-  width: 80px;
+  width: 100px;
   height: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .auth-container form div {
+  width: 100%;
   margin-bottom: 1rem;
-  text-align: left;
-  padding: 10px 20px;
-}
-
-.auth-container form label {
-  display: block;
-  margin-bottom: 0.5rem;
+  padding: 10px;
 }
 
 .auth-container form input {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.auth-container form input:focus {
+  border-color: #007bff;
+}
+
+input::placeholder {
+  font-family: "spotify-circular", sans-serif;
+  color: #999;
+  font-size: 14px;
 }
 
 .auth-container button {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .auth-container button:hover {
   background-color: #0056b3;
 }
 
-.auth-container p {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.auth-container p a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.auth-container p a:hover {
-  text-decoration: underline;
-}
 .btn-ctn {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 10px;
 }
 
 .btn-ctn button {
-  font-family: "spotify-circular";
+  font-family: "spotify-circular", sans-serif;
   flex: 1;
-  padding: 10px 20px;
-  font-size: 14px;
+  padding: 0.75rem;
+  font-size: 16px;
   cursor: pointer;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 .btn-ctn button:hover {
-  background-color: #0056b3; /* Optional: change to your desired hover color */
+  background-color: #0056b3;
+}
+
+.auth-container p {
+  margin-top: 1rem;
+  font-size: 14px;
+  color: #666;
+}
+
+.auth-container p a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.auth-container p a:hover {
+  color: #0056b3;
+  text-decoration: underline;
 }

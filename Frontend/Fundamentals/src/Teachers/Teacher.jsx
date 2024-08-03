@@ -15,7 +15,6 @@ const TeacherComp = () => {
   const [selectedClassName, setSelectedClassName] = useState('');
   const [selectedClassSubject, setSelectedClassSubject] = useState('');
 
-  // redirect to login page if the page is reloaded
   const [hasConfirmed, setHasConfirmed] = useState(false);
   const isLoggedIn = userData.state;
   const navigate = useNavigate();

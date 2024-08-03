@@ -61,7 +61,7 @@ const handleTeacherLogin = async (e) => {
         <img className="logo" src={Logo} alt="Logo" />
         <form>
           <div>
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="email" placeholder="johndoe@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />

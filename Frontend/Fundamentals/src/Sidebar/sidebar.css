@@ -49,12 +49,13 @@
   margin-bottom: 20px;
 }
 
+
 .quiz-container {
   border-top: 1px solid #cccccc; 
   padding-top: 20px;
-  width: 759px; 
+  width: 100%; 
   overflow-y: auto;
-  height: 400px; 
+  height: 100%; 
   margin-bottom: 20px; 
   overflow-y: scroll;
 }
@@ -62,6 +63,7 @@
 .quiz-box {
   margin-bottom: 20px;
 }
+
 
 .quiz-container.scrollable {
   margin: 0 auto;
@@ -150,10 +152,6 @@
   font-family: "spotify-circular";
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.quiz-reset button:hover {
-  background-color: #e03e00;
 }
 
 .well-done-message {
@@ -325,7 +323,21 @@
 }
 
 .quiz-reset{
-  background-color: #4CAF50; 
+  /* background-color: #4CAF50;  */
+  border: none; 
+  color: white; 
+  padding: 15px 32px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block;
+  font-size: 16px;
+  margin: 20px 0; 
+  cursor: pointer;
+  border-radius: 12px; 
+  transition-duration: 0.4s;
+}
+.quiz-rst{
+  /* background-color: #4CAF50;  */
   border: none; 
   color: white; 
   padding: 15px 32px; 

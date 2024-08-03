@@ -348,6 +348,20 @@ const UnifiedComponent = () => {
           <label htmlFor="title2">Title 2</label>
           <input type="text" id="title2" value={title2} onChange={handleTitle2Change} required />
         </div>
+        {videoForms.map((videoForm, formIndex) => (
+          <div key={formIndex} className="video-form">
+            <h3>Video Form {formIndex + 1}</h3>
+            <button type="button" className="close-button" onClick={() => handleCloseSection(formIndex + quizForms.length)}>X</button>
+            <div className="form-group">
+              <label htmlFor={`videoName${formIndex}`}>Video Name</label>
+              <input type="text" id={`videoName${formIndex}`} value={videoForm.name} onChange={(event) => handleVideoChange(formIndex, event)} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor={`videoURL${formIndex}`}>Video URL</label>
+              <input type="text" id={`videoURL${formIndex}`} value={videoForm.videoUrl} onChange={(event) => handleVideoURLChange(formIndex, event)} required />
+            </div>
+          </div>
+        ))}
         {quizForms.map((quizForm, formIndex) => (
           <div key={formIndex} className="quiz-form">
             <h3>Quiz Form {formIndex + 1}</h3>
@@ -383,20 +397,6 @@ const UnifiedComponent = () => {
               </div>
             ))}
             <button type="button" className="add-question-button" onClick={() => addQuestionToQuizForm(formIndex)}>Add Question</button>
-          </div>
-        ))}
-        {videoForms.map((videoForm, formIndex) => (
-          <div key={formIndex} className="video-form">
-            <h3>Video Form {formIndex + 1}</h3>
-            <button type="button" className="close-button" onClick={() => handleCloseSection(formIndex + quizForms.length)}>X</button>
-            <div className="form-group">
-              <label htmlFor={`videoName${formIndex}`}>Video Name</label>
-              <input type="text" id={`videoName${formIndex}`} value={videoForm.name} onChange={(event) => handleVideoChange(formIndex, event)} required />
-            </div>
-            <div className="form-group">
-              <label htmlFor={`videoURL${formIndex}`}>Video URL</label>
-              <input type="text" id={`videoURL${formIndex}`} value={videoForm.videoUrl} onChange={(event) => handleVideoURLChange(formIndex, event)} required />
-            </div>
           </div>
         ))}
         {unitForm && (
