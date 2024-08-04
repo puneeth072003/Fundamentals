@@ -204,24 +204,28 @@ router.post('/createunit', validateNewUnit, async (req, res) => {
 });
 
 router.delete('/deleteunit', async (req, res) => {
-  const { title2 } = req.body;
-  if (!title2) {
-      return res.status(400).json({ error: 'title2 field is required' });
-  }
-  try {
-      const unit = await SidebarData.findOneAndUpdate(
-          { "data.title2": title2 },
-          { $pull: { data: { title2: title2 } } },
-          { new: true }
-      );
-      if (!unit) {
-          return res.status(404).json({ error: 'Unit not found' });
-      }
-      return res.status(200).json({ message: 'Unit deleted successfully' });
-  } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Internal server error' });
-  }
+  const { title2, class: unitClass, subject } = req.body;
+    if (!title2 || !unitClass || !subject) {
+        return res.status(400).json({ error: 'title2, class, and subject are required' });
+    }
+    try {
+        const document = await SidebarData.findOne({
+            'data.title2': title2,
+            'data.class': unitClass,
+            'data.subject': subject
+        });
+        if (!document) {
+            return res.status(404).json({ error: 'Unit not found' });
+        }
+        const result = await SidebarData.updateOne(
+            {},
+            { $pull: { 'data': { title2, class: unitClass, subject } } }
+        );
+        res.json({ message: 'Unit successfully deleted' });
+    } catch (error) {
+        console.error('Error deleting unit:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 module.exports = router;
