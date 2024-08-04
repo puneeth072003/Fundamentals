@@ -1,12 +1,60 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import './sidebar.css';
 import QuizComponent from './quizComp';
 import axios from 'axios';
+import { styled } from "@mui/material/styles";
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  "&:not(:last-child)": {
+    borderBottom: 0
+  },
+  "&::before": {
+    display: "none",
+  },
+  fontSize: "50px"
+}));
+
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem" }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === "dark"
+      ? "rgba(255, 255, 255, .05)"
+      : "rgba(0, 0, 0, .03)",
+  flexDirection: "row-reverse",
+  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+    transform: "rotate(90deg)"
+  },
+  "& .MuiAccordionSummary-content": {
+    marginLeft: theme.spacing(1)
+  },
+  padding: "10px 15px",
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: "1px solid rgba(0, 0, 0, .125)"
+}));
 
 const StudentApp = () => {
   const { className, subject } = useParams();
-  const [selectedUnit, setSelectedUnit] = useState(null);
+  const [expandedUnit, setExpandedUnit] = useState(null);
   const [selectedSubunit, setSelectedSubunit] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [data, setData] = useState([]);
@@ -14,7 +62,8 @@ const StudentApp = () => {
   const [status, setStatus] = useState("Click on a subunit to continue");
   const [flag, setFlag] = useState(false);
   const [unitno, setUnitno] = useState(1);
-  const classNo=Number(className);
+  const classNo = Number(className);
+  const unitCache = useRef({}); // Cache for unit data
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,69 +75,69 @@ const StudentApp = () => {
           setStatus("Click on a subunit to continue");
         } else {
           console.error('Response data is not an array:', response.data);
-          setStatus(error.message);
+          setStatus("Error loading data");
         }
       } catch (err) {
         setError(err);
+        setStatus("Error loading data");
       }
     };
 
     fetchData();
-  }, [className, subject]);
+  }, [classNo, subject]);
 
   const handleUnitClick = async (unit) => {
-    setSelectedUnit(unit);
+    setExpandedUnit(prevUnit => (prevUnit === unit ? null : unit));
     setSelectedSubunit(null);
-    try {
-      const response = await axios.post(`http://localhost:3000/api/v1/${className}/${subject}`);
-      if (Array.isArray(response.data.content)) {
-        setData(response.data.content);
-        setStatus("Click on a subunit to continue");
-      } else {
-        console.error('Response data is not an array:', response.data);
-        setStatus(error.message);
-      }
-    } catch (err) {
-      setError(err);
-    }
-  };
+};
 
   const handleSubunitClick = (subunit) => {
     setUnitno(subunit.no);
     setSelectedSubunit(subunit);
     if (subunit.type === 'quiz') {
       setQuestions(subunit.quiz.questions);
+      if (subunit.quiz.quizTitle === 'Unit test') {
+        setFlag(true);
+      } else {
+        setFlag(false);
+      }
     } else {
-      setQuestions([]); // Clear questions if the subunit is not a quiz
-    }
-    if (subunit.quiz.quizTitle === 'Unit test') {
-      setFlag(true);
-    } else {
-      setFlag(false); // Clear questions if the subunit is not a quiz
+      setQuestions([]); // Clear questions
+      setFlag(false); // Reset flag
     }
   };
 
+  function convertToCamelCase(subject) {
+    return subject.toLowerCase().replace(/\b\w+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1));
+  }
+
   return (
+    <>
+    <h1 style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",paddingLeft:"5%",paddingBottom:"2%"}}>Class {className} : {convertToCamelCase(subject)} Student Dashboard</h1>
     <div className="student_app">
       <div className="stu-sidebar">
-        <ul className="sidebar-list">
-          {data.map((unit, unitIndex) => (
-            <li key={unitIndex} className="sidebar-item">
-              <div className="sidebar-item-title" onClick={() => handleUnitClick(unit)}>
-                {unit.title1}: {unit.title2}
-              </div>
-              {selectedUnit === unit && (
-                <ul className="subunit-list">
-                  {unit.subunits.map((subunit, subunitIndex) => (
-                    <li key={subunitIndex} className="subunit-item" onClick={() => handleSubunitClick(subunit)}>
-                      {subunit.quiz ? subunit.quiz.name : subunit.video ? subunit.video.name : 'Unknown Subunit'}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
+        {data.map((unit, unitIndex) => (
+          <Accordion key={unitIndex} expanded={expandedUnit === unit} onChange={() => handleUnitClick(unit)}>
+            <AccordionSummary>
+              <Typography sx={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",color:"#1e90ff",fontSize:"1.3rem"}}>{unit.title1}: {unit.title2}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <List>
+                {unit.subunits.map((subunit, subunitIndex) => (
+                  <React.Fragment key={subunitIndex}>
+                    <ListItem style={{ cursor: 'pointer'}} onClick={() => handleSubunitClick(subunit)}>
+                      <ListItemText
+                        className="custom-list-item-text"
+                        primary={subunit.quiz ? <h3 style={{fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",color:"black"}}>{subunit.quiz.name}</h3> : subunit.video ? <h3 style={{fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",color:"black"}}>{subunit.video.name}</h3> : 'Unknown Subunit'}
+                      />              
+                    </ListItem>
+                    {subunitIndex < unit.subunits.length - 1 && <Divider />}
+                  </React.Fragment>
+                ))}
+              </List>
+            </AccordionDetails>
+          </Accordion>
+        ))}
       </div>
       <div className="main-content">
         {!selectedSubunit && (
@@ -99,8 +148,8 @@ const StudentApp = () => {
         {selectedSubunit && selectedSubunit.type === 'video' && (
           <div className="video-container">
             <iframe
-              width="1000"
-              height="550"
+              width="100%"
+              height="100%"
               src={selectedSubunit.video.videoUrl}
               title="YouTube video player"
               frameBorder="0"
@@ -111,12 +160,13 @@ const StudentApp = () => {
         )}
         {selectedSubunit && selectedSubunit.type === 'quiz' && (
           <div className="quiz-box">
-            <h1>Quiz: {selectedSubunit.quiz.name}</h1>
-            <QuizComponent questions={questions} classNo={classNo} subject={subject} unitName={selectedUnit.title2} subunitName={selectedSubunit.quiz.name} />
+            <h1 style={{fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",color:"black"}}>Quiz: {selectedSubunit.quiz.name}</h1>
+            <QuizComponent questions={questions} classNo={classNo} subject={subject} unitName={expandedUnit.title2} subunitName={selectedSubunit.quiz.name} />
           </div>
         )}
       </div>
     </div>
+    </>
   );
 };
 

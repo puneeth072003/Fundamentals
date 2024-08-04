@@ -14,6 +14,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
   const [message, setMessage] = useState('');
   const [showSolution, setShowSolution] = useState(false);
   const [showTeacherMessage, setShowTeacherMessage] = useState(false);
+  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
 
   const maxResets = 3;
   const maxQuestions = 10;
@@ -35,12 +36,16 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
     setMessage('');
     setShowSolution(false);
     setShowTeacherMessage(false);
+    setIsAnswerSubmitted(false);
   };
 
   const handleAnswerClick = (answer) => {
     setSelectedAnswer(answer);
+  };
+
+  const handleSubmitAnswer = () => {
     const currentQuestion = shuffledQuestions[currentQuestionIndex];
-    const isCorrect = answer === currentQuestion.correctOption;
+    const isCorrect = selectedAnswer === currentQuestion.correctOption;
     if (isCorrect) {
       setScore(score + 1);
       setMessage('Right Answer!');
@@ -51,10 +56,11 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
       ...attendedQuestions,
       {
         questionNumber: currentQuestionIndex + 1,
-        userAnswer: answer,
+        userAnswer: selectedAnswer,
         isCorrect: isCorrect,
       },
     ]);
+    setIsAnswerSubmitted(true);
   };
 
   const handleNextQuestion = () => {
@@ -63,6 +69,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
       setSelectedAnswer(null);
       setMessage('');
       setShowSolution(false);
+      setIsAnswerSubmitted(false);
     } else {
       setShowWellDone(true);
     }
@@ -74,6 +81,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
       setSelectedAnswer(null);
       setMessage('');
       setShowSolution(false);
+      setIsAnswerSubmitted(false);
     }
   };
 
@@ -135,6 +143,13 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
 
   const currentQuestion = shuffledQuestions[currentQuestionIndex];
 
+  const renderQuestionText = (text) => {
+    const parts = text.split('$');
+    return parts.map((part, index) => {
+      return index % 2 === 0 ? part : <LatexRenderer key={index} latex={part} />;
+    });
+  };
+
   return (
     <div className="quiz-wrapper">
       <div className="quiz-container">
@@ -149,24 +164,31 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
         ) : (
           <>
             <div className="quiz-question">
-              <h3><LatexRenderer latex={currentQuestion.question} /></h3>
-              <p>Question {currentQuestionIndex + 1} of {maxQuestions}</p>
+              <p style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif", marginBottom:"5px"}}>Question {currentQuestionIndex + 1} of {maxQuestions}</p>
+              <h3 style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif", marginTop:"0"}}>{renderQuestionText(currentQuestion.question)}</h3>
             </div>
             <div className="quiz-options">
               {currentQuestion.options.map((option, index) => (
                 <button
                   key={index}
                   className={`quiz-option ${
-                    selectedAnswer && (option === currentQuestion.correctOption ? 'quiz-correct' : 'quiz-incorrect')
+                    isAnswerSubmitted && (option === currentQuestion.correctOption ? 'quiz-correct' : 'quiz-incorrect')
                   } ${selectedAnswer === option ? 'quiz-selected' : ''}`}
                   onClick={() => handleAnswerClick(option)}
-                  disabled={selectedAnswer !== null}
+                  disabled={isAnswerSubmitted}
                 >
-                  <LatexRenderer latex={option} />
+                  {renderQuestionText(option)}
                 </button>
               ))}
             </div>
-            {selectedAnswer && (
+            {selectedAnswer && !isAnswerSubmitted && (
+              <div className="quiz-submit">
+                <button className="show-solution-button" onClick={handleSubmitAnswer}>
+                  Submit Answer
+                </button>
+              </div>
+            )}
+            {isAnswerSubmitted && (
               <div className="quiz-answer">
                 <p>{message}</p>
                 <button className="show-solution-button" onClick={handleShowSolution}>
@@ -178,12 +200,12 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
               <button className="quiz-prev" onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>
                 Previous Question
               </button>
-              <button className="quiz-next" onClick={handleSubmitQuestion} disabled={selectedAnswer === null}>
+              <button className="quiz-next" onClick={handleSubmitQuestion} disabled={!isAnswerSubmitted}>
                 {currentQuestionIndex === shuffledQuestions.length - 1 ? 'Submit Quiz' : 'Next Question'}
               </button>
             </div>
-            <div className="quiz-reset">
-              <button onClick={handleResetQuiz}>
+            <div className="quiz-rst">
+              <button onClick={handleResetQuiz} className='quiz-rst'>
                 Reset Quiz
               </button>
             </div>
@@ -209,7 +231,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
       </div>
       {showSolution && (
         <div className="quiz-solution">
-          <p>Solution: <LatexRenderer latex={currentQuestion.solution} /></p>
+          <p>Solution: {renderQuestionText(currentQuestion.solution)}</p>
         </div>
       )}
       {showTeacherMessage && (

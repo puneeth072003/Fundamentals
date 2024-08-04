@@ -1,6 +1,7 @@
 .student_app {
   display: flex;
   height: 100vh;
+  padding-bottom: 3rem;
 }
 
 .stu-sidebar {
@@ -45,16 +46,28 @@
 .video-container {
   display: flex;
   justify-content: center;
+  position: relative;
   width: 100%; 
   margin-bottom: 20px;
+  height: 0;
+  margin: 0 auto;
+  padding-bottom: 56.25%;
+}
+
+.video-container iframe {
+  position: absolute;
+  /* top: 0;
+  left: 0; */
+  width: 100%;
+  height: 100%;
 }
 
 .quiz-container {
   border-top: 1px solid #cccccc; 
   padding-top: 20px;
-  width: 759px; 
+  width: 100%; 
   overflow-y: auto;
-  height: 400px; 
+  height: 100%; 
   margin-bottom: 20px; 
   overflow-y: scroll;
 }
@@ -93,7 +106,7 @@
   width: 45%;
   color: white;
   border: none;
-  font-family: "spotify-circular";
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   border-radius: 5px;
   padding: 10px 20px;
   margin: 5px;
@@ -123,7 +136,7 @@
 
 .quiz-next {
   background-color: #1e90ff;
-  font-family: "spotify-circular";
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: white;
   border: none;
   border-radius: 5px;
@@ -141,20 +154,35 @@
   margin-top: 30px;
 }
 
-.quiz-reset button {
-  background-color: green;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-family: "spotify-circular";
+.quiz-reset{
+  /* background-color: #4CAF50;  */
+  border: none; 
+  color: white; 
+  padding: 15px 32px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block;
+  font-size: 16px;
+  margin: 20px 0; 
   cursor: pointer;
-  transition: background-color 0.3s;
+  border-radius: 12px; 
+  transition-duration: 0.4s;
+}
+.quiz-rst{
+  /* background-color: #4CAF50;  */
+  border: none; 
+  color: white; 
+  padding: 15px 32px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block;
+  font-size: 16px;
+  margin: 20px 0; 
+  cursor: pointer;
+  border-radius: 12px; 
+  transition-duration: 0.4s;
 }
 
-.quiz-reset button:hover {
-  background-color: #e03e00;
-}
 
 .well-done-message {
   font-size: 2em;
@@ -167,7 +195,7 @@
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
-  font-family: "spotify-circular";
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -232,7 +260,7 @@
 .quiz-prev,
 .quiz-next {
   background-color: #1e90ff;
-  font-family: "spotify-circular";
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: white;
   border: none;
   border-radius: 5px;
@@ -254,7 +282,7 @@
 
 .show-solution-button{
   background-color: #1e90ff;
-  font-family: "spotify-circular";
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: white;
   border: none;
   border-radius: 5px;
