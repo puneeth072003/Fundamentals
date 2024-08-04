@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import './sidebar.css';
 import { UserContext } from '../redux/user-context';
 import LatexRenderer from '../AddSection/LatexRenderer';
+import Button from '@mui/material/Button';
+import welldoneImg from '../assets/welldone.png';
 
 const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -71,6 +73,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
       setShowSolution(false);
       setIsAnswerSubmitted(false);
     } else {
+      setShowSolution(false);
       setShowWellDone(true);
     }
   };
@@ -96,7 +99,7 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
   };
 
   const handleShowSolution = () => {
-    setShowSolution(true);
+    setShowSolution(!showSolution);
   };
 
   const handleSubmitScore = () => {
@@ -152,83 +155,80 @@ const QuizComponent = ({ questions, classNo, subject, unitName, subunitName }) =
 
   return (
     <div className="quiz-wrapper">
-      <div className="quiz-container">
-        {showWellDone ? (
-          <div className="well-done-message">
-            <h2>Well done!</h2>
-            <p>Your score: {score} / {maxQuestions}</p>
-            <button className="quiz-reset" onClick={handleResetQuiz}>
-              Reset Quiz
+      {showWellDone ? (
+        <div className="well-done-message">
+          <img src={welldoneImg} alt="well done image" style={{height:"110px",width:"100px",paddingBottom:"20px"}}/>
+          <h2 style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",color:"black"}}>GoodWork!!</h2>
+          <p>Your score: {score} / {maxQuestions}</p>
+          <div>
+            <Button variant="contained" onClick={handleResetQuiz} style={{fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",background:"red"}} >Retake quiz</Button>
+          </div>
+        </div>
+      ) : (
+        <div className="quiz-container">
+          <div className="quiz-question">
+            <p style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif", marginBottom:"5px"}}>Question {currentQuestionIndex + 1} of {maxQuestions}</p>
+            <h3 style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif", marginTop:"0"}}>{renderQuestionText(currentQuestion.question)}</h3>
+          </div>
+          <div className="quiz-options">
+            {currentQuestion.options.map((option, index) => (
+              <button
+                key={index}
+                className={`quiz-option ${
+                  isAnswerSubmitted && (option === currentQuestion.correctOption ? 'quiz-correct' : 'quiz-incorrect')
+                } ${selectedAnswer === option ? 'quiz-selected' : ''}`}
+                onClick={() => handleAnswerClick(option)}
+                disabled={isAnswerSubmitted}
+              >
+                {renderQuestionText(option)}
+              </button>
+            ))}
+          </div>
+          {selectedAnswer && !isAnswerSubmitted && (
+            <div className="quiz-submit">
+              <button className="show-solution-button" onClick={handleSubmitAnswer}>
+                Submit Answer
+              </button>
+            </div>
+          )}
+          {isAnswerSubmitted && (
+            <div className="quiz-answer">
+              <p>{message}</p>
+              <button className="show-solution-button" onClick={handleShowSolution}>
+                {showSolution ? 'Hide Solution' : 'Show Solution'}
+              </button>
+            </div>
+          )}
+          <div className="quiz-navigation">
+            <button className="quiz-next" onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>
+              Previous Question
+            </button>
+            <button className="quiz-next" onClick={handleSubmitQuestion} disabled={!isAnswerSubmitted}>
+              {currentQuestionIndex === shuffledQuestions.length - 1 ? 'Submit Quiz' : 'Next Question'}
             </button>
           </div>
-        ) : (
-          <>
-            <div className="quiz-question">
-              <p style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif", marginBottom:"5px"}}>Question {currentQuestionIndex + 1} of {maxQuestions}</p>
-              <h3 style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif", marginTop:"0"}}>{renderQuestionText(currentQuestion.question)}</h3>
-            </div>
-            <div className="quiz-options">
-              {currentQuestion.options.map((option, index) => (
-                <button
-                  key={index}
-                  className={`quiz-option ${
-                    isAnswerSubmitted && (option === currentQuestion.correctOption ? 'quiz-correct' : 'quiz-incorrect')
-                  } ${selectedAnswer === option ? 'quiz-selected' : ''}`}
-                  onClick={() => handleAnswerClick(option)}
-                  disabled={isAnswerSubmitted}
-                >
-                  {renderQuestionText(option)}
-                </button>
-              ))}
-            </div>
-            {selectedAnswer && !isAnswerSubmitted && (
-              <div className="quiz-submit">
-                <button className="show-solution-button" onClick={handleSubmitAnswer}>
-                  Submit Answer
-                </button>
-              </div>
-            )}
-            {isAnswerSubmitted && (
-              <div className="quiz-answer">
-                <p>{message}</p>
-                <button className="show-solution-button" onClick={handleShowSolution}>
-                  Show Solution
-                </button>
-              </div>
-            )}
-            <div className="quiz-navigation">
-              <button className="quiz-prev" onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>
-                Previous Question
-              </button>
-              <button className="quiz-next" onClick={handleSubmitQuestion} disabled={!isAnswerSubmitted}>
-                {currentQuestionIndex === shuffledQuestions.length - 1 ? 'Submit Quiz' : 'Next Question'}
-              </button>
-            </div>
-            <div className="quiz-rst">
-              <button onClick={handleResetQuiz} className='quiz-rst'>
-                Reset Quiz
-              </button>
-            </div>
-            <div className="qt-attended-questions">
-              <h3 className="qt-heading">Attended Questions:</h3>
-              <ul className="qt-questions-list">
-                {[...Array(totalQuestions)].map((_, index) => {
-                  const attendedQuestion = attendedQuestions.find(item => item.questionNumber === index + 1);
-                  let circleClass = 'qt-circle';
+          <div className="quiz-reset-container">
+            <Button variant="contained" onClick={handleResetQuiz} style={{fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",background:"red"}} >Reset Quiz</Button>
+          </div>
+          <div className="qt-attended-questions">
+            <h3 className="qt-heading">Attended Questions:</h3>
+            <ul className="qt-questions-list">
+              {[...Array(totalQuestions)].map((_, index) => {
+                const attendedQuestion = attendedQuestions.find(item => item.questionNumber === index + 1);
+                let circleClass = 'qt-circle';
 
-                  if (attendedQuestion) {
-                    circleClass += attendedQuestion.isCorrect ? ' qt-correct-answer' : ' qt-incorrect-answer';
-                  }
+                if (attendedQuestion) {
+                  circleClass += attendedQuestion.isCorrect ? ' qt-correct-answer' : ' qt-incorrect-answer';
+                }
 
-                  return (
-                    <li key={index} className={circleClass}></li>
-                  );
-                })}
-              </ul>
-            </div>
-          </>
-        )}
-      </div>
+                return (
+                  <li key={index} className={circleClass}></li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      )}
       {showSolution && (
         <div className="quiz-solution">
           <p>Solution: {renderQuestionText(currentQuestion.solution)}</p>
