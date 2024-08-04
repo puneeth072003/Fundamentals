@@ -13,6 +13,8 @@ import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import robImg from '../assets/rob.png';
+import { colors } from '@mui/material';
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -141,8 +143,9 @@ const StudentApp = () => {
       </div>
       <div className="main-content">
         {!selectedSubunit && (
-          <div className="content-placeholder">
-            {status}
+          <div style={{ display: 'flex',flexDirection:'column', alignItems: 'center', height: '100%' }}>
+            <img src={robImg} alt="well done image" style={{height:"300px",width:"250px",paddingBottom:"20px"}}/>
+            <h3 style={{color:"black", fontFamily:"monospace"}}>rob: {status}</h3>
           </div>
         )}
         {selectedSubunit && selectedSubunit.type === 'video' && (
