@@ -76,7 +76,6 @@ export default function CustomizedDeleteDialog({ showdeldialog, handleClose }) {
           subject: selectedsubject,
         }),
       });
-
       if (response.ok) {
         const data = await response.json();
         setState({
@@ -193,6 +192,7 @@ export default function CustomizedDeleteDialog({ showdeldialog, handleClose }) {
           open={state.open}
           onClose={handleAlertClose}
           TransitionComponent={state.Transition}
+          style={{ fontFamily:"'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif" }}
           message={state.message}
           key={state.Transition.name}
           autoHideDuration={1200}
