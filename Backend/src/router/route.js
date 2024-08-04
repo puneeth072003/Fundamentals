@@ -203,4 +203,25 @@ router.post('/createunit', validateNewUnit, async (req, res) => {
   }
 });
 
+router.delete('/deleteunit', async (req, res) => {
+  const { title2 } = req.body;
+  if (!title2) {
+      return res.status(400).json({ error: 'title2 field is required' });
+  }
+  try {
+      const unit = await SidebarData.findOneAndUpdate(
+          { "data.title2": title2 },
+          { $pull: { data: { title2: title2 } } },
+          { new: true }
+      );
+      if (!unit) {
+          return res.status(404).json({ error: 'Unit not found' });
+      }
+      return res.status(200).json({ message: 'Unit deleted successfully' });
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 module.exports = router;
