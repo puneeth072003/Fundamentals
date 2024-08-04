@@ -5,15 +5,19 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
-
+import CustomizedDeleteDialog from '../AddSection/RemoveUnit';
 
 export default function PositionedMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [showdeldialog, setShowdeldialog] = React.useState(false);
+
   const open = Boolean(anchorEl);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -28,16 +32,18 @@ export default function PositionedMenu() {
     navigate('/addsection');
   };
 
+  const handleDeleteDialog = () => {
+    setShowdeldialog(true);
+    handleClose(); // Close the menu after selecting the item
+  };
+
+  const handleDialogClose = () => {
+    setShowdeldialog(false);
+  };
+
   return (
     <div>
-      <Button
-        id="demo-positioned-button"
-        aria-controls={open ? 'demo-positioned-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        <IconButton
+      <IconButton
         aria-label="more"
         id="long-button"
         aria-controls={open ? 'long-menu' : undefined}
@@ -47,10 +53,9 @@ export default function PositionedMenu() {
       >
         <MoreVertIcon />
       </IconButton>
-      </Button>
       <Menu
         id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
+        aria-labelledby="long-button"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -64,7 +69,8 @@ export default function PositionedMenu() {
         }}
       >
         <MenuItem onClick={handleCreateAccount}>Create Account</MenuItem>
-        <MenuItem onClick={handleAddContent}>Add Contents</MenuItem>
+        <MenuItem onClick={handleAddContent}>Add Units</MenuItem>
+        <MenuItem onClick={handleDeleteDialog}>Remove Unit</MenuItem>
         <MenuItem onClick={handleClose}>
           <a
             href="https://github.com/puneeth072003/Fundamentals/issues/new"
@@ -76,6 +82,9 @@ export default function PositionedMenu() {
           </a>
         </MenuItem>
       </Menu>
+      {showdeldialog && (
+        <CustomizedDeleteDialog showdeldialog={showdeldialog} handleClose={handleDialogClose} />
+      )}
     </div>
   );
 }
