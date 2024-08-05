@@ -6,24 +6,22 @@ const videoSubunitSchema = new Schema({
   videoUrl: { type: String, required: true }
 });
 
+const questionSchema = new Schema({
+  question: { type: String, required: true },
+  options: [{ type: String, required: true }],
+  correctOption: { type: String, required: true },
+  solution: { type: String, required: true },
+  base64Image: { type: String } // Optional base64 encoded image
+});
+
 const quizSubunitSchema = new Schema({
   name: { type: String, required: true },
-  questions: [{
-    question: { type: String, required: true },
-    options: [{ type: String, required: true }],
-    correctOption: { type: String, required: true },
-    solution: { type: String, required: true }
-  }]
+  questions: [questionSchema]
 });
 
 const unitTestSubunitSchema = new Schema({
   name: { type: String, required: true },
-  questions: [{
-    question: { type: String, required: true },
-    options: [{ type: String, required: true }],
-    correctOption: { type: String, required: true },
-    solution: { type: String, required: true }
-  }]
+  questions: [questionSchema]
 });
 
 const subunitSchema = new Schema({
