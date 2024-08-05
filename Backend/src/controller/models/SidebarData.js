@@ -11,7 +11,7 @@ const questionSchema = new Schema({
   options: [{ type: String, required: true }],
   correctOption: { type: String, required: true },
   solution: { type: String, required: true },
-  base64Image: { type: String } // Optional base64 encoded image
+  // image: { type: String } 
 });
 
 const quizSubunitSchema = new Schema({
