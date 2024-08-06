@@ -10,6 +10,7 @@
 
 .teach-head {
   margin-bottom: 20px;
+  margin-right: auto; /* Aligns to the left with some margin on the right */
   font-size: 24px;
   color: #333;
 }
@@ -25,15 +26,26 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.menu-filter {
+  width: 30%;
+  display: flex;
+  align-items: center; /* Aligns items vertically */
+  gap: 10px; /* Space between the PositionedMenu and Select components */
+}
+
 .new-usr {
   display: flex;
-  flex-direction: table; /* Align items in a column */
-  align-items: flex-start; /* Align items to the left */
-  padding: 20px;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .teach-head {
   margin-right: 800px; /* Space between heading and button */
+  font-size: 24px;
+  color: #333;
 }
 
 .btn-add-user {
