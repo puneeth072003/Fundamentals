@@ -3,9 +3,12 @@ import './teachers.css';
 import { UserContext } from '../redux/user-context';
 import { useNavigate } from 'react-router-dom';
 import PositionedMenu from './Menu';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 const TeacherComp = () => {
   const [students, setStudents] = useState([]);
+  const [filteredStudents, setFilteredStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedSubunit, setSelectedSubunit] = useState(null);
@@ -15,7 +18,7 @@ const TeacherComp = () => {
   const [selectedClassName, setSelectedClassName] = useState('');
   const [selectedClassSubject, setSelectedClassSubject] = useState('');
 
-  // redirect to login page if the page is reloaded
+  // Redirect to login page if the page is reloaded
   const [hasConfirmed, setHasConfirmed] = useState(false);
   const isLoggedIn = userData.state;
   const navigate = useNavigate();
@@ -35,6 +38,7 @@ const TeacherComp = () => {
           const response = await fetch(`http://localhost:3000/api/v1/getall/${classNo}/${selectedClassSubject}`);
           const data = await response.json();
           setStudents(data);
+          setFilteredStudents(data);
         } catch (error) {
           console.error('Error fetching students:', error);
         }
@@ -74,11 +78,38 @@ const TeacherComp = () => {
     }
   };
 
+  const handleFilterChange = (event) => {
+    const value = event.target.value;
+    let filtered = [];
+
+    if (value === 'alphabetical') {
+      filtered = [...students].sort((a, b) => a.username.localeCompare(b.username));
+    } else if (value === 'marks') {
+      filtered = [...students].sort((a, b) => b.score - a.score);
+    } else {
+      filtered = students;
+    }
+
+    setFilteredStudents(filtered);
+  };
+
   return (
     <div className='teach-main'>
       <div className='new-usr'>
         <h1 className='teach-head'>Welcome, {userData.username}!</h1>
-        <PositionedMenu />
+        <div className='menu-filter'>
+          <PositionedMenu />
+          <Select
+            defaultValue=""
+            onChange={handleFilterChange}
+            displayEmpty
+            variant="outlined"
+          >
+            <MenuItem value="">No Filter</MenuItem>
+            <MenuItem value="alphabetical">Alphabetical Order</MenuItem>
+            <MenuItem value="marks">Marks</MenuItem>
+          </Select>
+        </div>
       </div>
       <div className="teach-container">
         <div className="teach-sidebar">
@@ -109,7 +140,7 @@ const TeacherComp = () => {
             <>
               <h2>Students</h2>
               <ul className="teach-students">
-                {students.map((student) => (
+                {filteredStudents.map((student) => (
                   <li
                     key={student._id}
                     className={`teach-student ${selectedStudent === student ? 'selected' : ''}`}
