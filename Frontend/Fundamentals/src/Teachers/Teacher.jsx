@@ -17,6 +17,7 @@ const TeacherComp = () => {
 
   const [selectedClassName, setSelectedClassName] = useState('');
   const [selectedClassSubject, setSelectedClassSubject] = useState('');
+  const [filter, setFilter] = useState(''); // State for filter
 
   // Redirect to login page if the page is reloaded
   const [hasConfirmed, setHasConfirmed] = useState(false);
@@ -25,7 +26,7 @@ const TeacherComp = () => {
 
   useEffect(() => {
     if (!isLoggedIn && !hasConfirmed) {
-      navigate('/login');
+      navigate('/');
       setHasConfirmed(true);
     }
   }, [isLoggedIn, hasConfirmed, navigate]);
@@ -47,6 +48,24 @@ const TeacherComp = () => {
 
     fetchStudents();
   }, [selectedClassName, selectedClassSubject]);
+
+  useEffect(() => {
+    let filtered = [];
+
+    if (filter === 'alphabetical') {
+      filtered = [...students].sort((a, b) => a.username.localeCompare(b.username));
+    } else if (filter === 'marks') {
+      filtered = [...students].sort((a, b) => {
+        const aScore = a.units.reduce((total, unit) => total + unit.subunits.reduce((sum, subunit) => sum + subunit.score, 0), 0);
+        const bScore = b.units.reduce((total, unit) => total + unit.subunits.reduce((sum, subunit) => sum + subunit.score, 0), 0);
+        return bScore - aScore;
+      });
+    } else {
+      filtered = students;
+    }
+
+    setFilteredStudents(filtered);
+  }, [filter, students]);
 
   const handleStudentClick = (student) => {
     setSelectedStudent(student);
@@ -79,18 +98,7 @@ const TeacherComp = () => {
   };
 
   const handleFilterChange = (event) => {
-    const value = event.target.value;
-    let filtered = [];
-
-    if (value === 'alphabetical') {
-      filtered = [...students].sort((a, b) => a.username.localeCompare(b.username));
-    } else if (value === 'marks') {
-      filtered = [...students].sort((a, b) => b.score - a.score);
-    } else {
-      filtered = students;
-    }
-
-    setFilteredStudents(filtered);
+    setFilter(event.target.value);
   };
 
   return (
@@ -100,7 +108,7 @@ const TeacherComp = () => {
         <div className='menu-filter'>
           <PositionedMenu />
           <Select
-            defaultValue=""
+            value={filter} // Bind filter value to Select
             onChange={handleFilterChange}
             displayEmpty
             variant="outlined"
